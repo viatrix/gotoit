@@ -109,7 +109,7 @@ class ProjectModel {
             manage: this.genStat(quality)
         };
 
-        let stats = JSON.parse(JSON.stringify(skills));;
+        let stats = JSON.parse(JSON.stringify(skills));
 
         if (size !== 4) {
             let sk = _.shuffle(Object.keys(stats));
@@ -120,10 +120,10 @@ class ProjectModel {
         else {
             stats = stats_bulk;
         }
-        
-        let reward = [0, 100, 1000, 10000, 100000][size] +
-            Math.ceil((_.max(_.values(stats)) + _.sum(_.values(stats))) * 5 * Math.sqrt(quality));
 
+        let s = _.values(stats);
+        let reward = Math.pow(10, size+1) +
+            Math.ceil((_.max(s) + _.sum(s)) * 5 * Math.sqrt(quality));
 
         return new ProjectModel(
             this.genName(),

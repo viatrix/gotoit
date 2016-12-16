@@ -89,7 +89,6 @@ class App extends Component {
             put(worker_id, project_id);
         }
 
-        console.log(data);
         this.setState({data: data});
     }
 
@@ -99,7 +98,6 @@ class App extends Component {
     }
 
     changeRole(worker_id, role, value) {
-        console.log(worker_id, role, value);
         let data = this.state.data;
         if (!(worker_id in data.workers_roles))  data.workers_roles[worker_id] = {};
         data.workers_roles[worker_id][role] = value;
@@ -167,12 +165,10 @@ class App extends Component {
     }
 
     startProject(project) {
-        console.log(project);
         let data = this.state.data;
         data.projects.push(project);
         this.setState({data: data});
         this.modifyRelation(null, project.id, true);
-        console.log(data);
     }
 
     closeProject(id) {
@@ -203,13 +199,9 @@ class App extends Component {
     }
 
     changeTechnology(technology, project_id, value) {
-        console.log(technology, project_id, value);
         let data = this.state.data;
-
         if (!(project_id in data.projects_technologies)) data.projects_technologies[project_id] = {};
         data.projects_technologies[project_id][technology] = value;
-
-        console.log(data);
         this.setState({data: data});
     }
 
@@ -361,6 +353,9 @@ class App extends Component {
                 if (project.id in tech && 'tdd' in tech[project.id] && tech[project.id]['tdd'] &&
                         project.tests < project.planedTasksQuantity() && _.random(1, 2) === 1) {
                     console.log('writing tests!');
+                //    console.log(worker.getSideResource());
+                //    console.log(Math.min(project.planedTasksQuantity() - project.tests, worker.getSideResource()));
+
                     project.tests += Math.min(project.planedTasksQuantity() - project.tests, worker.getSideResource());
                     skip_work = true;
                 }
@@ -370,7 +365,11 @@ class App extends Component {
                     'refactoring' in tech[project.id] &&
                     tech[project.id]['refactoring'] &&
                     project.complexity &&
-                    (_.random(1, project.complexity) > ((project.complexity * 0.66) + 10) ))
+                    project.complexity < (project.tasksQuantity() + project.bugsQuantity()) && ((
+                            _.random(1, project.complexity) >
+                            _.random((project.size-1) * Math.sqrt(project.complexity), project.planedTasksQuantity()))
+                        )
+                    )
                 {
                     console.log('refactoring!');
                     project.complexity -= Math.min(project.complexity, worker.getSideResource());
@@ -379,25 +378,17 @@ class App extends Component {
 
                 // Work
                 if (!skip_work) {
-                    let focus_on = null;
-                    let rad = false;
-                    if (project.id in tech &&
+                    let focus_on = (project.id in tech &&
                         'agile' in tech[project.id] &&
                         tech[project.id]['agile'])
-                    {
-                        console.log(project.needs);
-                        focus_on = _.maxBy(Object.keys(project.needs), function (o) { return project.needs[o]; });
-                    }
-                    if (project.id in tech &&
+                        ? _.maxBy(Object.keys(project.needs), function (o) { return project.needs[o]; }) : null
+
+                    let rad = (project.id in tech &&
                         'rad' in tech[project.id] &&
                         tech[project.id]['rad'])
-                    {
-                        console.log(project);
-                        rad = true;
-                    }
+                        ? true : false;
                     worker.addExperience(project.applyWork(worker.getResources(worker_roles, focus_on), rad));
                 }
-
             }
         });
 
