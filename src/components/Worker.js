@@ -37,7 +37,7 @@ class Worker extends Component {
         const worker = this.props.worker;
 
         const manage_button = <button className="btn">Manage Work</button>;
-        const educate_button = <button className="btn">Educate</button>;
+        const educate_button = <button className="btn invisible">Educate</button>;
 
         return (
             <div className="unit_block">
