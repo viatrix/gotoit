@@ -141,7 +141,7 @@ class ProjectModel {
             (_.random(1, 10) +
             (_.random(1, quality) * _.random(1, hired ? hired : 1)) +
             (_.random(1, quality) * _.random(1, projects_done)) +
-            (_.random(1, quality) * _.random(1, projects_generated)))
+            (_.random(1, quality) * _.random(1, Math.sqrt(projects_generated))))
         );
     }
 
