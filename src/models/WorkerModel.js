@@ -36,7 +36,7 @@ class WorkerModel {
     }
 
     getSideResource() {
-        return _.random(1, this.statsSum()/this.stats.length);
+        return _.random(0, this.statsSum()/this.stats.length) + _.random(0, this.statsSum()/this.stats.length);
     }
 
     addExperience(learned) {
