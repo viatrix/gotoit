@@ -235,7 +235,7 @@ class App extends Component {
     componentDidMount() {
         this.timerID = setInterval(
             () => this.tick(),
-            200
+            100
         );
     }
 
