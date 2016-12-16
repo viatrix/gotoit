@@ -124,7 +124,7 @@ class ProjectModel {
         return new ProjectModel(
             this.genName(),
             'project',
-            Math.ceil(_.sum(_.values(stats)) * 5 * Math.sqrt(Math.sqrt(quality))),
+            Math.ceil(_.sum(_.values(stats)) * 5 * Math.sqrt(quality)),
             stats,
             size
         );
