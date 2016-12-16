@@ -120,11 +120,15 @@ class ProjectModel {
         else {
             stats = stats_bulk;
         }
+        
+        let reward = [0, 100, 1000, 10000, 100000][size] +
+            Math.ceil((_.max(_.values(stats)) + _.sum(_.values(stats))) * 5 * Math.sqrt(quality));
+
 
         return new ProjectModel(
             this.genName(),
             'project',
-            Math.ceil(_.sum(_.values(stats)) * 5 * Math.sqrt(quality)),
+            reward,
             stats,
             size
         );
