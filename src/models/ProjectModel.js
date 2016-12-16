@@ -103,10 +103,10 @@ class ProjectModel {
         projects_generated++;
 
         let stats_bulk = {
-            program: this.genStat(quality),
-            design: this.genStat(quality),
-            admin: this.genStat(quality),
-            manage: this.genStat(quality)
+            program: this.genStat(quality, size),
+            design: this.genStat(quality, size),
+            admin: this.genStat(quality, size),
+            manage: this.genStat(quality, size)
         };
 
         let stats = JSON.parse(JSON.stringify(skills));
@@ -140,8 +140,9 @@ class ProjectModel {
         return _.sample(first_names) + ' ' + _.sample(second_names);
     }
 
-    static genStat(quality) {
+    static genStat(quality, size=1) {
         return Math.floor(
+            Math.pow(10, size-1) +
             (_.random(1, 10) +
             (_.random(1, quality) * _.random(1, hired ? hired : 1)) +
             (_.random(1, quality) * _.random(1, projects_done)) +
