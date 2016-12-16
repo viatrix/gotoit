@@ -1,4 +1,6 @@
 
+import _ from 'lodash';
+
 import WorkerModel from './models/WorkerModel';
 import ProjectModel from './models/ProjectModel';
 
@@ -27,8 +29,8 @@ var app_state =
         },
         offered_projects: {
             freelance: [
-                ProjectModel.generate(1, 2),
-                ProjectModel.generate(1, 2)
+                ProjectModel.generate(1, _.random(1, 2)),
+                ProjectModel.generate(1, _.random(1, 2))
             ],
             contract: [],
             bigdeal: [

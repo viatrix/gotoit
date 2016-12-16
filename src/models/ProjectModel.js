@@ -3,6 +3,7 @@
 import _ from 'lodash';
 
 import {skills} from '../data/knowledge';
+import {hired, projects_done} from '../App';
 
 var projects_generated = 0;
 
@@ -137,10 +138,10 @@ class ProjectModel {
     }
 
     static genStat(quality) {
-        let hired = 1;
         return Math.floor(
             (_.random(1, 10) +
-            (_.random(1, quality) * _.random(1, hired)) +
+            (_.random(1, quality) * _.random(1, hired ? hired : 1)) +
+            (_.random(1, quality) * _.random(1, Math.sqrt(projects_done+1))) +
             (_.random(1, quality) * _.random(1, Math.sqrt(projects_generated+1)))));
     }
 

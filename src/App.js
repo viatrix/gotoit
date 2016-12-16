@@ -11,6 +11,9 @@ import {skills_names} from './data/knowledge';
 var agency_generation_counter = 0;
 var contract_generation_counter = 0;
 
+export var hired = 1;
+export var projects_done = 0;
+
 class App extends Component {
     constructor(props) {
         super(props);
@@ -127,6 +130,7 @@ class App extends Component {
     }
 
     hireEmployer(worker) {
+        hired++;
         let data = this.state.data;
         data.workers.push(worker);
         this.modifyRelation(worker.id, null, true);
@@ -134,6 +138,7 @@ class App extends Component {
     }
 
     dismissEmployer(id) {
+        hired--;
         let data = this.state.data;
         _.remove(data.workers, (worker) => { return (worker.id === id); });
         this.setState({data: data});
@@ -183,6 +188,7 @@ class App extends Component {
     }
 
     finishProject(id) {
+        projects_done++;
         let data = this.state.data;
         this.addMoney(_.find(data.projects, (project) => { return (project.id === id); }).reward);
         _.remove(data.projects, (project) => { return (project.id === id); });
@@ -306,7 +312,7 @@ class App extends Component {
         }
 
         if (_.random(1, 24*2) === 1 && data.offered_projects.freelance.length < 3) {
-            data.offered_projects.freelance.push(ProjectModel.generate(_.random(1, 5), 2));
+            data.offered_projects.freelance.push(ProjectModel.generate(_.random(1, 5), _.random(1, 2)));
         }
         if (_.random(1, 24*5) === 1 && data.offered_projects.freelance.length > 0) {
             _.remove(data.offered_projects.freelance, (candidate) => { return (candidate.id === data.offered_projects.freelance[0].id); });
