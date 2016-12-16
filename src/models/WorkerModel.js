@@ -21,7 +21,7 @@ class WorkerModel {
             return 0;
         }
         else {
-            return this.statsSum();
+            return this.statsSum() + _.max(_.values(this.stats));
         }
     }
 

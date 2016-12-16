@@ -98,7 +98,7 @@ class ProjectModel {
     }
 
     static generate(quality=1, size=4) {
-        console.log("gen quality="+quality+", size="+size);
+    //    console.log("gen quality="+quality+", size="+size);
         projects_generated++;
 
         let stats_bulk = {
@@ -112,8 +112,6 @@ class ProjectModel {
 
         if (size !== 4) {
             let sk = _.shuffle(Object.keys(stats));
-            console.log(stats);
-            //console.log(sk);
             for (let i = 0; i < size; i++) {
                 stats[sk[i]] = stats_bulk[sk[i]];
             }
@@ -121,7 +119,6 @@ class ProjectModel {
         else {
             stats = stats_bulk;
         }
-        console.log(stats);
 
         return new ProjectModel(
             this.genName(),
@@ -141,8 +138,9 @@ class ProjectModel {
         return Math.floor(
             (_.random(1, 10) +
             (_.random(1, quality) * _.random(1, hired ? hired : 1)) +
-            (_.random(1, quality) * _.random(1, Math.sqrt(projects_done+1))) +
-            (_.random(1, quality) * _.random(1, Math.sqrt(projects_generated+1)))));
+            (_.random(1, quality) * _.random(1, projects_done)) +
+            (_.random(1, quality) * _.random(1, projects_generated)))
+        );
     }
 
 }
