@@ -300,28 +300,28 @@ class App extends Component {
         if (_.random(1, 24*7) === 1 && data.candidates.resumes.length < 3) {
             data.candidates.resumes.push(WorkerModel.generate(_.random(3, 5)));
         }
-        if (_.random(1, 24*7*2) === 1 && data.candidates.resumes.length > 0) {
+        if (_.random(1, 24*7*4) === 1 && data.candidates.resumes.length > 0) {
             _.remove(data.candidates.resumes, (candidate) => { return (candidate.id === data.candidates.resumes[0].id); });
         }
 
-        if (_.random(1, 24*7*2) === 1 && data.candidates.stars.length < 3) {
+        if (_.random(1, 24*7*4) === 1 && data.candidates.stars.length < 3) {
             data.candidates.stars.push(WorkerModel.generate(_.random(20, 40)));
         }
-        if (_.random(1, 24*7*4) === 1 && data.candidates.stars.length > 0) {
+        if (_.random(1, 24*7*4*2) === 1 && data.candidates.stars.length > 0) {
             _.remove(data.candidates.stars, (candidate) => { return (candidate.id === data.candidates.stars[0].id); });
         }
 
-        if (_.random(1, 24*2) === 1 && data.offered_projects.freelance.length < 3) {
+        if (_.random(1, 24) === 1 && data.offered_projects.freelance.length < 3) {
             data.offered_projects.freelance.push(ProjectModel.generate(_.random(1, 5), _.random(1, 2)));
         }
-        if (_.random(1, 24*5) === 1 && data.offered_projects.freelance.length > 0) {
+        if (_.random(1, 24*7) === 1 && data.offered_projects.freelance.length > 0) {
             _.remove(data.offered_projects.freelance, (candidate) => { return (candidate.id === data.offered_projects.freelance[0].id); });
         }
 
         if (_.random(1, 24*7) === 1 && data.offered_projects.bigdeal.length < 3) {
             data.offered_projects.bigdeal.push(ProjectModel.generate(_.random(20, 40), 4));
         }
-        if (_.random(1, 24*7*2) === 1 && data.offered_projects.bigdeal.length > 0) {
+        if (_.random(1, 24*7*4) === 1 && data.offered_projects.bigdeal.length > 0) {
             _.remove(data.offered_projects.bigdeal, (candidate) => { return (candidate.id === data.offered_projects.bigdeal[0].id); });
         }
 
