@@ -8,7 +8,7 @@ import {hired, projects_done} from '../App';
 var projects_generated = 0;
 
 class ProjectModel {
-    constructor(name, type, reward, start_needs, complexity = 0) {
+    constructor(name, type, reward, start_needs, size, complexity = 0) {
         this.id = _.uniqueId('project');
         this.name = name;
         this.type = type;
@@ -18,6 +18,7 @@ class ProjectModel {
         this.needs_max = JSON.parse(JSON.stringify(start_needs));
         this.complexity = complexity;
         this.iteration = 1;
+        this.size = size;
         this.tests = 0;
     }
 
@@ -28,8 +29,8 @@ class ProjectModel {
             if (this.needs[stat] > 0 && work[stat] > 0) {
                 learned.push(stat);
 
-                let cont = _.random(0, (this.complexity / (work[stat] + this.iteration) ));
-                let pro = _.random(1, this.needs[stat]) + _.random(1, this.errors[stat]);
+                let cont = _.random(0, (this.complexity * this.size) / this.iteration);
+                let pro = work[stat] + _.random(1, this.needs[stat]) + _.random(1, this.errors[stat]);
 
             //    console.log(cont, pro);
 
@@ -124,7 +125,8 @@ class ProjectModel {
             this.genName(),
             'project',
             Math.ceil(_.sum(_.values(stats)) * 5 * Math.sqrt(Math.sqrt(quality))),
-            stats
+            stats,
+            size
         );
     }
 
