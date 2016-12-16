@@ -31,7 +31,7 @@ class People extends Component {
                     })}
                 </ul>
                 <button id={candidate.id} onClick={(e) => this.hire(e, type)}>Hire</button>
-                <button id={candidate.id} onClick={(e) => this.reject(e, type)}>Reject</button>
+                <button id={candidate.id} onClick={(e) => this.reject(e, type)}>Reject{type === 'agency' ? ' +900$' : ''}</button>
 
             </div>
         };

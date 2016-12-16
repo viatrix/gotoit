@@ -121,6 +121,7 @@ class App extends Component {
 
     rejectCandidate(id, type) {
         let data = this.state.data;
+        if (type === 'agency') data.money += 900;
         _.remove(data.candidates[type], (candidate) => { return (candidate.id === id); });
         this.setState({data: data});
     }
@@ -149,6 +150,7 @@ class App extends Component {
 
     rejectOffered(id, type) {
         let data = this.state.data;
+        if (type === 'contract') data.money += 900;
         _.remove(data.offered_projects[type], (candidate) => { return (candidate.id === id); });
         this.setState({data: data});
     }

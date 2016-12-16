@@ -36,7 +36,7 @@ class Projects extends Component {
                     })}
                 </ul>
                 <button id={candidate.id} onClick={(e) => this.startOffered(e, type)}>Start</button>
-                <button id={candidate.id} onClick={(e) => this.reject(e, type)}>Reject</button>
+                <button id={candidate.id} onClick={(e) => this.reject(e, type)}>Reject{type === 'contract' ? ' +900$' : ''}</button>
             </div>
         };
 
