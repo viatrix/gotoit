@@ -298,7 +298,7 @@ class App extends Component {
             _.remove(data.candidates.resumes, (candidate) => { return (candidate.id === data.candidates.resumes[0].id); });
         }
 
-        if (_.random(1, 24*7*4) === 1 && data.candidates.stars.length < 3) {
+        if (_.random(1, 24*7*2) === 1 && data.candidates.stars.length < 3) {
             data.candidates.stars.push(WorkerModel.generate(_.random(20, 40)));
         }
         if (_.random(1, 24*7*4) === 1 && data.candidates.stars.length > 0) {
@@ -315,7 +315,7 @@ class App extends Component {
         if (_.random(1, 24*7) === 1 && data.offered_projects.bigdeal.length < 3) {
             data.offered_projects.bigdeal.push(ProjectModel.generate(_.random(20, 40)));
         }
-        if (_.random(1, 24*7) === 1 && data.offered_projects.bigdeal.length > 0) {
+        if (_.random(1, 24*7*2) === 1 && data.offered_projects.bigdeal.length > 0) {
             _.remove(data.offered_projects.bigdeal, (candidate) => { return (candidate.id === data.offered_projects.bigdeal[0].id); });
         }
 
@@ -328,6 +328,8 @@ class App extends Component {
         const tech = data.projects_technologies;
         
         data.workers.forEach((worker) => {
+            if (!worker.is_player && (data.money - worker.getSalary()) < 0) return;
+
             let skip_work = false;
 
             let worker_roles = {
