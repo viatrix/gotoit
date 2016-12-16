@@ -1,6 +1,10 @@
 
 
 div {
+    /*    border: solid 1px; */
+}
+
+.unit_block {
     border: solid 1px;
 }
 
