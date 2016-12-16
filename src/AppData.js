@@ -27,12 +27,12 @@ var app_state =
         },
         offered_projects: {
             freelance: [
-                ProjectModel.generate(1),
-                ProjectModel.generate(1)
+                ProjectModel.generate(1, 2),
+                ProjectModel.generate(1, 2)
             ],
             contract: [],
             bigdeal: [
-                ProjectModel.generate(42)
+                ProjectModel.generate(42, 4)
             ],
         },
         workers: [

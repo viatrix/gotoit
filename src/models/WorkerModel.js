@@ -51,10 +51,8 @@ class WorkerModel {
     }
 
     static generate(quality=1) {
-        return new WorkerModel(
-            this.genName(),
-            {program: this.genStat(quality), design: this.genStat(quality), admin: this.genStat(quality), manage: this.genStat(quality)}
-        );
+        let stats = {program: this.genStat(quality), design: this.genStat(quality), admin: this.genStat(quality), manage: this.genStat(quality)};
+        return new WorkerModel(this.genName(), stats);
     }
 
     static generatePlayer() {

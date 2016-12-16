@@ -96,9 +96,31 @@ class ProjectModel {
         //this.complexity -= (_.sum(_.values(this.needs)));
     }
 
-    static generate(quality=1) {
+    static generate(quality=1, size=4) {
+        console.log("gen quality="+quality+", size="+size);
         projects_generated++;
-        let stats = {program: this.genStat(quality), design: this.genStat(quality), admin: this.genStat(quality), manage: this.genStat(quality)};
+
+        let stats_bulk = {
+            program: this.genStat(quality),
+            design: this.genStat(quality),
+            admin: this.genStat(quality),
+            manage: this.genStat(quality)
+        };
+
+        let stats = JSON.parse(JSON.stringify(skills));;
+
+        if (size !== 4) {
+            let sk = _.shuffle(Object.keys(stats));
+            console.log(stats);
+            //console.log(sk);
+            for (let i = 0; i < size; i++) {
+                stats[sk[i]] = stats_bulk[sk[i]];
+            }
+        }
+        else {
+            stats = stats_bulk;
+        }
+        console.log(stats);
 
         return new ProjectModel(
             this.genName(),
