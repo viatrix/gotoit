@@ -101,24 +101,49 @@ class Project extends Component {
 
                 <Portal ref="manage" closeOnEsc closeOnOutsideClick openByClickOn={manage_button}>
                     <TeamDialog>
-                        <h2>Project Team</h2>
+                        <h4> {project.name} {project.reward}$ </h4>
                         <div>
-                            Who will work on {project.name} project?
-                            <input type="checkbox" onChange={this.manageAll}/>All
-                            <ul>
-                                {this.props.data.workers.map((worker, i) =>
-                                    <li key={worker.id + project.id}>
-                                        <input
-                                            type="checkbox"
-                                            id={worker.id || ''}
-                                            checked={data.helpers.getRelation(worker.id, project.id)}
-                                            onChange={this.manage}/>
-                                        {worker.name}
-                                    </li>
-                                )}
-                            </ul>
+                            <span> Tasks: {project.tasksQuantity()}/{project.planedTasksQuantity()} </span>
+                            <span> Bugs: {project.bugsQuantity()} </span>
+                            <span> Complexity: {project.complexity} </span>
+                            <span> Iteration: {project.iteration} </span>
                         </div>
-                        <h2>Project Technologies</h2>
+                        <ul>
+                            {skills_names.map((skill) => {
+
+                                let need = project.needs[skill];
+                                let errors = project.errors[skill];
+                                let max = project.needs_max[skill];
+                                let diff = max - need - errors;
+
+                                let sum = need + errors + diff;
+
+                                let tasks = need / sum * 100;
+                                let bugs = errors / sum * 100;
+                                let done = (diff / sum * 100)-0.1;
+                              //  let done = Math.max(0, (Math.floor(100-tasks-bugs)));
+
+                                return <div key={skill} className="row">
+                                    <div className="col-md-1">{skill}</div>
+                                    <div className="col-md-10 progress">
+                                        <div className="progress-bar progress-bar-warning" role="progressbar"
+                                                style={{width: tasks+'%'}}>
+                                            {need ? <label>{need} tasks</label> : ''}
+                                        </div>
+                                        <div className="progress-bar progress-bar-danger" role="progressbar"
+                                                 style={{width: bugs+'%'}}>
+                                            {errors ? <label>{errors} bugs</label> : ''}
+                                        </div>
+                                        <div className="progress-bar progress-bar-success" role="progressbar"
+                                                 style={{width: done+'%'}}>
+                                            {(diff) ? <label>{diff} done</label> : ''}
+                                        </div>
+                                    </div>
+                                </div>;
+                            })}
+                            {project.tests > 0 ? <li key="tests">tests <span>{project.tests}</span> / <span>{project.planedTasksQuantity()}</span></li> : ''}
+                        </ul>
+                        <h4>Project Technologies</h4>
                         <div>
                             Which technologies should be used on {project.name} project?
                             <ul>
@@ -131,6 +156,23 @@ class Project extends Component {
                                             onChange={this.changeTechnology}/>
                                         <span> {technologies[technology].name} </span>
                                         <span className="small"> {technologies[technology].description} </span>
+                                    </li>
+                                )}
+                            </ul>
+                        </div>
+                        <h4>Project Team</h4>
+                        <div>
+                            Who will work on {project.name} project?
+                            <input type="checkbox" onChange={this.manageAll}/>All
+                            <ul>
+                                {this.props.data.workers.map((worker, i) =>
+                                    <li key={worker.id + project.id}>
+                                        <input
+                                            type="checkbox"
+                                            id={worker.id || ''}
+                                            checked={data.helpers.getRelation(worker.id, project.id)}
+                                            onChange={this.manage}/>
+                                        {worker.name}
                                     </li>
                                 )}
                             </ul>
@@ -160,8 +202,8 @@ class Project extends Component {
                 </div>
 
                 <div className="small">
-                    <p>Team: {team_label}</p>
-                    <p>Tech: {tech_label}</p>
+                    <p className="small">Team: {team_label}</p>
+                    <p className="small">Tech: {tech_label}</p>
                 </div>
             </div>
         );
