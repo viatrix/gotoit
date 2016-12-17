@@ -47,7 +47,7 @@ class Projects extends Component {
 
         return (
             <div>
-                <h4>Projects</h4>
+                <h4 className="text-center">Projects</h4>
 
 
                 <Portal closeOnEsc closeOnOutsideClick openByClickOn={find_projects}>

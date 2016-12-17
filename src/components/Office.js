@@ -6,8 +6,8 @@ class Office extends Component {
 
         return (
             <div>
-                <h4>Office</h4>
-                <span>money <label>{this.props.data.money}</label></span>
+                <h4 className="text-center">Office</h4>
+                <h5>Money <label>{this.props.data.money}</label></h5>
                 <div>
                     <p className="row">
                     <span className="col-sm-2 col-md-2">
