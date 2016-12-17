@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import Portal from 'react-portal';
+import _ from 'lodash';
 
 import TeamDialog from './TeamDialog';
+import StatsBar from './StatsBar';
 
 import Project from './Project';
 import ProjectModel from '../models/ProjectModel';
-import {skills_names} from '../data/knowledge';
+import {skills} from '../data/knowledge';
 
 class Projects extends Component {
     constructor(props) {
@@ -29,12 +31,13 @@ class Projects extends Component {
         const find_projects = <button>Find Projects</button>;
 
         let project_block_template = (candidate, type) => {
-            return <div key={candidate.id} className="unit_block">{candidate.name} <span></span>
-                <ul>
-                    {skills_names.map((skill) => {
-                        return <li key={skill}> <span> {skill} {candidate.needs[skill]} </span> </li>
-                    })}
-                </ul>
+            const stats_data = _.mapValues(skills, (stat, key) => {
+                return { name: key, val: <span>{candidate.needs[key]}</span> };
+            });
+
+            return <div key={candidate.id} className="unit_block">{candidate.name}
+                <div>deadline: {candidate.getDeadlineText()}</div>
+                <StatsBar stats={stats_data} data={this.props.data} />
                 <button id={candidate.id} onClick={(e) => this.startOffered(e, type)}>Start</button>
                 <button id={candidate.id} onClick={(e) => this.reject(e, type)}>Reject{type === 'contract' ? ' +900$' : ''}</button>
                 {candidate.reward}$

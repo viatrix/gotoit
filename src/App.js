@@ -177,6 +177,13 @@ class App extends Component {
         this.setState({data: data});
     }
 
+    failProject(id) {
+        let data = this.state.data;
+        console.log('fail');
+        _.remove(data.projects, (project) => { return (project.id === id); });
+        this.setState({data: data});
+    }
+
     fixProject(id) {
         let data = this.state.data;
         _.find(data.projects, (project) => { return (project.id === id); }).fix();
@@ -237,13 +244,25 @@ class App extends Component {
 
 
     tick() {
+        const data = this.state.data;
+
         this.nextDay();
 
         this.rollTurn();
 
-        if (this.state.data.date.is_working_time) {
+        if (data.date.is_working_time) {
             this.work();
         }
+
+        data.projects.forEach((project) => {
+            if (project.tasksQuantity() === 0 && project.bugsQuantity() === 0)
+                this.finishProject(project.id);
+            project.deadline--;
+            if (project.deadline <= 0)
+                this.failProject(project.id);
+            if (project.tasksQuantity() === 0 && project.bugsQuantity() !== 0)
+                this.fixProject(project.id);
+        });
     }
 
     nextDay() {
@@ -392,12 +411,17 @@ class App extends Component {
             }
         });
 
+        /*
         data.projects.forEach((project) => {
             if (project.tasksQuantity() === 0 && project.bugsQuantity() === 0)
                 this.finishProject(project.id);
+            project.deadline--;
+            if (project.deadline <= 0)
+                this.failProject(project.id);
             if (project.tasksQuantity() === 0 && project.bugsQuantity() !== 0)
                 this.fixProject(project.id);
         });
+        */
     }
 
     render() {

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Portal from 'react-portal';
 import _ from 'lodash';
+import classNames from 'classnames';
 
 import TeamDialog from './TeamDialog';
 import StatsBar from './StatsBar';
@@ -106,21 +107,35 @@ class Project extends Component {
         }
         const finish_button = tmp;
 
+        const deadline = project.getDeadlineText();
 
         return (
             <div className="unit_block">
-                {project.name} ({project.reward}$)
+                {project.name} ({project.reward}$) {deadline}
 
                 <Portal ref="manage" closeOnEsc closeOnOutsideClick openByClickOn={manage_button}>
                     <TeamDialog>
-                        <h4> {project.name} {project.reward}$ </h4>
-                        <div>
-                            <span> Tasks: {project.tasksQuantity()}/{project.planedTasksQuantity()} </span>
-                            <span> Bugs: {project.bugsQuantity()} </span>
-                            <span> Complexity: {project.complexity} </span>
-                            <span> Iteration: {project.iteration} </span>
+                        <h4> {project.name} {project.reward}$ {deadline}</h4>
+                        <div className="flex-container-row">
+                            <div className="flex-element"> Tasks: {project.tasksQuantity()}/{project.planedTasksQuantity()} </div>
+                            <div className="flex-element"> Bugs: {project.bugsQuantity()} </div>
+                            <div className="flex-element"> Complexity: {project.complexity} </div>
+                            <div className="flex-element"> Iteration: {project.iteration} </div>
                         </div>
                         <div>
+                            {project.deadline > 0 ? <div key="tests" className="row">
+                                <div className="col-md-1">Deadline</div>
+                                <div className="col-md-10 progress">
+                                    <div className={classNames('progress-bar', (project.deadline / project.deadline_max < 0.1 ? 'progress-bar-danger' : 'progress-bar-warning'))} role="progressbar"
+                                         style={{width: (100-(project.deadline / project.deadline_max * 100))+'%'}}>
+                                        <label>{project.deadline_max - project.deadline} hours</label>
+                                    </div>
+                                    <div className="progress-bar progress-bar-success" role="progressbar"
+                                         style={{width: (project.deadline / project.deadline_max * 100)+'%'}}>
+                                        <label>{project.deadline} hours</label>
+                                    </div>
+                                </div>
+                            </div> : ''}
                             {skills_names.map((skill) => {
 
                                 let need = project.needs[skill];
@@ -206,6 +221,18 @@ class Project extends Component {
                         </div>
                     </TeamDialog>
                 </Portal>
+
+                {project.deadline > 0 ?
+                    <div className="progress">
+                        <div className={classNames('progress-bar', (project.deadline / project.deadline_max < 0.1 ? 'progress-bar-danger' : 'progress-bar-warning'))} role="progressbar"
+                             style={{width: (100-(project.deadline / project.deadline_max * 100))+'%'}}>
+                            <label>{project.deadline_max - project.deadline} gone</label>
+                        </div>
+                        <div className="progress-bar progress-bar-success" role="progressbar"
+                             style={{width: (project.deadline / project.deadline_max * 100)+'%'}}>
+                            <label>{project.deadline} to deadline</label>
+                        </div>
+                    </div> : ''}
 
                 <StatsBar stats={stats_data} data={this.props.data} />
 

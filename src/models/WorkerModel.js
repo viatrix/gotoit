@@ -56,7 +56,7 @@ class WorkerModel {
     }
 
     static generate(quality=1) {
-        let stats = {program: this.genStat(quality), design: this.genStat(quality), admin: this.genStat(quality), manage: this.genStat(quality)};
+        let stats = {design: this.genStat(quality), manage: this.genStat(quality), program: this.genStat(quality), admin: this.genStat(quality)};
         return new WorkerModel(this.genName(), stats);
     }
 

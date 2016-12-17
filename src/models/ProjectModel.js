@@ -8,7 +8,7 @@ import {hired, projects_done} from '../App';
 var projects_generated = 0;
 
 class ProjectModel {
-    constructor(name, type, reward, start_needs, size, complexity = 0) {
+    constructor(name, type, reward, start_needs, size, deadline, complexity = 0) {
         this.id = _.uniqueId('project');
         this.name = name;
         this.type = type;
@@ -16,6 +16,8 @@ class ProjectModel {
         this.needs = JSON.parse(JSON.stringify(start_needs));
         this.errors = JSON.parse(JSON.stringify(skills));
         this.needs_max = JSON.parse(JSON.stringify(start_needs));
+        this.deadline = deadline;
+        this.deadline_max = deadline;
         this.complexity = complexity;
         this.iteration = 1;
         this.size = size;
@@ -91,6 +93,10 @@ class ProjectModel {
         return needed;
     }
 
+    getDeadlineText() {
+        return this.deadline + ' hours';
+    }
+
     fix() {
         this.iteration++;
         this.needs = JSON.parse(JSON.stringify(this.errors));
@@ -124,18 +130,13 @@ class ProjectModel {
         let s = _.values(stats);
         let reward = Math.pow(10, size+1) +
             Math.ceil((_.max(s) + _.sum(s)) * 5 * Math.sqrt(quality));
+        let deadline = Math.floor(Math.pow(100, Math.sqrt(size)) + (_.sum(s)*3*4*Math.sqrt(quality))/size); //8*5*4*size*Math.sqrt(quality);
 
-        return new ProjectModel(
-            this.genName(size),
-            'project',
-            reward,
-            stats,
-            size
-        );
+        return new ProjectModel(this.genName(size), 'project', reward, stats, size, deadline);
     }
 
     static genName(size) {
-        var size_names = ['Browser', 'Tiny', 'Small', 'Medium', 'Big'];
+        var size_names = ['Test', 'Tiny', 'Small', 'Medium', 'Big'];
         var first_names = ['Browser', 'Desktop', 'Mobile', 'Embedded', 'Enterprise'];
         var second_names = ['Game', 'System', 'Environment', 'Site', 'Application'];
         return size_names[size] + ' ' + _.sample(first_names) + ' ' + _.sample(second_names);
