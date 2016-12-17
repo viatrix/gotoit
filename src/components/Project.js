@@ -125,7 +125,7 @@ class Project extends Component {
 
                                 let need = project.needs[skill];
                                 let errors = project.errors[skill];
-                                let max = project.needs_max[skill];
+                                var max = project.needs_max[skill];
                                 let diff = max - need - errors;
 
                                 let sum = need + errors + diff;
@@ -153,7 +153,19 @@ class Project extends Component {
                                     </div>
                                 </div>;
                             })}
-                            {project.tests > 0 ? <li key="tests">tests <span>{project.tests}</span> / <span>{project.planedTasksQuantity()}</span></li> : ''}
+                            {project.tests > 0 ? <div key="tests" className="row">
+                                <div className="col-md-1">tests</div>
+                                <div className="col-md-10 progress">
+                                    <div className="progress-bar progress-bar-warning" role="progressbar"
+                                         style={{width: (100-(project.tests / project.planedTasksQuantity() * 100))+'%'}}>
+                                        <label>{project.planedTasksQuantity()-project.tests} tasks</label>
+                                    </div>
+                                    <div className="progress-bar progress-bar-success" role="progressbar"
+                                         style={{width: (project.tests / project.planedTasksQuantity() * 100)+'%'}}>
+                                        <label>{project.tests} done</label>
+                                    </div>
+                                </div>
+                            </div> : ''}
                         </div>
                         <h4>Project Technologies</h4>
                         <div>
