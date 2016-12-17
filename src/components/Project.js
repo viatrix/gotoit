@@ -18,6 +18,10 @@ class Project extends Component {
         this.close = this.close.bind(this);
     }
 
+    componentDidMount() {
+        this.refs.manage.openPortal();
+    }
+
     manage(event) {
         this.props.data.helpers.modifyRelation(event.target.id, this.props.project.id, event.target.checked);
     }
@@ -95,7 +99,7 @@ class Project extends Component {
             <div className="unit_block">
                 {project.name} ({project.reward}$)
 
-                <Portal closeOnEsc closeOnOutsideClick openByClickOn={manage_button}>
+                <Portal ref="manage" closeOnEsc closeOnOutsideClick openByClickOn={manage_button}>
                     <TeamDialog>
                         <h2>Project Team</h2>
                         <div>

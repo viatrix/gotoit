@@ -12,6 +12,9 @@ class Worker extends Component {
         this.dismiss = this.dismiss.bind(this);
         this.changeRole = this.changeRole.bind(this);
     }
+    componentDidMount() {
+        this.refs.manage.openPortal();
+    }
 
     manage(event) {
         this.props.data.helpers.modifyRelation(this.props.worker.id, event.target.id, event.target.checked);
@@ -69,7 +72,7 @@ class Worker extends Component {
                     </TeamDialog>
                 </Portal>
 
-                <Portal closeOnEsc closeOnOutsideClick openByClickOn={manage_button}>
+                <Portal ref="manage" closeOnEsc closeOnOutsideClick openByClickOn={manage_button}>
                     <TeamDialog>
                         <h2>Worker Projects</h2>
                         <div>
