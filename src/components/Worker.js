@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import Portal from 'react-portal';
+import _ from 'lodash';
 
 import TeamDialog from './TeamDialog';
+import StatsBar from './StatsBar';
 import {skills_names, roles, education} from '../data/knowledge';
 
 class Worker extends Component {
@@ -41,6 +43,10 @@ class Worker extends Component {
 
         const manage_button = <button className="btn">Manage Work</button>;
         const educate_button = <button className="btn invisible">Educate</button>;
+
+        const stats_data = _.mapValues(worker.stats, (stat, key) => {
+            return {name: key, val: (worker.stats[key] + worker.expirience[key]/100)};
+        });
 
         return (
             <div className="unit_block">
@@ -114,15 +120,7 @@ class Worker extends Component {
                     </TeamDialog>
                 </Portal>
 
-                <ul>
-                    {skills_names.map((skill) => {
-                        return <li key={skill}>
-                            <span> {skill} {worker.stats[skill]} </span>
-                            <span> ({worker.expirience[skill]}%) </span>
-                        </li>
-                    })}
-                </ul>
-
+                <StatsBar stats={stats_data} data={this.props.data} />
             </div>
         );
     }

@@ -1,5 +1,20 @@
 
 
+.flex-container-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-container-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.flex-element {
+    flex: 1;
+}
+
+
 div {
     /*    border: solid 1px; */
 }

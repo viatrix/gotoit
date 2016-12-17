@@ -3,8 +3,9 @@ import Portal from 'react-portal';
 import _ from 'lodash';
 
 import TeamDialog from './TeamDialog';
+import StatsBar from './StatsBar';
 
-import {skills_names, technologies} from '../data/knowledge';
+import {skills_names, skills, technologies} from '../data/knowledge';
 
 
 class Project extends Component {
@@ -49,6 +50,17 @@ class Project extends Component {
     render() {
         const data = this.props.data;
         const project = this.props.project;
+
+        const stats_data = _.mapValues(skills, (stat, key) => {
+            return {name: key, // _.capitalize(key[0]),
+                val:
+                    <span>
+                        <span>{project.needs[key]}</span>
+                        {project.errors[key] > 0 ? <span>+{project.errors[key]}</span> : ''}
+                        /<span>{project.needs_max[key]}</span>
+                    </span>
+            };
+        });
 
         const manage_button = <button className="btn">Manage</button>;
 
@@ -108,7 +120,7 @@ class Project extends Component {
                             <span> Complexity: {project.complexity} </span>
                             <span> Iteration: {project.iteration} </span>
                         </div>
-                        <ul>
+                        <div>
                             {skills_names.map((skill) => {
 
                                 let need = project.needs[skill];
@@ -142,7 +154,7 @@ class Project extends Component {
                                 </div>;
                             })}
                             {project.tests > 0 ? <li key="tests">tests <span>{project.tests}</span> / <span>{project.planedTasksQuantity()}</span></li> : ''}
-                        </ul>
+                        </div>
                         <h4>Project Technologies</h4>
                         <div>
                             Which technologies should be used on {project.name} project?
@@ -183,16 +195,7 @@ class Project extends Component {
                     </TeamDialog>
                 </Portal>
 
-                <ul>
-                    {skills_names.map((skill) => {
-                        return <li key={skill}>
-                            <span> {skill} {project.needs[skill]} </span>
-                            {project.errors[skill] > 0 ? <span> ({project.errors[skill]}) </span> : ' '}
-                             / <span> {project.needs_max[skill]} </span>
-                        </li>
-                    })}
-                    {project.tests > 0 ? <li key="tests">tests <span>{project.tests}</span> / <span>{project.planedTasksQuantity()}</span></li> : ''}
-                </ul>
+                <StatsBar stats={stats_data} data={this.props.data} />
 
                 <div>
                     <span> Tasks: {project.tasksQuantity()}/{project.planedTasksQuantity()} </span>
