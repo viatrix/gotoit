@@ -29,7 +29,7 @@ class Projects extends Component {
         const find_projects = <button>Find Projects</button>;
 
         let project_block_template = (candidate, type) => {
-            return <div key={candidate.id} className="unit_block">{candidate.name} <span> {candidate.reward}$</span>
+            return <div key={candidate.id} className="unit_block">{candidate.name} <span></span>
                 <ul>
                     {skills_names.map((skill) => {
                         return <li key={skill}> <span> {skill} {candidate.needs[skill]} </span> </li>
@@ -37,6 +37,7 @@ class Projects extends Component {
                 </ul>
                 <button id={candidate.id} onClick={(e) => this.startOffered(e, type)}>Start</button>
                 <button id={candidate.id} onClick={(e) => this.reject(e, type)}>Reject{type === 'contract' ? ' +900$' : ''}</button>
+                {candidate.reward}$
             </div>
         };
 
@@ -51,19 +52,19 @@ class Projects extends Component {
 
                 <Portal closeOnEsc closeOnOutsideClick openByClickOn={find_projects}>
                     <TeamDialog>
-                        <h2>Find Projects</h2>
+                        <h3 className="text-center">Find Projects</h3>
                         <div className="row">
                             <div className="col-md-4">
-                                <h3>Freelance</h3>
+                                <h4 className="text-center">Freelance</h4>
                                 {this.props.data.offered_projects.freelance.map(freelance_offered)}
                             </div>
                             <div className="col-md-4">
-                                <h3>Contract</h3>
+                                <h4 className="text-center">Contract</h4>
                                 <button onClick={this.props.data.helpers.contractSearch}>Search 1000$</button>
                                 {this.props.data.offered_projects.contract.map(contract_offered)}
                             </div>
                             <div className="col-md-4">
-                                <h3>Big Deal</h3>
+                                <h4 className="text-center">Big Deal</h4>
                                 {this.props.data.offered_projects.bigdeal.map(bigdeal_offered)}
                             </div>
                         </div>

@@ -10,6 +10,7 @@ class WorkerModel {
         this.stats = stats;
         this.is_player = is_player;
         this.expirience = JSON.parse(JSON.stringify(skills));
+        this.standing = 0;
     }
 
     statsSum() {
@@ -21,12 +22,14 @@ class WorkerModel {
             return 0;
         }
         else {
-            return this.statsSum() + _.max(_.values(this.stats));
+            //console.log("standing " + this.standing + " means " + (1 + (this.standing/(12*4*7*8*Math.PI))));
+            return Math.floor((this.statsSum() + _.max(_.values(this.stats))) * (1 + (this.standing/(12*4*7*8*Math.PI))));
         }
     }
 
 
     getResources(worker_roles, focus_on=null) {
+        this.standing++;
         var resources = {};
         let stat = focus_on ? focus_on : _.sample(_.keys(_.pickBy(worker_roles, _.identity)));
         if (!(stat in resources)) resources[stat] = 0;
@@ -36,6 +39,7 @@ class WorkerModel {
     }
 
     getSideResource() {
+        this.standing++;
         let s = this.statsSum()/_.values(this.stats).length;
         return Math.floor(_.random(1, s) + _.random(1, s));
     }
@@ -67,8 +71,8 @@ class WorkerModel {
     }
 
     static genName() {
-        var first_names = ['Jack', 'Kristofer', 'Mike', 'Micheal', 'Marlena', 'Loris', 'Breana', 'Gregorio', 'Freddy', 'Devin'];
-        var second_names = ['Smith', 'Eisenhauer', 'Kirschbaum', 'Larose', 'Alvarado', 'Christon', 'Jaynes', 'Mcmillian', 'Radcliffe', 'Engelhard'];
+        var first_names = ['Jack', 'Kristofer', 'Mike', 'Micheal', 'Marlena', 'Loris', 'Breana', 'Gregorio', 'Freddy', 'Devin', 'Nicol', 'Alex', 'Peter'];
+        var second_names = ['Smith', 'Eisenhauer', 'Kirschbaum', 'Larose', 'Alvarado', 'Christon', 'Jaynes', 'Mcmillian', 'Radcliffe', 'Engelhard', 'Prambpharatha'];
         return _.sample(first_names) + ' ' + _.sample(second_names);
     }
 

@@ -126,7 +126,7 @@ class ProjectModel {
             Math.ceil((_.max(s) + _.sum(s)) * 5 * Math.sqrt(quality));
 
         return new ProjectModel(
-            this.genName(),
+            this.genName(size),
             'project',
             reward,
             stats,
@@ -134,10 +134,11 @@ class ProjectModel {
         );
     }
 
-    static genName() {
+    static genName(size) {
+        var size_names = ['Browser', 'Tiny', 'Small', 'Medium', 'Big'];
         var first_names = ['Browser', 'Desktop', 'Mobile', 'Embedded', 'Enterprise'];
         var second_names = ['Game', 'System', 'Environment', 'Site', 'Application'];
-        return _.sample(first_names) + ' ' + _.sample(second_names);
+        return size_names[size] + ' ' + _.sample(first_names) + ' ' + _.sample(second_names);
     }
 
     static genStat(quality, size=1) {

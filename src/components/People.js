@@ -46,19 +46,19 @@ class People extends Component {
 
                 <Portal closeOnEsc closeOnOutsideClick openByClickOn={hire_button}>
                     <TeamDialog>
-                        <h2>Hiring</h2>
+                        <h3 className="text-center">Hiring</h3>
                         <div className="row">
                             <div className="col-md-4">
-                                <h3>Resume</h3>
+                                <h4 className="text-center">Resume</h4>
                                 {this.props.data.candidates.resumes.map(resumes_candidate)}
                             </div>
                             <div className="col-md-4">
-                                <h3>Agency</h3>
+                                <h4 className="text-center">Agency</h4>
                                 <button onClick={this.props.data.helpers.agencySearch}>Search 1000$</button>
                                 {this.props.data.candidates.agency.map(agency_candidate)}
                             </div>
                             <div className="col-md-4">
-                                <h3>Stars</h3>
+                                <h4 className="text-center">Stars</h4>
                                 {this.props.data.candidates.stars.map(stars_candidate)}
                             </div>
                         </div>

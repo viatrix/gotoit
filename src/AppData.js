@@ -8,7 +8,7 @@ import ProjectModel from './models/ProjectModel';
 var app_state =
 {
     data: {
-        money: 0,
+        money: 1000,
         date: {
             tick: 0,
             hour: 0,
