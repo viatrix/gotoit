@@ -138,14 +138,15 @@ class Project extends Component {
 
                                 let need = project.needs[skill];
                                 let errors = project.errors[skill];
-                                var max = project.needs_max[skill];
-                                let diff = max - need - errors;
+                                var needs_max = project.needs_max[skill];
+                                var max = _.max(_.values(project.needs_max));
+                                let diff = needs_max - need - errors;
 
-                                let sum = need + errors + diff;
+                                //let sum = need + errors + diff;
 
-                                let tasks = need / sum * 100;
-                                let bugs = errors / sum * 100;
-                                let done = (diff / sum * 100)-0.1;
+                                let tasks = need / max * 100;
+                                let bugs = errors / max * 100;
+                                let done = diff / max * 100;
                               //  let done = Math.max(0, (Math.floor(100-tasks-bugs)));
 
                                 return <div key={skill} className="row">
