@@ -108,7 +108,7 @@ class App extends Component {
         agency_generation_counter++;
         let data = this.state.data;
         data.money -= 1000;
-        data.candidates.agency.push(WorkerModel.generate(_.random(10, 20) + agency_generation_counter));
+        data.candidates.agency.push(WorkerModel.generate(_.random(1, 20) + agency_generation_counter));
         this.setState({data: data});
     }
 
@@ -147,7 +147,7 @@ class App extends Component {
         contract_generation_counter++;
         let data = this.state.data;
         data.money -= 1000;
-        data.offered_projects.contract.push(ProjectModel.generate(_.random(10, 20) + contract_generation_counter, 3));
+        data.offered_projects.contract.push(ProjectModel.generate(_.random(1, 20) + contract_generation_counter, 3));
         this.setState({data: data});
     }
 
