@@ -56,8 +56,8 @@ class Project extends Component {
             return {name: key, // _.capitalize(key[0]),
                 val:
                     <span>
-                        <span>{project.needs[key]}</span>
-                        {project.errors[key] > 0 ? <span>+{project.errors[key]}</span> : ''}
+                        <span className="text-warning">{project.needs[key]}</span>
+                        {project.errors[key] > 0 ? <span className="text-danger">+{project.errors[key]}</span> : ''}
                         /<span>{project.needs_max[key]}</span>
                     </span>
             };
@@ -111,14 +111,14 @@ class Project extends Component {
 
         return (
             <div className="unit_block">
-                {project.name} ({project.reward}$) {deadline}
+                {project.name} ({project.reward}$)
 
                 <Portal ref="manage" closeOnEsc closeOnOutsideClick openByClickOn={manage_button}>
                     <TeamDialog>
-                        <h4> {project.name} {project.reward}$ {deadline}</h4>
+                        <h4> {project.name} {project.reward}$</h4>
                         <div className="flex-container-row">
                             <div className="flex-element"> Tasks: {project.tasksQuantity()}/{project.planedTasksQuantity()} </div>
-                            <div className="flex-element"> Bugs: {project.bugsQuantity()} </div>
+                            <div className="flex-element"> Bugs: <label className="text-danger">{project.bugsQuantity()}</label></div>
                             <div className="flex-element"> Complexity: {project.complexity} </div>
                             <div className="flex-element"> Iteration: {project.iteration} </div>
                         </div>
@@ -270,7 +270,7 @@ class Project extends Component {
 
                 <div className="flex-container-row">
                     <div className="flex-element"> Tasks: {project.tasksQuantity()}/{project.planedTasksQuantity()} </div>
-                    <div className="flex-element"> Bugs: {project.bugsQuantity()} </div>
+                    <div className="flex-element"> Bugs: <label className="text-danger">{project.bugsQuantity()}</label> </div>
                     <div className="flex-element"> Complexity: {project.complexity} </div>
                     <div className="flex-element"> Iteration: {project.iteration} </div>
                 </div>
