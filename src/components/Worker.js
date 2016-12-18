@@ -85,8 +85,9 @@ class Worker extends Component {
                             Which projects {worker.name} has to work?
                             <input
                                 type="checkbox"
+                                id={worker.id}
                                 checked={worker.accept_default}
-                                onChange={(e) => {this.manageAll(e); worker.accept_default = event.target.checked;}}/> All
+                                onChange={(e) => { worker.accept_default = e.target.checked; this.manageAll(e); console.log(worker.accept_default); }}/> All
                             <ul>
                                 {this.props.data.projects.map((project, i) =>
                                     <li key={worker.id + project.id}>
