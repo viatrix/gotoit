@@ -65,7 +65,7 @@ class WorkerModel {
 
         return new WorkerModel(
             name,
-            {program: 1, design: 1, admin: 1, manage: 1},
+            _.mapValues(skills, (value, key) => { return 1; }), // {design: 1, manage: 1, program: 1, admin: 1},
             true
         );
     }

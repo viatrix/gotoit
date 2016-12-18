@@ -234,18 +234,46 @@ class Project extends Component {
                         </div>
                     </div> : ''}
 
+                {(() => {
+                    let errors = project.bugsQuantity();
+                    let need = project.tasksQuantity();
+                    var max = project.planedTasksQuantity();
+                    let diff = max - need - errors;
+
+                    let sum = need + errors + diff;
+
+                    let tasks = need / sum * 100;
+                    let bugs = errors / sum * 100;
+                    let done = (diff / sum * 100)-0.1;
+
+                    return <div className="progress">
+                        <div className="progress-bar progress-bar-warning" role="progressbar"
+                             style={{width: tasks+'%'}}>
+                            {need ? <label>{need} tasks</label> : ''}
+                        </div>
+                        <div className="progress-bar progress-bar-danger" role="progressbar"
+                             style={{width: bugs+'%'}}>
+                            {errors ? <label>{errors} bugs</label> : ''}
+                        </div>
+                        <div className="progress-bar progress-bar-success" role="progressbar"
+                             style={{width: done+'%'}}>
+                            {(diff) ? <label>{diff} done</label> : ''}
+                        </div>
+                    </div>;
+                })()}
+
                 <StatsBar stats={stats_data} data={this.props.data} />
 
-                <div>
-                    <span> Tasks: {project.tasksQuantity()}/{project.planedTasksQuantity()} </span>
-                    <span> Bugs: {project.bugsQuantity()} </span>
-                    <span> Complexity: {project.complexity} </span>
-                    <span> Iteration: {project.iteration} </span>
+                <div className="flex-container-row">
+                    <div className="flex-element"> Tasks: {project.tasksQuantity()}/{project.planedTasksQuantity()} </div>
+                    <div className="flex-element"> Bugs: {project.bugsQuantity()} </div>
+                    <div className="flex-element"> Complexity: {project.complexity} </div>
+                    <div className="flex-element"> Iteration: {project.iteration} </div>
                 </div>
 
                 <div className="small">
                     <p className="small">Team: {team_label}</p>
-                    <p className="small">Tech: {tech_label}</p>
+                    {tech.length ? <p className="small">Tech: {tech_label}</p> : ''}
                 </div>
             </div>
         );
