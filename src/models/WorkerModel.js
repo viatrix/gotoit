@@ -1,6 +1,8 @@
 
 import _ from 'lodash';
 
+import bulkStyler from '../services/bulkStyler';
+
 import {skills} from '../data/knowledge';
 
 class WorkerModel {
@@ -59,37 +61,7 @@ class WorkerModel {
     static generate(quality=1) {
         let stats_bulk = {design: this.genStat(quality), manage: this.genStat(quality), program: this.genStat(quality), admin: this.genStat(quality)};
 
-        let speciality = ['none', 'specialist', 'dualist'][_.random(0, 2)];
-
-        let order = Object.keys(stats_bulk).sort(function(a,b){return stats_bulk[b]-stats_bulk[a]});
-
-        switch (speciality) {
-            case 'none':
-                console.log('none');
-                stats_bulk[order[0]] *= 0.8;
-                stats_bulk[order[1]] *= 0.9;
-                stats_bulk[order[2]] *= 1.1;
-                stats_bulk[order[3]] *= 1.2;
-                break;
-            case 'specialist':
-                console.log('specialist');
-                stats_bulk[order[0]] *= 2;
-                stats_bulk[order[1]] *= 0.5;
-                stats_bulk[order[2]] *= 0.6;
-                stats_bulk[order[3]] *= 0.7;
-                break;
-            case 'dualist':
-                console.log('dualist');
-                stats_bulk[order[0]] *= 1.5;
-                stats_bulk[order[1]] *= 1.7;
-                stats_bulk[order[2]] *= 0.5;
-                stats_bulk[order[3]] *= 0.7;
-                break;
-            default:
-                console.log('error case: ' + speciality);
-        }
-
-        let stats = _.mapValues(stats_bulk, function(stat) { return Math.ceil(stat); });
+        let stats = bulkStyler(stats_bulk);
 
         return new WorkerModel(this.genName(), stats);
     }

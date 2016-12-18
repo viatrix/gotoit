@@ -2,6 +2,8 @@
 
 import _ from 'lodash';
 
+import bulkStyler from '../services/bulkStyler';
+
 import {skills} from '../data/knowledge';
 import {hired, projects_done} from '../App';
 
@@ -109,7 +111,6 @@ class ProjectModel {
     //    console.log("gen quality="+quality+", size="+size);
         projects_generated++;
 
-
         let stats_bulk = {
             program: this.genStat(quality, size),
             design: this.genStat(quality, size),
@@ -117,6 +118,7 @@ class ProjectModel {
             manage: this.genStat(quality, size)
         };
 
+        stats_bulk = bulkStyler(stats_bulk);
 
         let stats = JSON.parse(JSON.stringify(skills));
 
