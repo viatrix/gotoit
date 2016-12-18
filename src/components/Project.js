@@ -121,7 +121,7 @@ class Project extends Component {
                             <div className="flex-element"> Iteration: {project.iteration} </div>
                         </div>
                         <div>
-                            {project.deadline > 0 ? <div key="tests" className="row">
+                            {project.deadline > 0 ? <div key="deadline" className="row">
                                 <div className="col-md-2">Deadline</div>
                                 <div className="col-md-9 progress">
                                     <div className={classNames('progress-bar', (project.deadline / project.deadline_max < 0.1 ? 'progress-bar-danger' : 'progress-bar-warning'))} role="progressbar"
