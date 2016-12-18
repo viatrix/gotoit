@@ -79,11 +79,11 @@ class App extends Component {
 
         if (worker_id === null) {
             this.state.data.workers.forEach((worker) => {
-                put(worker.id, project_id);
+                if (worker.accept_default) put(worker.id, project_id);
             });
         } else if (project_id === null) {
             this.state.data.projects.forEach((project) => {
-                put(worker_id, project.id);
+                if (project.accept_default) put(worker_id, project.id);
             });
         } else {
             put(worker_id, project_id);

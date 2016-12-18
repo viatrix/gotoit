@@ -22,6 +22,7 @@ class ProjectModel {
         this.iteration = 1;
         this.size = size;
         this.tests = 0;
+        this.accept_default = true;
     }
 
     applyWork(work, rad = false) {
@@ -130,7 +131,8 @@ class ProjectModel {
         let s = _.values(stats);
         let reward = Math.pow(10, size+1) +
             Math.ceil((_.max(s) + _.sum(s)) * 5 * Math.sqrt(quality));
-        let deadline = Math.floor(Math.pow(100, Math.sqrt(size)) + (_.sum(s)*3*4*Math.sqrt(quality))/size); //8*5*4*size*Math.sqrt(quality);
+        let deadline = Math.floor(
+            (Math.pow(100, Math.sqrt(size)) + ((_.max(s) + _.sum(s)) * 5)) / size); //8*5*4*size*Math.sqrt(quality);
 
         return new ProjectModel(this.genName(size), 'project', reward, stats, size, deadline);
     }

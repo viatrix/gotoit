@@ -11,6 +11,7 @@ class WorkerModel {
         this.is_player = is_player;
         this.expirience = JSON.parse(JSON.stringify(skills));
         this.standing = 0;
+        this.accept_default = true;
     }
 
     statsSum() {
