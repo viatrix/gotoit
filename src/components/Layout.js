@@ -7,7 +7,7 @@ import Office from './Office';
 class Layout extends Component {
     render() {
         return (
-        <div className="row">
+        <div className="App row">
             <div className="col-md-4">
                 <People data={this.props.data}/>
             </div>
