@@ -122,8 +122,8 @@ class Project extends Component {
                         </div>
                         <div>
                             {project.deadline > 0 ? <div key="tests" className="row">
-                                <div className="col-md-1">Deadline</div>
-                                <div className="col-md-10 progress">
+                                <div className="col-md-2">Deadline</div>
+                                <div className="col-md-9 progress">
                                     <div className={classNames('progress-bar', (project.deadline / project.deadline_max < 0.1 ? 'progress-bar-danger' : 'progress-bar-warning'))} role="progressbar"
                                          style={{width: (100-(project.deadline / project.deadline_max * 100))+'%'}}>
                                         <label>{project.deadline_max - project.deadline} hours</label>
@@ -150,8 +150,8 @@ class Project extends Component {
                               //  let done = Math.max(0, (Math.floor(100-tasks-bugs)));
 
                                 return <div key={skill} className="row">
-                                    <div className="col-md-1">{skill}</div>
-                                    <div className="col-md-10 progress">
+                                    <div className="col-md-2">{skill}</div>
+                                    <div className="col-md-9 progress">
                                         <div className="progress-bar progress-bar-warning" role="progressbar"
                                                 style={{width: tasks+'%'}}>
                                             {need ? <label>{need} tasks</label> : ''}
@@ -168,8 +168,8 @@ class Project extends Component {
                                 </div>;
                             })}
                             {project.tests > 0 ? <div key="tests" className="row">
-                                <div className="col-md-1">tests</div>
-                                <div className="col-md-10 progress">
+                                <div className="col-md-2">tests</div>
+                                <div className="col-md-9 progress">
                                     <div className="progress-bar progress-bar-warning" role="progressbar"
                                          style={{width: (100-(project.tests / project.planedTasksQuantity() * 100))+'%'}}>
                                         <label>{project.planedTasksQuantity()-project.tests} tasks</label>
@@ -183,39 +183,48 @@ class Project extends Component {
                         </div>
                         <h4>Project Technologies</h4>
                         <div>
-                            Which technologies should be used on {project.name} project?
                             <ul>
+                                Which technologies should be used on {project.name} project?
                                 {Object.keys(technologies).map((technology, i) =>
-                                    <li key={technology}>
-                                        <input
-                                            type="checkbox"
-                                            id={technology}
-                                            checked={data.helpers.getTechnology(project.id, technology)}
-                                            onChange={this.changeTechnology}/>
-                                        <span> {technologies[technology].name} </span>
-                                        <span className="small"> {technologies[technology].description} </span>
-                                    </li>
+                                    <div key={technology} className="checkbox">
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                id={technology}
+                                                checked={data.helpers.getTechnology(project.id, technology)}
+                                                onChange={this.changeTechnology}/>
+                                            <span> {technologies[technology].name} </span>
+                                            <span className="small"> {technologies[technology].description} </span>
+                                        </label>
+                                    </div>
                                 )}
                             </ul>
                         </div>
                         <h4>Project Team</h4>
                         <div>
-                            Who will work on {project.name} project?
-                            <input
-                                type="checkbox"
-                                id={project.id}
-                                checked={project.accept_default}
-                                onChange={(e) => { project.accept_default = e.target.checked; this.manageAll(e); console.log(project.accept_default);}}/> All
                             <ul>
-                                {this.props.data.workers.map((worker, i) =>
-                                    <li key={worker.id + project.id}>
+                                Who will work on {project.name} project?
+                                <div className="checkbox-inline">
+                                    <label>
                                         <input
                                             type="checkbox"
-                                            id={worker.id || ''}
-                                            checked={data.helpers.getRelation(worker.id, project.id)}
-                                            onChange={this.manage}/>
+                                            id={project.id}
+                                            checked={project.accept_default}
+                                            onChange={(e) => { project.accept_default = e.target.checked; this.manageAll(e); console.log(project.accept_default);}}/>
+                                        All
+                                    </label>
+                                </div>
+                                {this.props.data.workers.map((worker, i) =>
+                                    <div key={worker.id + project.id} className="checkbox">
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                id={worker.id || ''}
+                                                checked={data.helpers.getRelation(worker.id, project.id)}
+                                                onChange={this.manage}/>
                                         {worker.name}
-                                    </li>
+                                        </label>
+                                    </div>
                                 )}
                             </ul>
                         </div>

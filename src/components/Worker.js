@@ -81,49 +81,63 @@ class Worker extends Component {
                 <Portal ref="manage" closeOnEsc closeOnOutsideClick openByClickOn={manage_button}>
                     <TeamDialog>
                         <h2>Worker Projects</h2>
-                        <div>
+                        <ul>
                             Which projects {worker.name} has to work?
-                            <input
-                                type="checkbox"
-                                id={worker.id}
-                                checked={worker.accept_default}
-                                onChange={(e) => { worker.accept_default = e.target.checked; this.manageAll(e); console.log(worker.accept_default); }}/> All
-                            <ul>
+                            <div className="checkbox-inline">
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        id={worker.id}
+                                        checked={worker.accept_default}
+                                        onChange={(e) => {
+                                            worker.accept_default = e.target.checked;
+                                            this.manageAll(e);
+                                            console.log(worker.accept_default);
+                                        }}/>
+                                    All
+                                </label>
+                            </div>
+                            <div>
                                 {this.props.data.projects.map((project, i) =>
-                                    <li key={worker.id + project.id}>
-                                        <input
-                                            type="checkbox"
-                                            id={project.id || ''}
-                                            checked={this.props.data.helpers.getRelation(worker.id, project.id)}
-                                            onChange={this.manage}/>
-                                        {project.name}
-                                    </li>
+                                    <div key={worker.id + project.id} className="checkbox">
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                id={project.id || ''}
+                                                checked={this.props.data.helpers.getRelation(worker.id, project.id)}
+                                                onChange={this.manage}/>
+                                            {project.name}
+                                        </label>
+                                    </div>
                                 )}
-                            </ul>
-                        </div>
+                            </div>
+                        </ul>
                         <h2>Roles</h2>
                         <div>
-                            Which roles {worker.name} has to perform?
                             <ul>
+                                Which roles {worker.name} has to perform?
                                 {skills_names.map((role, i) =>
-                                    <li key={role}>
-                                        <input
-                                            type="checkbox"
-                                            id={role}
-                                            checked={this.props.data.helpers.getRole(worker.id, role)}
-                                            onChange={this.changeRole}/>
-                                        <span> {roles[role].name} </span>
-                                        <span className="small"> {roles[role].description} </span>
-                                    </li>
+                                    <div key={role} className="checkbox">
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                id={role}
+                                                checked={this.props.data.helpers.getRole(worker.id, role)}
+                                                onChange={this.changeRole}/>
+                                            <span> {roles[role].name} </span>
+                                            <span className="small"> {roles[role].description} </span>
+                                        </label>
+                                    </div>
                                 )}
                             </ul>
                         </div>
                         <div>
-                            {worker.is_player ? '' : <button className="small btn-danger" onClick={this.dismiss}>Dismiss an employee</button>}
+                            {worker.is_player ? '' :
+                                <button className="small btn-danger" onClick={this.dismiss}>Dismiss an
+                                    employee</button>}
                         </div>
                     </TeamDialog>
                 </Portal>
-
                 <StatsBar stats={stats_data} data={this.props.data} />
             </div>
         );
