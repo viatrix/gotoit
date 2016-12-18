@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import Portal from 'react-portal';
+import _ from 'lodash';
 
 import TeamDialog from './TeamDialog';
+import StatsBar from './StatsBar';
 import Worker from './Worker';
-import {skills_names} from '../data/knowledge';
+import {skills} from '../data/knowledge';
 
 class People extends Component {
     constructor(props) {
@@ -24,12 +26,12 @@ class People extends Component {
         const hire_button = <button>Hire Worker</button>;
 
         let unit_block_template = (candidate, type) => {
+            const stats_data = _.mapValues(skills, (val, key) => {
+                return { name: key, val: <span>{candidate.stats[key]}</span> };
+            });
+
             return <div key={candidate.id} className="unit_block">{candidate.name} <span> {candidate.getSalary()}$</span>
-                <ul>
-                    {skills_names.map((skill) => {
-                        return <li key={skill}> <span> {skill} {candidate.stats[skill]} </span> </li>
-                    })}
-                </ul>
+                <StatsBar stats={stats_data} data={this.props.data} />
                 <button id={candidate.id} onClick={(e) => this.hire(e, type)}>Hire</button>
                 <button id={candidate.id} onClick={(e) => this.reject(e, type)}>Reject{type === 'agency' ? ' +900$' : ''}</button>
 

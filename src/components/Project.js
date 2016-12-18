@@ -107,8 +107,6 @@ class Project extends Component {
         }
         const finish_button = tmp;
 
-        const deadline = project.getDeadlineText();
-
         return (
             <div className="unit_block">
                 {project.name} ({project.reward}$)

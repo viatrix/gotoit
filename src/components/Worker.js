@@ -44,7 +44,7 @@ class Worker extends Component {
         const manage_button = <button className="btn">Manage Work</button>;
         const educate_button = <button className="btn invisible">Educate</button>;
 
-        const stats_data = _.mapValues(worker.stats, (stat, key) => {
+        const stats_data = _.mapValues(worker.stats, (val, key) => {
             return {name: key, val: (worker.stats[key] + worker.expirience[key]/100).toFixed(2)};
         });
 

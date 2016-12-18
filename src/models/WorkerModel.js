@@ -57,7 +57,36 @@ class WorkerModel {
     }
 
     static generate(quality=1) {
-        let stats = {design: this.genStat(quality), manage: this.genStat(quality), program: this.genStat(quality), admin: this.genStat(quality)};
+        let stats_bulk = {design: this.genStat(quality), manage: this.genStat(quality), program: this.genStat(quality), admin: this.genStat(quality)};
+
+        let speciality = ['none', 'specialist', 'dualist'][_.random(0, 2)];
+
+        let order = Object.keys(stats_bulk).sort(function(a,b){return stats_bulk[b]-stats_bulk[a]});
+
+        switch (speciality) {
+            case 'none':
+                console.log('none');
+                break;
+            case 'specialist':
+                console.log('specialist');
+                stats_bulk[order[0]] *= 2;
+                stats_bulk[order[1]] *= 0.7;
+                stats_bulk[order[2]] *= 0.5;
+                stats_bulk[order[3]] *= 0.3;
+                break;
+            case 'dualist':
+                console.log('dualist');
+                stats_bulk[order[0]] *= 1.5;
+                stats_bulk[order[1]] *= 1.7;
+                stats_bulk[order[2]] *= 0.3;
+                stats_bulk[order[3]] *= 0.5;
+                break;
+            default:
+                console.log('error case: ' + speciality);
+        }
+        
+        let stats = _.mapValues(stats_bulk, function(stat) { return Math.ceil(stat); });
+
         return new WorkerModel(this.genName(), stats);
     }
 

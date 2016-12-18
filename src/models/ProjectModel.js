@@ -109,12 +109,14 @@ class ProjectModel {
     //    console.log("gen quality="+quality+", size="+size);
         projects_generated++;
 
+
         let stats_bulk = {
             program: this.genStat(quality, size),
             design: this.genStat(quality, size),
             admin: this.genStat(quality, size),
             manage: this.genStat(quality, size)
         };
+
 
         let stats = JSON.parse(JSON.stringify(skills));
 
