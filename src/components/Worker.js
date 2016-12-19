@@ -14,8 +14,9 @@ class Worker extends Component {
         this.dismiss = this.dismiss.bind(this);
         this.changeRole = this.changeRole.bind(this);
     }
+
     componentDidMount() {
-        this.refs.manage.openPortal();
+        if (!this.props.worker.is_player) this.refs.manage.openPortal();
     }
 
     manage(event) {

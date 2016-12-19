@@ -8,7 +8,8 @@ import ProjectModel from './models/ProjectModel';
 var app_state =
 {
     data: {
-        money: 1000,
+        money: 0,
+        stage: 'start',
         date: {
             tick: 0,
             hour: 0,
@@ -37,12 +38,8 @@ var app_state =
                 ProjectModel.generate(42, 4)
             ],
         },
-        workers: [
-            WorkerModel.generatePlayer(),
-        ],
-        workers_roles: {
-            player: {design: true, manage: true, program: true, admin: true}
-        },
+        workers: [WorkerModel.generatePlayer()],
+        workers_roles: {player: {design: true, manage: true, program: true, admin: true}},
         projects: [],
         projects_reports: [],
         projects_technologies: [],

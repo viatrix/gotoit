@@ -71,7 +71,7 @@ class Project extends Component {
 
 
                 <p className="small">
-                    Project is {project.stage}ed with team {team_label}{tech.length ? <span> and tech {tech_label}</span> : ''}. Spent {project.facts.money_spent}$ for salary.
+                    Project is {project.stage}ed with team {team_label}{tech.length ? <span className="small"> and tech {tech_label}</span> : ''}. Spent {project.facts.money_spent}$ for salary.
                     Done {project.facts.tasks_done} tasks. Passed {project.facts.bugs_passed} bugs.
                     Do {project.facts.refactored} refactoring and wrote {project.facts.tests_wrote} tests.
                 </p>

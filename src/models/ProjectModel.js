@@ -130,7 +130,7 @@ class ProjectModel {
             manage: this.genStat(quality, size)
         };
 
-        stats_bulk = bulkStyler(stats_bulk);
+        stats_bulk = bulkStyler.speciality(stats_bulk);
 
         let stats = JSON.parse(JSON.stringify(skills));
 

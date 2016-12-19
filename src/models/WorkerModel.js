@@ -66,13 +66,13 @@ class WorkerModel {
     static generate(quality=1) {
         let stats_bulk = {design: this.genStat(quality), manage: this.genStat(quality), program: this.genStat(quality), admin: this.genStat(quality)};
 
-        let stats = bulkStyler(stats_bulk);
+        let stats = bulkStyler.speciality(stats_bulk);
 
         return new WorkerModel(this.genName(), stats);
     }
 
     static generatePlayer() {
-        let name = prompt('Type your name', this.genName());
+        let name = '';//prompt('Type your name', this.genName());
 
         return new WorkerModel(
             name,

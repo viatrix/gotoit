@@ -21,6 +21,9 @@ class App extends Component {
     constructor(props) {
         super(props);
 
+        this.brutalSet = this.brutalSet.bind(this);
+        this.brutalGet = this.brutalGet.bind(this);
+
         this.getRelation = this.getRelation.bind(this);
         this.modifyRelation = this.modifyRelation.bind(this);
         this.getRole = this.getRole.bind(this);
@@ -41,6 +44,10 @@ class App extends Component {
         this.changeTechnology = this.changeTechnology.bind(this);
 
         this.howManyEmployers = this.howManyEmployers.bind(this);
+
+
+        app_state.data.helpers['brutalSet'] = this.brutalSet;
+        app_state.data.helpers['brutalGet'] = this.brutalGet;
 
         app_state.data.helpers['modifyRelation'] = this.modifyRelation;
         app_state.data.helpers['getRelation'] = this.getRelation;
@@ -63,6 +70,16 @@ class App extends Component {
 
         this.state = app_state;
     }
+
+
+    brutalGet() {
+        return this.state;
+    }
+
+    brutalSet(state) {
+        this.setState(state);
+    }
+
 
     getRelation(worker_id, project_id) {
         return (
@@ -119,8 +136,6 @@ class App extends Component {
         let data = this.state.data;
         this.hireEmployer((_.remove(data.candidates[type], (candidate) => { return (candidate.id === id); }))[0]);
         this.setState({data: data});
-
-        skills_names.forEach((skill) => { this.changeRole(id, skill, true); });
     }
 
     rejectCandidate(id, type) {
@@ -136,6 +151,7 @@ class App extends Component {
         worker.facts.tick_hired = data.date.tick;
         data.workers.push(worker);
         this.modifyRelation(worker.id, null, true);
+        skills_names.forEach((skill) => { this.changeRole(worker.id, skill, true); });
         this.setState({data: data});
     }
 
@@ -256,9 +272,16 @@ class App extends Component {
     }
 
     componentDidMount() {
+        /*
+        let data = this.state.data;
+        data.workers = [WorkerModel.generatePlayer()];
+        data.workers_roles = {player: {design: true, manage: true, program: true, admin: true}};
+        this.setState({data: data});
+        */
+
         this.timerID = setInterval(
             () => this.tick(),
-            100
+            250
         );
     }
 
