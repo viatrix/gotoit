@@ -19,6 +19,7 @@ class ProjectModel {
         this.reward = reward;
         this.needs = JSON.parse(JSON.stringify(start_needs));
         this.errors = JSON.parse(JSON.stringify(skills));
+        this.stored_wisdom = JSON.parse(JSON.stringify(skills));
         this.needs_max = JSON.parse(JSON.stringify(start_needs));
         this.deadline = deadline;
         this.deadline_max = deadline;
@@ -34,29 +35,35 @@ class ProjectModel {
             refactored: 0, tests_wrote: 0};
     }
 
-    applyWork(work, worker, rad = false) {
+    applyWork(work, worker, rad = false, supporter = false) {
         var learned = [];
 
         Object.keys(work).forEach((stat) => {
+            let resource = this.stored_wisdom[stat] + work[stat];
+            if (supporter) {
+                this.stored_wisdom[stat] += work[stat];
+              //  console.log('support '+stat+' '+work[stat]);
+                return 'supporter';
+            }
             if (this.needs[stat] > 0 && work[stat] > 0) {
                 learned.push(stat);
-
                 let cont = _.random(0, (this.complexity * this.size) / this.iteration);
                 let pro =
-                    work[stat] +
-                    _.random(work[stat], Math.sqrt(this.needs[stat])) +
-                    _.random(work[stat], this.errors[stat]);
-
+                    resource +
+                    _.random(resource, Math.sqrt(this.needs[stat])) +
+                    _.random(resource, this.errors[stat]);
             //    console.log(cont, pro);
-
                 if (cont < pro) {
                     this.complexity += (rad ? 4 : 1);
-                    let real_work = Math.min(this.needs[stat], (work[stat] + (rad ? worker.getSideResource() : 0)));
+                    let theory_work = resource + (rad ? worker.getSideResource() : 0);
+                    let real_work = Math.min(this.needs[stat], theory_work);
                     worker.facts.tasks_done += real_work;
                     this.facts.tasks_done += real_work;
                     this.needs[stat] -= real_work;
+                    this.stored_wisdom[stat] = 0;
                 }
                 else {
+                    this.stored_wisdom[stat] += work[stat];
                     if (this.runTests()) {
                         console.log('Test prevent errors');
                     }

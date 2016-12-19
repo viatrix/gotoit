@@ -398,6 +398,18 @@ class App extends Component {
     work() {
         const data = this.state.data;
         const tech = data.projects_technologies;
+
+        // Pair
+        let team_sizes = {};
+        _.keys(data.relations).forEach((worker_id) => {
+            let worker_projects = data.relations[worker_id];
+            _.keys(worker_projects).forEach((project_id) => {
+                if (worker_projects[project_id]) {
+                    team_sizes[project_id] = team_sizes[project_id] ? team_sizes[project_id] + 1 : 1;
+                }
+            })
+        });
+       // console.log(team_sizes);  HERE PROBLEMS
         
         data.workers.forEach((worker) => {
             if (!worker.is_player && (data.money - worker.getSalary()) < 0) return;
@@ -412,10 +424,7 @@ class App extends Component {
 
             // looking worker projects
             let worker_projects = data.projects.filter((project) => {
-                return (
-                    worker.id in data.relations &&
-                    project.id in data.relations[worker.id] &&
-                    data.relations[worker.id][project.id] &&
+                return (this.getRelation(worker.id, project.id) &&
                     project.isNeed(worker_roles) &&
                     project.stage === 'open');
             });
@@ -428,28 +437,42 @@ class App extends Component {
                 worker.facts.money_earned += salary;
                 project.facts.money_spent += salary;
 
+
+                let focus_on = (this.getTechnology(project.id, 'agile'))
+                    ? _.maxBy(Object.keys(project.needs), function (o) { return project.needs[o]; }) : null;
+
+                let rad = (project.id in tech &&
+                'rad' in tech[project.id] &&
+                tech[project.id]['rad'])
+                    ? true : false;
+
+                // Pair. 1 - worker, 2 - supporter
+                let supporter = false;
+                if (this.getTechnology(project.id, 'pair') &&
+                    team_sizes[project.id] > 1 && _.random(1, 2) === 2) {
+                    supporter = true;
+                    //worker.addExperience(project.applyWork(worker.getResources(worker_roles, focus_on), worker, rad, supporter));
+                    console.log('supporter');
+                    //return 'supporter';
+                }
+
                 // TDD
-                if (project.id in tech && 'tdd' in tech[project.id] && tech[project.id]['tdd'] &&
+                if (!supporter && this.getTechnology(project.id, 'tdd') &&
                     project.tests < project.planedTasksQuantity() &&
                     ((project.tests / project.planedTasksQuantity()) < (project.tasksQuantity() / project.planedTasksQuantity()))  &&
-                    _.random(1, 4) === 1) {
+                    _.random(1, 4) === 1)
+                {
                     console.log('writing tests!');
-                //    console.log(worker.getSideResource());
-                //    console.log(Math.min(project.planedTasksQuantity() - project.tests, worker.getSideResource()));
-
                     let tests = Math.min(project.planedTasksQuantity() - project.tests, worker.getSideResource());
                     worker.facts.tests_wrote += tests;
                     project.facts.tests_wrote += tests;
                     project.tests += tests;
-
                     skip_work = true;
                 }
 
                 // Refactoring
-                if (project.id in tech &&
-                    'refactoring' in tech[project.id] &&
-                    tech[project.id]['refactoring'] &&
-                    project.complexity &&
+                if (!supporter && this.getTechnology(project.id, 'refactoring') &&
+                    project.complexity > 0 &&
                     project.complexity < (project.tasksQuantity() + project.bugsQuantity()) && ((
                             _.random(1, project.complexity) >
                             _.random((project.size-1.5) * Math.sqrt(project.complexity), project.planedTasksQuantity()))
@@ -466,17 +489,7 @@ class App extends Component {
 
                 // Work
                 if (!skip_work) {
-                    let focus_on = (project.id in tech &&
-                        'agile' in tech[project.id] &&
-                        tech[project.id]['agile'])
-                        ? _.maxBy(Object.keys(project.needs), function (o) { return project.needs[o]; }) : null
-
-                    let rad = (project.id in tech &&
-                        'rad' in tech[project.id] &&
-                        tech[project.id]['rad'])
-                        ? true : false;
-
-                    worker.addExperience(project.applyWork(worker.getResources(worker_roles, focus_on), worker, rad));
+                    worker.addExperience(project.applyWork(worker.getResources(worker_roles, focus_on), worker, rad, supporter));
                 }
             }
         });
