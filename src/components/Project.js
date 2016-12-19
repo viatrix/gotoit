@@ -95,7 +95,7 @@ class Project extends Component {
 
         let stage_button = '';
         if (project.stage === 'ready') {
-            stage_button = <button className="small" onClick={() => {project.stage='open';}}>Start Project</button>;
+            stage_button = <button className="small btn-success" onClick={() => {project.stage='open';}}>Start Project</button>;
         }
         else {
             if (project.isFinished()) {
@@ -117,7 +117,7 @@ class Project extends Component {
 
                 <Portal ref="manage" closeOnEsc closeOnOutsideClick openByClickOn={manage_button}>
                     <TeamDialog>
-                        <h4> {project.name} {project.reward}$</h4>
+                        <h4> {project.name} {project.reward}$ {stage_button}</h4>
                         <div className="flex-container-row">
                             <div className="flex-element"> Tasks: {project.tasksQuantity()}/{project.planedTasksQuantity()} </div>
                             <div className="flex-element"> Bugs: <label className="text-danger">{project.bugsQuantity()}</label></div>
@@ -230,7 +230,6 @@ class Project extends Component {
                             </ul>
                         </div>
                         <div>
-                            {stage_button}
                         </div>
                     </TeamDialog>
                 </Portal>
