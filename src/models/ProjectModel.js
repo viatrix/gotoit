@@ -148,7 +148,7 @@ class ProjectModel {
         let reward = Math.pow(10, size+1) +
             Math.ceil((_.max(s) + _.sum(s)) * 5 * Math.sqrt(quality));
         let deadline = Math.floor(
-            (Math.pow(100, Math.sqrt(size)) + ((_.max(s) + _.sum(s)) * 5)) / size); //8*5*4*size*Math.sqrt(quality);
+            (Math.pow(100, Math.sqrt(size)) + ((_.max(s) + _.sum(s)) * 5)) / (2 * size)); //8*5*4*size*Math.sqrt(quality);
 
         return new ProjectModel(this.genName(size), 'project', reward, stats, size, deadline);
     }
@@ -162,6 +162,7 @@ class ProjectModel {
 
     static genStat(quality, size=1) {
         return Math.floor(
+            10 + // Yes, its a constant
             Math.pow(10, size-1) +
             (_.random(1, 10) +
             (_.random(1, quality) * _.random(1, hired ? hired : 1)) +

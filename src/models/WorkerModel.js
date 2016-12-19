@@ -49,7 +49,7 @@ class WorkerModel {
     getSideResource() {
         this.standing++;
         let s = this.statsSum()/_.values(this.stats).length;
-        return Math.floor(_.random(1, s) + _.random(1, s));
+        return Math.floor(_.random(1, s*2));
     }
 
     addExperience(learned) {

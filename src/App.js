@@ -281,7 +281,7 @@ class App extends Component {
 
         this.timerID = setInterval(
             () => this.tick(),
-            250
+            200
         );
     }
 
@@ -421,7 +421,9 @@ class App extends Component {
 
                 // TDD
                 if (project.id in tech && 'tdd' in tech[project.id] && tech[project.id]['tdd'] &&
-                        project.tests < project.planedTasksQuantity() && _.random(1, 2) === 1) {
+                    project.tests < project.planedTasksQuantity() &&
+                    ((project.tests / project.planedTasksQuantity()) < (project.tasksQuantity() / project.planedTasksQuantity()))  &&
+                    _.random(1, 4) === 1) {
                     console.log('writing tests!');
                 //    console.log(worker.getSideResource());
                 //    console.log(Math.min(project.planedTasksQuantity() - project.tests, worker.getSideResource()));

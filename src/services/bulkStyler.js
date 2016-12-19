@@ -36,20 +36,20 @@ class bulkStyler {
 
         switch (background) {
             case 'specialist':
-                stats_bulk[order[0]] += 6;
-                stats_bulk[order[1]] += 1;
-                stats_bulk[order[2]] += 1;
-                stats_bulk[order[3]] += 1;
+                stats_bulk[order[0]] += 5;
+                stats_bulk[order[1]] += 0;
+                stats_bulk[order[2]] += 0;
+                stats_bulk[order[3]] += 0;
                 break;
             case 'comprehensive':
-                stats_bulk[order[0]] += 3;
-                stats_bulk[order[1]] += 3;
-                stats_bulk[order[2]] += 3;
-                stats_bulk[order[3]] += 3;
+                stats_bulk[order[0]] += 2;
+                stats_bulk[order[1]] += 2;
+                stats_bulk[order[2]] += 2;
+                stats_bulk[order[3]] += 2;
                 break;
             case 'coworker':
-                stats_bulk[order[0]] += 4;
-                stats_bulk[order[1]] += 4;
+                stats_bulk[order[0]] += 3;
+                stats_bulk[order[1]] += 3;
                 stats_bulk[order[2]] += 1;
                 stats_bulk[order[3]] += 1;
                 break;
@@ -76,10 +76,10 @@ class bulkStyler {
                 stats_bulk[order[3]] += 2;
                 break;
             case 'businessman':
-                stats_bulk[order[0]] += 1;
-                stats_bulk[order[1]] += 1;
-                stats_bulk[order[2]] += 1;
-                stats_bulk[order[3]] += 1;
+                stats_bulk[order[0]] += 0;
+                stats_bulk[order[1]] += 0;
+                stats_bulk[order[2]] += 0;
+                stats_bulk[order[3]] += 0;
                 break;
             default:
                 console.log('error case: ' + education);
