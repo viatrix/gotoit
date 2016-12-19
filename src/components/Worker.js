@@ -90,7 +90,27 @@ class Worker extends Component {
                                 Passed {worker.facts.bugs_passed} bugs.
                                 Do {worker.facts.refactored} refactoring and wrote {worker.facts.tests_wrote} tests.
                             </p>
+                            <StatsBar stats={stats_data} data={this.props.data} />
                         </ul>
+                        <h2>Roles</h2>
+                        <div>
+                            <ul>
+                                Which roles {worker.name} has to perform?
+                                {skills_names.map((role, i) =>
+                                    <div key={role} className="checkbox">
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                id={role}
+                                                checked={this.props.data.helpers.getRole(worker.id, role)}
+                                                onChange={this.changeRole}/>
+                                            <span> {roles[role].name} </span>
+                                            <span className="small"> {roles[role].description} </span>
+                                        </label>
+                                    </div>
+                                )}
+                            </ul>
+                        </div>
                         <h2>Worker Projects</h2>
                         <ul>
                             Which projects {worker.name} has to work?
@@ -123,25 +143,6 @@ class Worker extends Component {
                                 )}
                             </div>
                         </ul>
-                        <h2>Roles</h2>
-                        <div>
-                            <ul>
-                                Which roles {worker.name} has to perform?
-                                {skills_names.map((role, i) =>
-                                    <div key={role} className="checkbox">
-                                        <label>
-                                            <input
-                                                type="checkbox"
-                                                id={role}
-                                                checked={this.props.data.helpers.getRole(worker.id, role)}
-                                                onChange={this.changeRole}/>
-                                            <span> {roles[role].name} </span>
-                                            <span className="small"> {roles[role].description} </span>
-                                        </label>
-                                    </div>
-                                )}
-                            </ul>
-                        </div>
                         <div>
                             {worker.is_player ? '' :
                                 <button className="small btn-danger" onClick={this.dismiss}>Dismiss an

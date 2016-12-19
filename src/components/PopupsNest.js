@@ -37,6 +37,7 @@ class PopupsNest extends Component {
         stats = bulkStyler.education(stats, this.state.selected_education);
 
         data.workers[0].stats = stats;
+        data.workers[0].name = this.state.suggest_name;
         data.stage = 'game';
         this.refs.creation.closePortal();
 
