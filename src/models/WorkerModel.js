@@ -15,9 +15,10 @@ class WorkerModel {
         this.accept_default = true;
 
         this.facts = {
+            project_finished: 0,
             tick_hired: 0, money_earned: 0,
-            tasks_trying: 0, tasks_done: 0, bugs_passed: 0,
-            refactored: 0, tests_wrote: 0, project_finished: 0};
+            tasks_done: 0, bugs_passed: 0,
+            refactored: 0, tests_wrote: 0};
     }
 
     statsSum() {

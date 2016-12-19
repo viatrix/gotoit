@@ -6,6 +6,7 @@ import TeamDialog from './TeamDialog';
 import StatsBar from './StatsBar';
 
 import Project from './Project';
+import ProjectReport from './ProjectReport';
 import ProjectModel from '../models/ProjectModel';
 import {skills} from '../data/knowledge';
 
@@ -74,11 +75,25 @@ class Projects extends Component {
                     </TeamDialog>
                 </Portal>
 
+                {this.props.data.projects.length ?
                 <div>
-                {this.props.data.projects.map((x, i) =>
-                    <Project key={x.id} project={x} data={this.props.data} />
-                )}
-                </div>
+                    <h3>Current Project</h3>
+                    <div>
+                        {this.props.data.projects.map((x, i) =>
+                            <Project key={x.id} project={x} data={this.props.data} />
+                        )}
+                    </div>
+                </div> : ''}
+
+                {this.props.data.projects_reports.length ?
+                <div>
+                    <h3>Archived Project</h3>
+                    <div>
+                        {this.props.data.projects_reports.map((x, i) =>
+                            <ProjectReport key={x.id} project={x} data={this.props.data} />
+                        )}
+                    </div>
+                </div> : ''}
             </div>
         );
     }

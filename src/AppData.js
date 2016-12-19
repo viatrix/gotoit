@@ -44,6 +44,7 @@ var app_state =
             player: {design: true, manage: true, program: true, admin: true}
         },
         projects: [],
+        projects_reports: [],
         projects_technologies: [],
         relations: [],
         helpers: {}

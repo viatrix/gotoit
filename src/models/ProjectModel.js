@@ -11,6 +11,8 @@ var projects_generated = 0;
 
 class ProjectModel {
     constructor(name, type, reward, start_needs, size, deadline, complexity = 0) {
+        this.stage = 'open';
+
         this.id = _.uniqueId('project');
         this.name = name;
         this.type = type;
@@ -26,7 +28,10 @@ class ProjectModel {
         this.tests = 0;
         this.accept_default = true;
 
-        this.facts = {tasks_trying: 0, tasks_done: 0, };
+        this.facts = {
+            money_spent: 0,
+            tasks_done: 0, bugs_passed: 0,
+            refactored: 0, tests_wrote: 0};
     }
 
     applyWork(work, worker, rad = false) {
@@ -45,6 +50,7 @@ class ProjectModel {
                     this.complexity += (rad ? 4 : 1);
                     let real_work = Math.min(this.needs[stat], (work[stat] * (rad ? 2 : 1)));
                     worker.facts.tasks_done += real_work;
+                    this.facts.tasks_done += real_work;
                     this.needs[stat] -= real_work;
                 }
                 else {
@@ -53,6 +59,7 @@ class ProjectModel {
                     }
                     else {
                         worker.facts.bugs_passed++;
+                        this.facts.bugs_passed++;
                         this.errors[stat]++;
                     }
                 }

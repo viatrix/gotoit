@@ -72,7 +72,7 @@ class App extends Component {
     }
 
     modifyRelation(worker_id, project_id, value) {
-        console.log(worker_id, project_id, value);
+      //  console.log(worker_id, project_id, value);
         let data = this.state.data;
 
         let put = (worker_id, project_id) => {
@@ -177,14 +177,14 @@ class App extends Component {
 
     closeProject(id) {
         let data = this.state.data;
-        _.remove(data.projects, (project) => { return (project.id === id); });
+        this.projectReporting(id, 'close');
         this.setState({data: data});
     }
 
     failProject(id) {
         let data = this.state.data;
         console.log('fail');
-        _.remove(data.projects, (project) => { return (project.id === id); });
+        this.projectReporting(id, 'fail');
         this.setState({data: data});
     }
 
@@ -199,7 +199,15 @@ class App extends Component {
         let data = this.state.data;
         data.workers.forEach((worker) => { worker.facts.project_finished++; });
         this.addMoney(_.find(data.projects, (project) => { return (project.id === id); }).reward);
-        _.remove(data.projects, (project) => { return (project.id === id); });
+        this.projectReporting(id, 'finish');
+        this.setState({data: data});
+    }
+
+    projectReporting(project_id, stage) {
+        let data = this.state.data;
+        let project = _.remove(data.projects, (project) => { return (project.id === project_id); })[0];
+        project.stage = stage;
+        data.projects_reports.unshift(project);
         this.setState({data: data});
     }
 
@@ -381,11 +389,12 @@ class App extends Component {
             });
             // work on one of projects
             if (worker_projects.length > 0) {
+                let project = _.sample(worker_projects);
+
                 let salary = worker.getSalary();
                 this.chargeMoney(salary);
                 worker.facts.money_earned += salary;
-
-                let project = _.sample(worker_projects);
+                project.facts.money_spent += salary;
 
                 // TDD
                 if (project.id in tech && 'tdd' in tech[project.id] && tech[project.id]['tdd'] &&
@@ -396,6 +405,7 @@ class App extends Component {
 
                     let tests = Math.min(project.planedTasksQuantity() - project.tests, worker.getSideResource());
                     worker.facts.tests_wrote += tests;
+                    project.facts.tests_wrote += tests;
                     project.tests += tests;
 
                     skip_work = true;
@@ -415,6 +425,7 @@ class App extends Component {
                     console.log('refactoring!');
                     let refactoring = Math.min(project.complexity, worker.getSideResource());
                     worker.facts.refactored += refactoring;
+                    project.facts.refactored += refactoring;
                     project.complexity -= Math.min(project.complexity, worker.getSideResource());
                     skip_work = true;
                 }
