@@ -371,7 +371,7 @@ class App extends Component {
         }
 
         if (_.random(1, 24*7*4) === 1 && data.candidates.stars.length < 3) {
-            data.candidates.stars.push(WorkerModel.generate(_.random(20, 40)));
+            data.candidates.stars.push(WorkerModel.generate(_.random(10, 30)));
         }
         if (_.random(1, 24*7*4*8) === 1 && data.candidates.stars.length > 0) {
             _.remove(data.candidates.stars, (candidate) => { return (candidate.id === data.candidates.stars[0].id); });
@@ -385,7 +385,7 @@ class App extends Component {
         }
 
         if (_.random(1, 24*7) === 1 && data.offered_projects.bigdeal.length < 3) {
-            data.offered_projects.bigdeal.push(ProjectModel.generate(_.random(20, 40), 4));
+            data.offered_projects.bigdeal.push(ProjectModel.generate(_.random(30, 60), 4));
         }
         if (_.random(1, 24*7*12) === 1 && data.offered_projects.bigdeal.length > 0) {
             _.remove(data.offered_projects.bigdeal, (candidate) => { return (candidate.id === data.offered_projects.bigdeal[0].id); });
@@ -452,7 +452,7 @@ class App extends Component {
                     team_sizes[project.id] > 1 && _.random(1, 2) === 2) {
                     supporter = true;
                     //worker.addExperience(project.applyWork(worker.getResources(worker_roles, focus_on), worker, rad, supporter));
-                    console.log('supporter');
+                    //console.log('supporter');
                     //return 'supporter';
                 }
 
