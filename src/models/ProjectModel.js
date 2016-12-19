@@ -11,7 +11,7 @@ var projects_generated = 0;
 
 class ProjectModel {
     constructor(name, type, reward, start_needs, size, deadline, complexity = 0) {
-        this.stage = 'open';
+        this.stage = 'ready';
 
         this.id = _.uniqueId('project');
         this.name = name;

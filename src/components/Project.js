@@ -93,19 +93,23 @@ class Project extends Component {
         }
         const tech_label = tech.map((tech_name) => { return label(tech_name, technologies[tech_name].acronym); });
 
-        let tmp = '';
-        if (project.isFinished()) {
-            if (project.isFixed()) {
-                tmp = <button className="small" onClick={this.finish}>Finish Project</button>;
-            }
-            else {
-                tmp = <button className="small" onClick={this.fix}>Fix Bugs</button>;
-            }
+        let stage_button = '';
+        if (project.stage === 'ready') {
+            stage_button = <button className="small" onClick={() => {project.stage='open';}}>Start Project</button>;
         }
         else {
-            tmp = <button className="small btn-danger" onClick={this.close}>Reject Project!</button>;
+            if (project.isFinished()) {
+                if (project.isFixed()) {
+                    stage_button = <button className="small" onClick={this.finish}>Finish Project</button>;
+                }
+                else {
+                    stage_button = <button className="small" onClick={this.fix}>Fix Bugs</button>;
+                }
+            }
+            else {
+                stage_button = <button className="small btn-danger" onClick={this.close}>Reject Project!</button>;
+            }
         }
-        const finish_button = tmp;
 
         return (
             <div className="unit_block">
@@ -226,7 +230,7 @@ class Project extends Component {
                             </ul>
                         </div>
                         <div>
-                            {finish_button}
+                            {stage_button}
                         </div>
                     </TeamDialog>
                 </Portal>

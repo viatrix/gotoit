@@ -191,6 +191,12 @@ class App extends Component {
         this.modifyRelation(null, project.id, true);
     }
 
+    runProject(id) {
+        let data = this.state.data;
+        this.projectReporting(id, 'close');
+        this.setState({data: data});
+    }
+
     closeProject(id) {
         let data = this.state.data;
         this.projectReporting(id, 'close');
@@ -302,6 +308,8 @@ class App extends Component {
         }
 
         data.projects.forEach((project) => {
+            if (project.stage !== 'open') return false;
+
             if (project.tasksQuantity() === 0 && project.bugsQuantity() === 0)
                 this.finishProject(project.id);
             project.deadline--;
@@ -408,7 +416,8 @@ class App extends Component {
                     worker.id in data.relations &&
                     project.id in data.relations[worker.id] &&
                     data.relations[worker.id][project.id] &&
-                    project.isNeed(worker_roles));
+                    project.isNeed(worker_roles) &&
+                    project.stage === 'open');
             });
             // work on one of projects
             if (worker_projects.length > 0) {
