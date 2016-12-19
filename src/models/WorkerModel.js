@@ -2,7 +2,6 @@
 import _ from 'lodash';
 
 import bulkStyler from '../services/bulkStyler';
-
 import {skills} from '../data/knowledge';
 
 class WorkerModel {
@@ -14,6 +13,11 @@ class WorkerModel {
         this.expirience = JSON.parse(JSON.stringify(skills));
         this.standing = 0;
         this.accept_default = true;
+
+        this.facts = {
+            tick_hired: 0, money_earned: 0,
+            tasks_trying: 0, tasks_done: 0, bugs_passed: 0,
+            refactored: 0, tests_wrote: 0, project_finished: 0};
     }
 
     statsSum() {

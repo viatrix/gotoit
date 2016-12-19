@@ -135,15 +135,12 @@ class Project extends Component {
                                 </div>
                             </div> : ''}
                             {skills_names.map((skill) => {
-
                                 let need = project.needs[skill];
                                 let errors = project.errors[skill];
                                 var needs_max = project.needs_max[skill];
                                 var max = _.max(_.values(project.needs_max));
                                 let diff = needs_max - need - errors;
-
                                 //let sum = need + errors + diff;
-
                                 let tasks = need / max * 100;
                                 let bugs = errors / max * 100;
                                 let done = diff / max * 100;

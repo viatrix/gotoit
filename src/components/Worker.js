@@ -59,7 +59,7 @@ class Worker extends Component {
                             <table>
                                 <thead>
                                     <tr>
-                                        <th></th>
+                                        <th> </th>
                                         {skills_names.map((skill) => { return <th key={skill}>{skill}</th>; })}
                                     </tr>
                                 </thead>
@@ -80,6 +80,16 @@ class Worker extends Component {
 
                 <Portal ref="manage" closeOnEsc closeOnOutsideClick openByClickOn={manage_button}>
                     <TeamDialog>
+                        <h2>{worker.name}</h2>
+                        <ul>
+                            <p>Hired {Math.ceil((this.props.data.date.tick - worker.facts.tick_hired)/24)} days ago.
+                                Got {worker.facts.money_earned}$ of salary.</p>
+                            <p>Finished {worker.facts.project_finished} project.
+                                Done {worker.facts.tasks_done} of {worker.facts.tasks_done + worker.facts.bugs_passed} tasks.
+                                Passed {worker.facts.bugs_passed} bugs.
+                                Do {worker.facts.refactored} refactoring and wrote {worker.facts.tests_wrote} tests.
+                            </p>
+                        </ul>
                         <h2>Worker Projects</h2>
                         <ul>
                             Which projects {worker.name} has to work?

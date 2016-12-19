@@ -7,12 +7,15 @@ import app_state from './AppData';
 import WorkerModel from './models/WorkerModel';
 import ProjectModel from './models/ProjectModel';
 import {skills_names} from './data/knowledge';
+import {setCallback} from './services/getData';
+
 
 var agency_generation_counter = 0;
 var contract_generation_counter = 0;
 
 export var hired = 1;
 export var projects_done = 0;
+
 
 class App extends Component {
     constructor(props) {
@@ -130,6 +133,7 @@ class App extends Component {
     hireEmployer(worker) {
         hired++;
         let data = this.state.data;
+        worker.facts.tick_hired = data.date.tick;
         data.workers.push(worker);
         this.modifyRelation(worker.id, null, true);
         this.setState({data: data});
@@ -193,6 +197,7 @@ class App extends Component {
     finishProject(id) {
         projects_done++;
         let data = this.state.data;
+        data.workers.forEach((worker) => { worker.facts.project_finished++; });
         this.addMoney(_.find(data.projects, (project) => { return (project.id === id); }).reward);
         _.remove(data.projects, (project) => { return (project.id === id); });
         this.setState({data: data});
@@ -230,6 +235,17 @@ class App extends Component {
         return this.state.data.workers.length;
     }
 
+    componentWillMount(){
+
+        let callback = () => {
+            return this.state.data;
+        };
+
+        //console.log(callback);
+        //console.log(callback());
+
+        setCallback(callback);
+    }
 
     componentDidMount() {
         this.timerID = setInterval(
@@ -365,7 +381,10 @@ class App extends Component {
             });
             // work on one of projects
             if (worker_projects.length > 0) {
-                this.chargeMoney(worker.getSalary());
+                let salary = worker.getSalary();
+                this.chargeMoney(salary);
+                worker.facts.money_earned += salary;
+
                 let project = _.sample(worker_projects);
 
                 // TDD
@@ -375,7 +394,10 @@ class App extends Component {
                 //    console.log(worker.getSideResource());
                 //    console.log(Math.min(project.planedTasksQuantity() - project.tests, worker.getSideResource()));
 
-                    project.tests += Math.min(project.planedTasksQuantity() - project.tests, worker.getSideResource());
+                    let tests = Math.min(project.planedTasksQuantity() - project.tests, worker.getSideResource());
+                    worker.facts.tests_wrote += tests;
+                    project.tests += tests;
+
                     skip_work = true;
                 }
 
@@ -391,6 +413,8 @@ class App extends Component {
                     )
                 {
                     console.log('refactoring!');
+                    let refactoring = Math.min(project.complexity, worker.getSideResource());
+                    worker.facts.refactored += refactoring;
                     project.complexity -= Math.min(project.complexity, worker.getSideResource());
                     skip_work = true;
                 }
@@ -406,7 +430,8 @@ class App extends Component {
                         'rad' in tech[project.id] &&
                         tech[project.id]['rad'])
                         ? true : false;
-                    worker.addExperience(project.applyWork(worker.getResources(worker_roles, focus_on), rad));
+
+                    worker.addExperience(project.applyWork(worker.getResources(worker_roles, focus_on), worker, rad));
                 }
             }
         });

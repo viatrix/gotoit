@@ -25,9 +25,11 @@ class ProjectModel {
         this.size = size;
         this.tests = 0;
         this.accept_default = true;
+
+        this.facts = {tasks_trying: 0, tasks_done: 0, };
     }
 
-    applyWork(work, rad = false) {
+    applyWork(work, worker, rad = false) {
         var learned = [];
 
         Object.keys(work).forEach((stat) => {
@@ -41,13 +43,16 @@ class ProjectModel {
 
                 if (cont < pro) {
                     this.complexity += (rad ? 4 : 1);
-                    this.needs[stat] -= Math.min(this.needs[stat], (work[stat] * (rad ? 2 : 1)));
+                    let real_work = Math.min(this.needs[stat], (work[stat] * (rad ? 2 : 1)));
+                    worker.facts.tasks_done += real_work;
+                    this.needs[stat] -= real_work;
                 }
                 else {
                     if (this.runTests()) {
                         console.log('Test prevent errors');
                     }
                     else {
+                        worker.facts.bugs_passed++;
                         this.errors[stat]++;
                     }
                 }

@@ -7,21 +7,18 @@ var bulkStyler = (stats_bulk) => {
 
     switch (speciality) {
         case 'none':
-            console.log('none');
             stats_bulk[order[0]] *= 0.8;
             stats_bulk[order[1]] *= 0.9;
             stats_bulk[order[2]] *= 1.1;
             stats_bulk[order[3]] *= 1.2;
             break;
         case 'specialist':
-            console.log('specialist');
             stats_bulk[order[0]] *= 2;
             stats_bulk[order[1]] *= 0.5;
             stats_bulk[order[2]] *= 0.6;
             stats_bulk[order[3]] *= 0.7;
             break;
         case 'dualist':
-            console.log('dualist');
             stats_bulk[order[0]] *= 1.5;
             stats_bulk[order[1]] *= 1.7;
             stats_bulk[order[2]] *= 0.5;
