@@ -95,7 +95,7 @@ class Project extends Component {
 
         let stage_button = '';
         if (project.stage === 'ready') {
-            stage_button = <button className="small btn-success" onClick={() => {project.stage='open';}}>Start Project</button>;
+            stage_button = <button className="small btn-success big" onClick={() => {project.stage='open';}}>Start Project</button>;
         }
         else {
             if (project.isFinished()) {

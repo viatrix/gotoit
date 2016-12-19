@@ -13,6 +13,7 @@ import {skills} from '../data/knowledge';
 class Projects extends Component {
     constructor(props) {
         super(props);
+        this.state = {show_archive: true};
         this.findProjects = this.findProjects.bind(this);
     }
 
@@ -53,7 +54,6 @@ class Projects extends Component {
             <div>
                 <h4 className="text-center">Projects</h4>
 
-
                 <Portal closeOnEsc closeOnOutsideClick openByClickOn={find_projects}>
                     <TeamDialog>
                         <h3 className="text-center">Find Projects</h3>
@@ -75,17 +75,22 @@ class Projects extends Component {
                     </TeamDialog>
                 </Portal>
 
-                {this.props.data.projects.length ?
+                <button onClick={() => {this.setState({show_archive: !this.state.show_archive});}}>{this.state.show_archive ? 'Hide' : 'Show'} Archive</button>
+
                 <div>
                     <h3>Current Project</h3>
                     <div>
-                        {this.props.data.projects.map((x, i) =>
-                            <Project key={x.id} project={x} data={this.props.data} />
-                        )}
-                    </div>
-                </div> : ''}
+                        {this.props.data.projects.length ?
+                            <div>
+                                {this.props.data.projects.map((x, i) =>
+                                    <Project key={x.id} project={x} data={this.props.data} />
+                                )}
+                            </div>
+                     : 'You have not projects in work.'}
+                     </div>
+                </div>
 
-                {this.props.data.projects_reports.length ?
+                {this.state.show_archive ?
                 <div>
                     <h3>Archived Project</h3>
                     <div>
