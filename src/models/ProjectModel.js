@@ -42,13 +42,16 @@ class ProjectModel {
                 learned.push(stat);
 
                 let cont = _.random(0, (this.complexity * this.size) / this.iteration);
-                let pro = work[stat] + _.random(1, this.needs[stat]) + _.random(1, this.errors[stat]);
+                let pro =
+                    work[stat] +
+                    _.random(work[stat], Math.sqrt(this.needs[stat])) +
+                    _.random(work[stat], this.errors[stat]);
 
             //    console.log(cont, pro);
 
                 if (cont < pro) {
                     this.complexity += (rad ? 4 : 1);
-                    let real_work = Math.min(this.needs[stat], (work[stat] * (rad ? 2 : 1)));
+                    let real_work = Math.min(this.needs[stat], (work[stat] + (rad ? worker.getSideResource() : 0)));
                     worker.facts.tasks_done += real_work;
                     this.facts.tasks_done += real_work;
                     this.needs[stat] -= real_work;

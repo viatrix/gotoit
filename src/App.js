@@ -377,10 +377,10 @@ class App extends Component {
             _.remove(data.candidates.stars, (candidate) => { return (candidate.id === data.candidates.stars[0].id); });
         }
 
-        if (_.random(1, 24) === 1 && data.offered_projects.freelance.length < 3) {
+        if (_.random(1, 12) === 1 && data.offered_projects.freelance.length < 3) {
             data.offered_projects.freelance.push(ProjectModel.generate(_.random(1, 5), _.random(1, 2)));
         }
-        if (_.random(1, 24*12) === 1 && data.offered_projects.freelance.length > 0) {
+        if (_.random(1, 7*12) === 1 && data.offered_projects.freelance.length > 0) {
             _.remove(data.offered_projects.freelance, (candidate) => { return (candidate.id === data.offered_projects.freelance[0].id); });
         }
 
@@ -452,7 +452,7 @@ class App extends Component {
                     project.complexity &&
                     project.complexity < (project.tasksQuantity() + project.bugsQuantity()) && ((
                             _.random(1, project.complexity) >
-                            _.random((project.size-1) * Math.sqrt(project.complexity), project.planedTasksQuantity()))
+                            _.random((project.size-1.5) * Math.sqrt(project.complexity), project.planedTasksQuantity()))
                         )
                     )
                 {
