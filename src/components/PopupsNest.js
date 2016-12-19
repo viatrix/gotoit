@@ -79,45 +79,49 @@ class PopupsNest extends Component {
                                           }}
                         /> Background
                         </h3>
-                        <div className="row">
-                            {Object.keys(player_backgrounds).map((background) => {
-                                return <div key={background} className="col-md-4">
-                                    <div className="radio">
-                                        <label>
-                                            <h3 className="text-center">
-                                                <input type="radio" name="background" value={background}
-                                                       checked={this.state.selected_background === background}
-                                                       onChange={(event) => {
-                                                           this.setState({selected_background: event.target.value})
-                                                       }}/>
-                                                {player_backgrounds[background].name}
-                                            </h3>
-                                            <p>{player_backgrounds[background].text}</p>
-                                        </label>
+                        <div className="panel panel-info">
+                            <div className="row">
+                                {Object.keys(player_backgrounds).map((background) => {
+                                    return <div key={background} className="col-md-4">
+                                        <div className="radio">
+                                            <label>
+                                                <h3 className="text-center">
+                                                    <input type="radio" name="background" value={background}
+                                                           checked={this.state.selected_background === background}
+                                                           onChange={(event) => {
+                                                               this.setState({selected_background: event.target.value})
+                                                           }}/>
+                                                    {player_backgrounds[background].name}
+                                                </h3>
+                                                <p>{player_backgrounds[background].text}</p>
+                                            </label>
+                                        </div>
                                     </div>
-                                </div>
-                            })}
+                                })}
+                            </div>
                         </div>
-                        <div className="row">
-                            {Object.keys(player_education).map((institute) => {
-                                return <div key={institute} className="col-md-4">
-                                    <div className="radio">
-                                        <label>
-                                            <h3 className="text-center">
-                                                <input type="radio" name="education" value={institute}
-                                                       checked={this.state.selected_education === institute}
-                                                       onChange={(event) => {
-                                                           this.setState({selected_education: event.target.value})
-                                                       }}/>
-                                                {player_education[institute].name}
-                                            </h3>
-                                            <p>{player_education[institute].text}</p>
-                                        </label>
+                        <div className="panel panel-success">
+                            <div className="row">
+                                {Object.keys(player_education).map((institute) => {
+                                    return <div key={institute} className="col-md-4">
+                                        <div className="radio">
+                                            <label>
+                                                <h3 className="text-center">
+                                                    <input type="radio" name="education" value={institute}
+                                                           checked={this.state.selected_education === institute}
+                                                           onChange={(event) => {
+                                                               this.setState({selected_education: event.target.value})
+                                                           }}/>
+                                                    {player_education[institute].name}
+                                                </h3>
+                                                <p>{player_education[institute].text}</p>
+                                            </label>
+                                        </div>
                                     </div>
-                                </div>
-                            })}
+                                })}
+                            </div>
                         </div>
-                        <div>
+                        <div className="panel panel-warning">
                             <div>Your start money:
                                 {player_backgrounds[this.state.selected_background].money +
                                 player_education[this.state.selected_education].money}
