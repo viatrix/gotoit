@@ -11,11 +11,9 @@ class Office extends Component {
 
         return (
             <div>
-                <h4 className="text-center">Office</h4>
-                <h5>Money <label>{this.props.data.money}</label></h5>
                 <div>
-                    <p className="row">
-                        <span className="inline">
+                    <p className="flex-container-row" style={{paddingLeft: 20}}>
+                        <span className="flex-element">
                             <FormattedDate
                             value={game_date}
                             weekday="short"
@@ -24,7 +22,11 @@ class Office extends Component {
                             year="numeric"
                             hour="numeric"
                             />
-                        </span> <span className="pull-right">
+                        </span>
+
+                        <label className="flex-element">Money {this.props.data.money}</label>
+
+                        <span className="pull-right">
                         {(date.is_working_time ?
                             <label className="label-success">Working</label> :
                             (date.day > 5) ?
