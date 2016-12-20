@@ -12,7 +12,7 @@ class Office extends Component {
         return (
             <div>
                 <div>
-                    <p className="flex-container-row" style={{paddingLeft: 20}}>
+                    <p className="flex-container-row" style={{paddingLeft: 20, height: 0}}>
                         <span className="flex-element">
                             <FormattedDate
                             value={game_date}

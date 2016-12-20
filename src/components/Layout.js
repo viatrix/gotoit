@@ -9,14 +9,14 @@ class Layout extends Component {
     render() {
         return (
             <div>
-                <div>
+                <div className="">
                     <Office data={this.props.data} />
                 </div>
-                <div className="App row">
-                    <div className="col-md-6">
+                <div className="App row slim-top">
+                    <div className="col-md-6 slim-top">
                         <People data={this.props.data}/>
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-6 slim-top">
                         <Projects data={this.props.data} />
                     </div>
                 </div>

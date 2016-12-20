@@ -23,7 +23,7 @@ class People extends Component {
     }
 
     render() {
-        const hire_button = <button className="btn btn-default">Hire Worker</button>;
+        const hire_button = <button className="btn btn-success">Hire Worker</button>;
 
         let unit_block_template = (candidate, type) => {
             const stats_data = _.mapValues(skills, (val, key) => {
@@ -44,7 +44,7 @@ class People extends Component {
 
         return (
             <div>
-                <h4 className="text-center">People</h4>
+                <h4 className="text-center slim-top">People
 
                 <Portal closeOnEsc closeOnOutsideClick openByClickOn={hire_button}>
                     <TeamDialog>
@@ -66,7 +66,7 @@ class People extends Component {
                         </div>
                     </TeamDialog>
                 </Portal>
-
+                </h4>
                 {this.props.data.workers.map((x, i) =>
                     <Worker key={x.id} worker={x} data={this.props.data} />
                 )}

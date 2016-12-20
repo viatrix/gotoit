@@ -30,7 +30,7 @@ class Projects extends Component {
     }
 
     render() {
-        const find_projects = <button className="btn btn-default">Find Projects</button>;
+        const find_projects = <button className="btn btn-success">Find Projects</button>;
 
         let project_block_template = (candidate, type) => {
             const stats_data = _.mapValues(skills, (stat, key) => {
@@ -52,8 +52,7 @@ class Projects extends Component {
 
         return (
             <div>
-                <h4 className="text-center">Projects</h4>
-
+                <h4 className="text-center">Projects
                 <Portal closeOnEsc closeOnOutsideClick openByClickOn={find_projects}>
                     <TeamDialog>
                         <h3 className="text-center">Find Projects</h3>
@@ -74,9 +73,8 @@ class Projects extends Component {
                         </div>
                     </TeamDialog>
                 </Portal>
-
-                <button className="btn btn-warning" onClick={() => {this.setState({show_archive: !this.state.show_archive});}}>{this.state.show_archive ? 'Hide' : 'Show'} Archive</button>
-
+                    <button className="btn btn-warning" onClick={() => {this.setState({show_archive: !this.state.show_archive});}}>{this.state.show_archive ? 'Hide' : 'Show'} Archive</button>
+                </h4>
                 <div>
                     <h3>Current Project</h3>
                     <div>
