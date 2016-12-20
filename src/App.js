@@ -320,47 +320,6 @@ class App extends Component {
         });
     }
 
-    nextDay() {
-        let data = this.state.data;
-        let time = data.date;
-
-        time.tick++;
-        time.hour++; // ; = time.hour
-        if (time.hour > 24) {
-            time.hour = 1;
-            time.day++;
-            data.workers.forEach((worker) => { if (worker.morale < 100) { worker.morale++; } });
-        }
-        if (time.day > 7) {
-            time.day = 1;
-            time.weak++;
-        }
-        if (time.weak > 4) {
-            time.weak = 1;
-            time.month++;
-        }
-        if (time.month > 12) {
-            time.month = 1;
-            time.year++;
-        }
-
-        if (
-            time.hour >= 10 &&
-            time.hour <= 18 &&
-            time.day <= 5
-        ) {
-            time.is_working_time = true;
-            console.log('time to work');
-            this.work();
-        }
-        else {
-            time.is_working_time = false;
-        }
-
-        data.date = time;
-        this.setState({data: data});
-    }
-
     rollTurn() {
         const data = this.state.data;
 
@@ -393,7 +352,50 @@ class App extends Component {
         }
 
         this.setState({data: data});
+    }
 
+    nextDay() {
+        let data = this.state.data;
+        let time = data.date;
+
+        time.tick++;
+        time.hour++; // ; = time.hour
+        if (time.hour > 24) {
+            time.hour = 1;
+            time.day++;
+            data.workers.forEach((worker) => {
+                console.log('worker '+worker.id+' morale '+worker.morale);
+                if (worker.morale < 100 && _.random(1, 7)) worker.morale++;
+            });
+        }
+        if (time.day > 7) {
+            time.day = 1;
+            time.weak++;
+        }
+        if (time.weak > 4) {
+            time.weak = 1;
+            time.month++;
+        }
+        if (time.month > 12) {
+            time.month = 1;
+            time.year++;
+        }
+
+        if (
+            time.hour >= 10 &&
+            time.hour <= 18 &&
+            time.day <= 5
+        ) {
+            time.is_working_time = true;
+        }
+        else {
+            time.is_working_time = false;
+        }
+
+        this.work(); // now we can work on weekends and at night
+
+        data.date = time;
+        this.setState({data: data});
     }
 
     work() {
@@ -450,15 +452,24 @@ class App extends Component {
 
                 // Overtime
                 if (!overtime && !data.date.is_working_time) {
-                    console.log('not working time');
+                    //console.log('not working time');
                     return false;
                 }
-                if (overtime && worker.morale < 0 && _.random(1, 12) !== 1) {
-                    console.log('worker not accept overtime');
-                    return false;
-                }
-                else {
-                    worker.morale--;
+                if (overtime && !data.date.is_working_time) {
+                    if (worker.morale > 0) {
+                        if (_.random(1, 4) === 1) {
+                            console.log('overtime on '+worker.morale);
+                            worker.morale--;
+                        }
+                        else {
+                            //console.log('worker choose rest');
+                            return false;
+                        }
+                    }
+                    else {
+                        //console.log('worker morale too low');
+                        return false;
+                    }
                 }
 
                 // get Salary

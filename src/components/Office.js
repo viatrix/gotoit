@@ -20,18 +20,18 @@ class Office extends Component {
                     year="numeric" />
                 <div>
                     <p className="flex-container-row">
-                    <span className="flex-element">
-                        {(date.is_working_time ?
-                        <label className="label-success">Working</label> :
-                        (date.day > 5) ?
-                            <label className="label-default">Weekends</label> :
-                            <label className="label-info">Sleeping</label>)}
-                    </span>
                     <span className="flex-element">Hour: {date.hour}</span>
                     <span className="flex-element">Day: {date.day}</span>
                     <span className="flex-element">Weak: {date.weak}</span>
                     <span className="flex-element">Month: {date.month}</span>
                     <span className="flex-element">Year: {date.year}</span>
+                    <span className="flex-element">
+                        {(date.is_working_time ?
+                            <label className="label-success">Working</label> :
+                            (date.day > 5) ?
+                                <label className="label-default">Weekends</label> :
+                                <label className="label-info">Sleeping</label>)}
+                    </span>
                 </p>
                 </div>
             </div>
