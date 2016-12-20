@@ -13,19 +13,19 @@ class Office extends Component {
             <div>
                 <h4 className="text-center">Office</h4>
                 <h5>Money <label>{this.props.data.money}</label></h5>
-                <FormattedDate
-                    value={game_date}
-                    day="numeric"
-                    month="long"
-                    year="numeric" />
                 <div>
                     <p className="flex-container-row">
-                    <span className="flex-element">Hour: {date.hour}</span>
-                    <span className="flex-element">Day: {date.day}</span>
-                    <span className="flex-element">Weak: {date.weak}</span>
-                    <span className="flex-element">Month: {date.month}</span>
-                    <span className="flex-element">Year: {date.year}</span>
-                    <span className="flex-element">
+                        <span className="flex-element">
+                            <FormattedDate
+                            value={game_date}
+                            day="numeric"
+                            month="long"
+                            year="numeric" />
+                        </span>
+                        <span className="flex-element">Hour: {date.hour}</span>
+                        <span className="flex-element">Day: {date.day}</span>
+                        <span className="flex-element">Weak: {date.weak}</span>
+                        <span className="flex-element">
                         {(date.is_working_time ?
                             <label className="label-success">Working</label> :
                             (date.day > 5) ?

@@ -15,6 +15,10 @@ class WorkerModel {
         this.morale = 0;
         this.accept_default = true;
 
+        this.temper = {
+            earliness: _.random(0, 3), variability: _.random(0, 3)
+        };
+
         this.facts = {
             project_finished: 0,
             tick_hired: 0, money_earned: 0,
@@ -36,6 +40,22 @@ class WorkerModel {
         }
     }
 
+    isWorkingTime(time) {
+        let variability = _.random(-this.temper.variability, this.temper.variability);
+        let mod = variability + this.temper.earliness;
+
+        let is_working_time = (
+            time.hour >= 9 + mod &&
+            time.hour <= 17 + mod &&
+            (time.day <= 5 || _.random(1, (12-(this.temper.variability*2))) === 1) && // variability guys work on weekends more often
+            (_.random(1, 10 - this.temper.variability) !==1) // variability guys eblanyat more often
+        ) ? true : false;
+
+        console.log('Worker '+this.name+' '+(is_working_time ? 'work' : 'rest')+' on hour '+time.hour+' with temper '+
+            this.temper.earliness+' '+this.temper.variability);
+
+        return is_working_time;
+    }
 
     getResources(worker_roles, focus_on=null, micromanagement) {
         this.standing++;

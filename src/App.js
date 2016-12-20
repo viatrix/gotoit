@@ -303,9 +303,7 @@ class App extends Component {
 
         this.rollTurn();
 
-        if (data.date.is_working_time) {
-            this.work();
-        }
+        this.work(); // now we can work on weekends and at night
 
         data.projects.forEach((project) => {
             if (project.stage !== 'open') return false;
@@ -392,8 +390,6 @@ class App extends Component {
             time.is_working_time = false;
         }
 
-        this.work(); // now we can work on weekends and at night
-
         data.date = time;
         this.setState({data: data});
     }
@@ -414,6 +410,8 @@ class App extends Component {
        // console.log(team_sizes);  HERE PROBLEMS - big load
         
         data.workers.forEach((worker) => {
+            let is_working_time = worker.isWorkingTime(data.date);
+
             if (!worker.is_player && (data.money - worker.getSalary()) < 0) return;
 
             let skip_work = false;
@@ -445,17 +443,17 @@ class App extends Component {
                 let creativity = this.getTechnology(project.id, 'creativity');
                 let overtime = this.getTechnology(project.id, 'overtime');
 
-                if (creativity && data.date.day === 5 && data.date.is_working_time) {
+                if (creativity && data.date.day === 5 && is_working_time) {
                     console.log('creativity day');
                     supporter = true;
                 }
 
                 // Overtime
-                if (!overtime && !data.date.is_working_time) {
+                if (!overtime && !is_working_time) {
                     //console.log('not working time');
                     return false;
                 }
-                if (overtime && !data.date.is_working_time) {
+                if (overtime && !is_working_time) {
                     if (worker.morale > 0) {
                         if (_.random(1, 4) === 1) {
                             console.log('overtime on '+worker.morale);
