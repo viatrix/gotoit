@@ -12,6 +12,7 @@ class WorkerModel {
         this.is_player = is_player;
         this.expirience = JSON.parse(JSON.stringify(skills));
         this.standing = 0;
+        this.morale = 0;
         this.accept_default = true;
 
         this.facts = {
@@ -36,12 +37,24 @@ class WorkerModel {
     }
 
 
-    getResources(worker_roles, focus_on=null) {
+    getResources(worker_roles, focus_on=null, micromanagement) {
         this.standing++;
         var resources = {};
         let stat = focus_on ? focus_on : _.sample(_.keys(_.pickBy(worker_roles, _.identity)));
         if (!(stat in resources)) resources[stat] = 0;
-        resources[stat] += _.random(1, this.stats[stat]);
+
+        if (micromanagement) {
+            let dices = [_.random(1, this.stats[stat]), _.random(1, this.stats[stat]), _.random(1, this.stats[stat])];
+            dices.sort((a,b) => { return a - b; });
+            resources[stat] += dices[1];
+        }
+        else {
+            resources[stat] += _.random(1, this.stats[stat]);
+        }
+
+        resources[stat] += micromanagement ?
+            Math.max(_.random(1, this.stats[stat]), Math.min(_.random(1, this.stats[stat]), _.random(1, this.stats[stat]))) :
+            _.random(1, this.stats[stat]);
         //    console.log(resources);
         return resources;
     }
@@ -52,9 +65,9 @@ class WorkerModel {
         return Math.floor(_.random(1, s*2));
     }
 
-    addExperience(learned) {
+    addExperience(learned, creativity = false) {
         learned.forEach((stat) => {
-            this.expirience[stat] += Math.ceil(10 / (this.stats[stat] ? this.stats[stat] : 1));
+            this.expirience[stat] += Math.ceil(10 * (creativity ? 1.25 : 1) / (this.stats[stat]));
             if (this.expirience[stat] >= 100) {
                 console.log('stat rise');
                 this.expirience[stat] -= 100;

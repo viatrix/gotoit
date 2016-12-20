@@ -329,6 +329,7 @@ class App extends Component {
         if (time.hour > 24) {
             time.hour = 1;
             time.day++;
+            data.workers.forEach((worker) => { if (worker.morale < 100) { worker.morale++; } });
         }
         if (time.day > 7) {
             time.day = 1;
@@ -397,7 +398,6 @@ class App extends Component {
 
     work() {
         const data = this.state.data;
-        const tech = data.projects_technologies;
 
         // Pair
         let team_sizes = {};
@@ -409,7 +409,7 @@ class App extends Component {
                 }
             })
         });
-       // console.log(team_sizes);  HERE PROBLEMS
+       // console.log(team_sizes);  HERE PROBLEMS - big load
         
         data.workers.forEach((worker) => {
             if (!worker.is_player && (data.money - worker.getSalary()) < 0) return;
@@ -432,33 +432,52 @@ class App extends Component {
             if (worker_projects.length > 0) {
                 let project = _.sample(worker_projects);
 
+
+                let focus_on = (this.getTechnology(project.id, 'agile'))
+                    ? _.maxBy(Object.keys(project.needs), function (o) { return project.needs[o]; }) : null;
+
+                let supporter = false;
+
+                let rad = this.getTechnology(project.id, 'rad');
+                let micromanagement = this.getTechnology(project.id, 'micromanagement');
+                let creativity = this.getTechnology(project.id, 'creativity');
+                let overtime = this.getTechnology(project.id, 'overtime');
+
+                if (creativity && data.date.day === 5 && data.date.is_working_time) {
+                    console.log('creativity day');
+                    supporter = true;
+                }
+
+                // Overtime
+                if (!overtime && !data.date.is_working_time) {
+                    console.log('not working time');
+                    return false;
+                }
+                if (overtime && worker.morale < 0 && _.random(1, 12) !== 1) {
+                    console.log('worker not accept overtime');
+                    return false;
+                }
+                else {
+                    worker.morale--;
+                }
+
+                // get Salary
                 let salary = worker.getSalary();
                 this.chargeMoney(salary);
                 worker.facts.money_earned += salary;
                 project.facts.money_spent += salary;
 
-
-                let focus_on = (this.getTechnology(project.id, 'agile'))
-                    ? _.maxBy(Object.keys(project.needs), function (o) { return project.needs[o]; }) : null;
-
-                let rad = (project.id in tech &&
-                'rad' in tech[project.id] &&
-                tech[project.id]['rad'])
-                    ? true : false;
-
                 // Pair. 1 - worker, 2 - supporter
-                let supporter = false;
                 if (this.getTechnology(project.id, 'pair') &&
                     team_sizes[project.id] > 1 && _.random(1, 2) === 2) {
                     supporter = true;
                     //worker.addExperience(project.applyWork(worker.getResources(worker_roles, focus_on), worker, rad, supporter));
-                    //console.log('supporter');
+                    console.log('supporter');
                     //return 'supporter';
                 }
 
                 // TDD
-                if (!supporter && this.getTechnology(project.id, 'tdd') &&
-                    project.tests < project.planedTasksQuantity() &&
+                if (!supporter && this.getTechnology(project.id, 'tdd') && project.tests < project.planedTasksQuantity() &&
                     ((project.tests / project.planedTasksQuantity()) < (project.tasksQuantity() / project.planedTasksQuantity()))  &&
                     _.random(1, 4) === 1)
                 {
@@ -471,8 +490,7 @@ class App extends Component {
                 }
 
                 // Refactoring
-                if (!supporter && this.getTechnology(project.id, 'refactoring') &&
-                    project.complexity > 0 &&
+                if (!supporter && this.getTechnology(project.id, 'refactoring') && project.complexity > 0 &&
                     project.complexity < (project.tasksQuantity() + project.bugsQuantity()) && ((
                             _.random(1, project.complexity) >
                             _.random((project.size-1.5) * Math.sqrt(project.complexity), project.planedTasksQuantity()))
@@ -489,7 +507,11 @@ class App extends Component {
 
                 // Work
                 if (!skip_work) {
-                    worker.addExperience(project.applyWork(worker.getResources(worker_roles, focus_on), worker, rad, supporter));
+                    worker.addExperience(
+                        project.applyWork(
+                            worker.getResources(worker_roles, focus_on, micromanagement),
+                        worker, rad, supporter),
+                    creativity);
                 }
             }
         });

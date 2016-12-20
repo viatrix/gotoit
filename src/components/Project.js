@@ -182,28 +182,30 @@ class Project extends Component {
                                 </div>
                             </div> : ''}
                         </div>
-                        <h4>Project Technologies</h4>
-                        <div>
-                            <ul>
-                                Which technologies should be used on {project.name} project?
+                        Which technologies and management methodologies should be used on {project.name} project?
+                        <div className="panel panel-success">
+                            <div className="row">
                                 {Object.keys(technologies).map((technology, i) =>
-                                    <div key={technology} className="checkbox">
-                                        <label>
-                                            <input
-                                                type="checkbox"
-                                                id={technology}
-                                                checked={data.helpers.getTechnology(project.id, technology)}
-                                                onChange={this.changeTechnology}/>
-                                            <span> {technologies[technology].name} </span>
-                                            <span className="small"> {technologies[technology].description} </span>
-                                        </label>
+                                    <div key={technology} className="col-md-3">
+                                        <div className="checkbox slim-margin">
+                                            <label>
+                                                <h5 className="text-center">
+                                                    <input
+                                                        type="checkbox"
+                                                        id={technology}
+                                                        checked={data.helpers.getTechnology(project.id, technology)}
+                                                        onChange={this.changeTechnology}/>
+                                                    {technologies[technology].name}
+                                                </h5>
+                                                <p className="small">{technologies[technology].description}</p>
+                                            </label>
+                                        </div>
                                     </div>
                                 )}
-                            </ul>
+                            </div>
                         </div>
-                        <h4>Project Team</h4>
-                        <div>
-                            <ul>
+
+                            <div className="panel panel-success">
                                 Who will work on {project.name} project?
                                 <div className="checkbox-inline">
                                     <label>
@@ -215,6 +217,7 @@ class Project extends Component {
                                         All
                                     </label>
                                 </div>
+                                <ul>
                                 {this.props.data.workers.map((worker, i) =>
                                     <div key={worker.id + project.id} className="checkbox">
                                         <label>
@@ -227,12 +230,12 @@ class Project extends Component {
                                         </label>
                                     </div>
                                 )}
-                            </ul>
-                        </div>
+                                </ul>
+                            </div>
                         <div>
-                        </div>
-                    </TeamDialog>
-                </Portal>
+                    </div>
+                </TeamDialog>
+            </Portal>
 
                 {project.deadline > 0 ?
                     <div className="progress">

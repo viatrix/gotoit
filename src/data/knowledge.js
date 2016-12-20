@@ -11,16 +11,14 @@ export const roles = {
 
 export const technologies = {
     tdd: {name: 'Test Driven Development', acronym: 'TDD', description: 'Developing tests that reduce the probability of errors.'},
+    refactoring: {name: 'Non-stop refactoring', acronym: 'Ref', description: "The complexity of the code - it's just a task for refactoring."},
     pair: {name: 'Pair Programming', acronym: 'Pair', description: 'Working in tandem allows us to solve complex problems.'},
-    rad: {name: 'Rapid Application Development', acronym: 'RAD', description: 'Faster Development at the cost of increasing complexity.'},
-    refactoring: {name: 'Non-stop refactoring', acronym: 'Ref', description: "The complexity of the code - it's just a task for refactoring."}
-};
+    rad: {name: 'Rapid Development', acronym: 'RAD', description: 'Faster Development at the cost of increasing complexity.'},
 
-export const management = {
-    overtime: {name: 'Test Driven Development', acronym: 'TDD', description: 'Overtime help you to finish project on time, but don\'t use it too often.'},
-    agile: {name: 'Agile Software Development', acronym: 'Agile', description: 'Development the priority, cut out unnecessary, makes the project lighter.'},
-    micromanagement: {name: 'Micromanagement', acronym: 'RAD', description: 'Solid control over the objectives is averaging performance.'},
-    creativity: {name: 'Creativity on Fridays', acronym: 'Free', description: "One day a week devoted to pet projects which boosting experience."}
+    overtime: {name: 'Overtime Work', acronym: 'Over', description: 'Overtime help to finish project on time, but exhausted team.'},
+    creativity: {name: 'Creativity on Fridays', acronym: 'Free', description: "Fridays devoted to pet projects which boosting experience."},
+    agile: {name: 'Agile Development', acronym: 'Agile', description: 'Focus on priority, cut out unnecessary, lighter the project.'},
+    micromanagement: {name: 'Micromanagement', acronym: 'Micro', description: 'Solid control over the objectives is averaging performance.'}
 };
 
 
