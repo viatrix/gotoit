@@ -24,7 +24,7 @@ class Office extends Component {
                             year="numeric"
                             hour="numeric"
                             />
-                        </span> <span className="inline">
+                        </span> <span className="pull-right">
                         {(date.is_working_time ?
                             <label className="label-success">Working</label> :
                             (date.day > 5) ?

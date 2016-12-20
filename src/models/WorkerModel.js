@@ -47,7 +47,7 @@ class WorkerModel {
         let is_working_time = (
             time.hour >= 9 + mod &&
             time.hour <= 17 + mod &&
-            (time.day <= 5 || _.random(1, (12-(this.temper.variability*2))) === 1) && // variability guys work on weekends more often
+            (time.day < 5 || _.random(1, (12-(this.temper.variability*2))) === 1) && // variability guys work on weekends more often
             (_.random(1, 10 - this.temper.variability) !==1) // variability guys eblanyat more often
         ) ? true : false;
 
