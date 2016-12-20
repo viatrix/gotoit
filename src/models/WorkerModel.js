@@ -51,8 +51,8 @@ class WorkerModel {
             (_.random(1, 10 - this.temper.variability) !==1) // variability guys eblanyat more often
         ) ? true : false;
 
-        console.log('Worker '+this.name+' '+(is_working_time ? 'work' : 'rest')+' on hour '+time.hour+' with temper '+
-            this.temper.earliness+' '+this.temper.variability);
+      //  console.log('Worker '+this.name+' '+(is_working_time ? 'work' : 'rest')+' on hour '+time.hour+' with temper '+
+      //      this.temper.earliness+' '+this.temper.variability);
 
         return is_working_time;
     }

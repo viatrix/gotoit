@@ -228,6 +228,9 @@ class App extends Component {
     projectReporting(project_id, stage) {
         let data = this.state.data;
         let project = _.remove(data.projects, (project) => { return (project.id === project_id); })[0];
+
+        this.message(project.name+' project '+stage);
+
         project.stage = stage;
         data.projects_reports.unshift(project);
         this.setState({data: data});
@@ -263,6 +266,10 @@ class App extends Component {
 
     howManyEmployers() {
         return this.state.data.workers.length;
+    }
+
+    message(text) {
+        this.state.data.helpers.addMessage(text);
     }
 
     componentWillMount(){
@@ -371,7 +378,7 @@ class App extends Component {
         if (time.hour > 24) {
             time.hour = 1;
             data.workers.forEach((worker) => {
-                console.log('worker '+worker.id+' morale '+worker.morale);
+               // console.log('worker '+worker.id+' morale '+worker.morale);
                 if (worker.morale < 100 && _.random(1, 7)) worker.morale++;
             });
         }
@@ -450,6 +457,7 @@ class App extends Component {
                     if (overtime) {
                         if (worker.morale > 0) {
                             if (_.random(1, 4) === 1) {
+                                this.message(worker.name+' overtime!');
                                 console.log('overtime on '+worker.morale);
                                 worker.morale--;
                             }
@@ -494,6 +502,7 @@ class App extends Component {
                     worker.facts.tests_wrote += tests;
                     project.facts.tests_wrote += tests;
                     project.tests += tests;
+                    this.message(worker.name+' wrote '+tests+' test!');
                     skip_work = true;
                 }
 
@@ -509,7 +518,8 @@ class App extends Component {
                     let refactoring = Math.min(project.complexity, worker.getSideResource());
                     worker.facts.refactored += refactoring;
                     project.facts.refactored += refactoring;
-                    project.complexity -= Math.min(project.complexity, worker.getSideResource());
+                    project.complexity -= refactoring;
+                    this.message(worker.name+' refactored '+refactoring+' complexity!');
                     skip_work = true;
                 }
 

@@ -4,6 +4,7 @@ import People from './People';
 import Projects from './Projects';
 import Office from './Office';
 import PopupsNest from './PopupsNest';
+import ToastNest from './ToastNest';
 
 class Layout extends Component {
     render() {
@@ -21,6 +22,7 @@ class Layout extends Component {
                     </div>
                 </div>
                 <PopupsNest data={this.props.data} />
+                <ToastNest data={this.props.data} />
             </div>
         );
     }

@@ -22,7 +22,6 @@ class PopupsNest extends Component {
         };
 
         this.embark = this.embark.bind(this);
-
     }
 
     embark() {

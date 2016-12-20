@@ -42,7 +42,8 @@ class ProjectModel {
             let resource = this.stored_wisdom[stat] + work[stat];
             if (supporter) {
                 this.stored_wisdom[stat] += work[stat];
-              //  console.log('support '+stat+' '+work[stat]);
+                console.log('support '+stat+' '+work[stat]);
+                console.log(this.stored_wisdom);
                 return 'supporter';
             }
             if (this.needs[stat] > 0 && work[stat] > 0) {
