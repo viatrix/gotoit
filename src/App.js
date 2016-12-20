@@ -407,7 +407,7 @@ class App extends Component {
                 }
             })
         });
-       // console.log(team_sizes);  HERE PROBLEMS - big load
+       // console.log(team_sizes);  HERE PROBLEMS - maybe need another way store
         
         data.workers.forEach((worker) => {
             let is_working_time = worker.isWorkingTime(data.date);
