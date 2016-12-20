@@ -95,19 +95,19 @@ class Project extends Component {
 
         let stage_button = '';
         if (project.stage === 'ready') {
-            stage_button = <button className="small btn-success big" onClick={() => {project.stage='open';}}>Start Project</button>;
+            stage_button = <button className="btn btn-success btn-lg" onClick={() => {project.stage='open';}}>Start Project</button>;
         }
         else {
             if (project.isFinished()) {
                 if (project.isFixed()) {
-                    stage_button = <button className="small" onClick={this.finish}>Finish Project</button>;
+                    stage_button = <button className="btn btn-default" onClick={this.finish}>Finish Project</button>;
                 }
                 else {
-                    stage_button = <button className="small" onClick={this.fix}>Fix Bugs</button>;
+                    stage_button = <button className="btn btn-default" onClick={this.fix}>Fix Bugs</button>;
                 }
             }
             else {
-                stage_button = <button className="small btn-danger" onClick={this.close}>Reject Project!</button>;
+                stage_button = <button className="btn btn-danger btn-sm" onClick={this.close}>Reject Project!</button>;
             }
         }
 

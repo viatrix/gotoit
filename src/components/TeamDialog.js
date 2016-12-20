@@ -7,7 +7,7 @@ class TeamDialog extends Component {
                 <div className="modal team-dialog">
                     <div className="modal-dialog">
                         <div className="modal-content" style={{padding: '10px'}}>
-                            <p><button className="btn pull-right" onClick={this.props.closePortal}>Close</button></p>
+                            <p><button className="btn btn-warning pull-right" onClick={this.props.closePortal}>Close</button></p>
                             {this.props.children}
                         </div>
                     </div>

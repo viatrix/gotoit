@@ -130,7 +130,7 @@ class PopupsNest extends Component {
                             </div>
                         </div>
                         <div className="text-center">
-                            <button className="big btn-success" onClick={this.embark}>Embark</button>
+                            <button className="big btn-success btn-lg" onClick={this.embark}>Embark</button>
                         </div>
                     </SimpleModal>
                 </Portal>

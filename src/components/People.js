@@ -23,7 +23,7 @@ class People extends Component {
     }
 
     render() {
-        const hire_button = <button>Hire Worker</button>;
+        const hire_button = <button className="btn btn-default">Hire Worker</button>;
 
         let unit_block_template = (candidate, type) => {
             const stats_data = _.mapValues(skills, (val, key) => {
@@ -32,8 +32,8 @@ class People extends Component {
 
             return <div key={candidate.id} className="unit_block">{candidate.name} <span> {candidate.getSalary()}$</span>
                 <StatsBar stats={stats_data} data={this.props.data} />
-                <button id={candidate.id} onClick={(e) => this.hire(e, type)}>Hire</button>
-                <button id={candidate.id} onClick={(e) => this.reject(e, type)}>Reject{type === 'agency' ? ' +900$' : ''}</button>
+                <button className="btn btn-success" id={candidate.id} onClick={(e) => this.hire(e, type)}>Hire</button>
+                <button className="btn btn-danger" id={candidate.id} onClick={(e) => this.reject(e, type)}>Reject{type === 'agency' ? ' +900$' : ''}</button>
 
             </div>
         };
@@ -56,7 +56,7 @@ class People extends Component {
                             </div>
                             <div className="col-md-4">
                                 <h4 className="text-center">Agency</h4>
-                                <button onClick={this.props.data.helpers.agencySearch}>Search 1000$</button>
+                                <button  className="btn btn-info" onClick={this.props.data.helpers.agencySearch}>Search 1000$</button>
                                 {this.props.data.candidates.agency.map(agency_candidate)}
                             </div>
                             <div className="col-md-4">

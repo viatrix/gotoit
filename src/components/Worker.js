@@ -42,8 +42,8 @@ class Worker extends Component {
     render() {
         const worker = this.props.worker;
 
-        const manage_button = <button className="btn">Manage Work</button>;
-        const educate_button = <button className="btn invisible">Educate</button>;
+        const manage_button = <button className="btn btn-default">Manage Work</button>;
+        const educate_button = <button className="btn btn-default invisible">Educate</button>;
 
         const stats_data = _.mapValues(worker.stats, (val, key) => {
             return {name: key, val: (worker.stats[key] + worker.expirience[key]/100).toFixed(2)};
@@ -145,7 +145,7 @@ class Worker extends Component {
                         </ul>
                         <div>
                             {worker.is_player ? '' :
-                                <button className="small btn-danger" onClick={this.dismiss}>Dismiss an
+                                <button className="btn btn-danger btn-sm" onClick={this.dismiss}>Dismiss an
                                     employee</button>}
                         </div>
                     </TeamDialog>

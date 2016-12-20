@@ -30,7 +30,7 @@ class Projects extends Component {
     }
 
     render() {
-        const find_projects = <button>Find Projects</button>;
+        const find_projects = <button className="btn btn-default">Find Projects</button>;
 
         let project_block_template = (candidate, type) => {
             const stats_data = _.mapValues(skills, (stat, key) => {
@@ -40,8 +40,8 @@ class Projects extends Component {
             return <div key={candidate.id} className="unit_block">{candidate.name}
                 <div>deadline: {candidate.getDeadlineText()}</div>
                 <StatsBar stats={stats_data} data={this.props.data} />
-                <button id={candidate.id} onClick={(e) => this.startOffered(e, type)}>Start</button>
-                <button id={candidate.id} onClick={(e) => this.reject(e, type)}>Reject{type === 'contract' ? ' +900$' : ''}</button>
+                <button className="btn btn-success" id={candidate.id} onClick={(e) => this.startOffered(e, type)}>Start</button>
+                <button className="btn btn-danger" id={candidate.id} onClick={(e) => this.reject(e, type)}>Reject{type === 'contract' ? ' +900$' : ''}</button>
                 {candidate.reward}$
             </div>
         };
@@ -64,7 +64,7 @@ class Projects extends Component {
                             </div>
                             <div className="col-md-4">
                                 <h4 className="text-center">Contract</h4>
-                                <button onClick={this.props.data.helpers.contractSearch}>Search 1000$</button>
+                                <button className="btn btn-info" onClick={this.props.data.helpers.contractSearch}>Search 1000$</button>
                                 {this.props.data.offered_projects.contract.map(contract_offered)}
                             </div>
                             <div className="col-md-4">
@@ -75,7 +75,7 @@ class Projects extends Component {
                     </TeamDialog>
                 </Portal>
 
-                <button onClick={() => {this.setState({show_archive: !this.state.show_archive});}}>{this.state.show_archive ? 'Hide' : 'Show'} Archive</button>
+                <button className="btn btn-warning" onClick={() => {this.setState({show_archive: !this.state.show_archive});}}>{this.state.show_archive ? 'Hide' : 'Show'} Archive</button>
 
                 <div>
                     <h3>Current Project</h3>
