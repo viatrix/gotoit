@@ -39,28 +39,28 @@ class ProjectModel {
         var learned = [];
 
         Object.keys(work).forEach((stat) => {
-            let resource = this.stored_wisdom[stat] + work[stat];
             if (supporter) {
                 this.stored_wisdom[stat] += work[stat];
                 console.log('support '+stat+' '+work[stat]);
                 console.log(this.stored_wisdom);
                 return 'supporter';
             }
+
+            let resource = this.stored_wisdom[stat] + work[stat] +
+                (rad ? worker.getSideResource() : 0) - _.random(0, this.complexity);
+
             if (this.needs[stat] > 0 && work[stat] > 0) {
                 learned.push(stat);
                 let cont = _.random(0, (this.complexity * this.size) / this.iteration);
-                let pro =
-                    resource +
-                    _.random(resource, Math.sqrt(this.needs[stat])) +
-                    _.random(resource, this.errors[stat]);
+                let pro = _.random(1, resource) + _.random(1, this.errors[stat]);
             //    console.log(cont, pro);
-                if (cont < pro) {
+                if (resource > 0 && cont < pro) {
                     this.complexity += (rad ? 4 : 1);
-                    let theory_work = resource + (rad ? worker.getSideResource() : 0);
-                    let real_work = Math.min(this.needs[stat], theory_work);
+                    let real_work = Math.min(this.needs[stat], resource);
                     worker.facts.tasks_done += real_work;
                     this.facts.tasks_done += real_work;
                     this.needs[stat] -= real_work;
+                    console.log('Work '+stat+' '+work[stat]+' where wisdom is '+this.stored_wisdom[stat]);
                     this.stored_wisdom[stat] = 0;
                 }
                 else {
@@ -69,11 +69,16 @@ class ProjectModel {
                         console.log('Test prevent errors');
                     }
                     else {
+                        console.log('Do errors');
                         worker.facts.bugs_passed++;
                         this.facts.bugs_passed++;
                         this.errors[stat]++;
                     }
                 }
+            }
+            else {
+                console.log('That strange case');
+                console.log(work);
             }
         });
 
@@ -119,6 +124,17 @@ class ProjectModel {
         return needed;
     }
 
+    getNeeds(roles) {
+        let needed = {};
+        //console.log(roles, this.needs);
+        Object.keys(this.needs).forEach((skill) => {
+            if (this.needs[skill] > 0 && roles[skill]) {
+                needed[skill] = roles[skill];
+            }
+        });
+        return needed;
+    }
+
     getDeadlineText() {
         return this.deadline + ' hours';
     }
@@ -159,7 +175,7 @@ class ProjectModel {
         let reward = Math.pow(10, size+1) +
             Math.ceil((_.max(s) + _.sum(s)) * 5 * Math.sqrt(quality));
         let deadline = Math.floor(
-            (Math.pow(100, Math.sqrt(size)) + ((_.max(s) + _.sum(s)) * 5)) / (2 * size)); //8*5*4*size*Math.sqrt(quality);
+            (Math.pow(100, Math.sqrt(size)) + ((_.max(s) + _.sum(s)) * 5)) / (3 * size)); //8*5*4*size*Math.sqrt(quality);
 
         return new ProjectModel(this.genName(size), 'project', reward, stats, size, deadline);
     }

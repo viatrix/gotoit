@@ -376,6 +376,7 @@ class App extends Component {
         time.tick++;
         time.hour++;
         if (time.hour > 24) {
+            console.log('A new day');
             time.hour = 1;
             data.workers.forEach((worker) => {
                // console.log('worker '+worker.id+' morale '+worker.morale);
@@ -438,7 +439,8 @@ class App extends Component {
 
 
                 let focus_on = (this.getTechnology(project.id, 'agile'))
-                    ? _.maxBy(Object.keys(project.needs), function (o) { return project.needs[o]; }) : null;
+                    ? _.maxBy(Object.keys(project.needs), function (o) { return project.needs[o]; })
+                    : _.sample(Object.keys(project.getNeeds(worker_roles)));
 
                 let supporter = false;
 

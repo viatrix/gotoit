@@ -35,7 +35,6 @@ class ToastNest extends Component {
                     <ToastContainer ref="toast"
                                     toastMessageFactory={ToastMessageFactory}
                                     className="toast-bottom-right" />
-                    <button onClick={this.addAlert}>GGininder</button>
                 </div>
             </div>
         );
