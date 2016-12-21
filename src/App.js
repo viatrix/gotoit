@@ -349,19 +349,19 @@ class App extends Component {
             _.remove(data.candidates.stars, (candidate) => { return (candidate.id === data.candidates.stars[0].id); });
         }
 
-        if (_.random(1, 24) === 1 && data.offered_projects.freelance.length < 5) {
+        if (_.random(1, 24*4) === 1 && data.offered_projects.freelance.length < 5) {
             data.offered_projects.freelance.push(ProjectModel.generate(_.random(1, 5), _.random(1, 2)));
             data.helpers.addAction('New freelance job!', {timeOut: 3000, extendedTimeOut: 1000});
         }
-        if (_.random(1, 7*24) === 1 && data.offered_projects.freelance.length > 0) {
+        if (_.random(1, 24*7) === 1 && data.offered_projects.freelance.length > 0) {
             _.remove(data.offered_projects.freelance, (candidate) => { return (candidate.id === data.offered_projects.freelance[0].id); });
         }
 
-        if (_.random(1, 24*7) === 1 && data.offered_projects.bigdeal.length < 5) {
+        if (_.random(1, 24*((7*4*8)/(1+projects_done))) === 1 && data.offered_projects.bigdeal.length < 5) {
             data.offered_projects.bigdeal.push(ProjectModel.generate(_.random(30, 60), 4));
             data.helpers.addAction('New big deal!');
         }
-        if (_.random(1, 24*7*12) === 1 && data.offered_projects.bigdeal.length > 0) {
+        if (_.random(1, 24*7*4*8) === 1 && data.offered_projects.bigdeal.length > 0) {
             _.remove(data.offered_projects.bigdeal, (candidate) => { return (candidate.id === data.offered_projects.bigdeal[0].id); });
         }
 

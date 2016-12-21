@@ -14,10 +14,10 @@ class Layout extends Component {
                     <Office data={this.props.data} />
                 </div>
                 <div className="App row slim-top">
-                    <div className="col-md-6 slim-top">
+                    <div className="col-md-5 slim-top">
                         <People data={this.props.data}/>
                     </div>
-                    <div className="col-md-6 slim-top">
+                    <div className="col-md-7 slim-top">
                         <Projects data={this.props.data} />
                     </div>
                 </div>

@@ -44,7 +44,7 @@ class People extends Component {
 
         return (
             <div>
-                <h4 className="text-center slim-top">People
+                <h4 className="text-center slim-top"><label> Team </label>
 
                 <Portal closeOnEsc closeOnOutsideClick openByClickOn={hire_button}>
                     <TeamDialog>
