@@ -466,7 +466,7 @@ class App extends Component {
                         if (worker.morale > 0) {
                             if (_.random(1, 4) === 1) {
                                 this.message(worker.name+' overtime!');
-                                console.log('overtime on '+worker.morale);
+                            //    console.log('overtime on '+worker.morale);
                                 worker.morale--;
                             }
                             else {
@@ -497,7 +497,7 @@ class App extends Component {
                     supporter = true;
                 }
                 // Pair. 1 - worker, 2 - supporter
-                if (this.getTechnology(project.id, 'pair') &&
+                if (!supporter && this.getTechnology(project.id, 'pair') &&
                     team_sizes[project.id] > 1 && _.random(1, 2) === 2) {
                     supporter = true;
                     //worker.addExperience(project.applyWork(worker.getResources(worker_roles, focus_on), worker, rad, supporter));
@@ -508,7 +508,7 @@ class App extends Component {
                 // TDD
                 if (!supporter && this.getTechnology(project.id, 'tdd') && project.tests < project.planedTasksQuantity() &&
                     ((project.tests / project.planedTasksQuantity()) < (project.tasksQuantity() / project.planedTasksQuantity()))  &&
-                    _.random(1, 4) === 1)
+                    _.random(1, 3) === 1)
                 {
                     console.log('writing tests!');
                     let tests = Math.min(project.planedTasksQuantity() - project.tests, worker.getSideResource());
@@ -546,7 +546,7 @@ class App extends Component {
                 }
             }
             else {
-                console.log('worker have not projects');
+              //  console.log('worker have not projects');
                 //worker.goRest();
             }
         });

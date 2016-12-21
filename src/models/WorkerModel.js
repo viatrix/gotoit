@@ -35,7 +35,7 @@ class WorkerModel {
             return 0;
         }
         else {
-            console.log("standing " + this.standing + " means " + (1 + (this.standing/(12*4*7*8*Math.PI))));
+        //    console.log("standing " + this.standing + " means " + (1 + (this.standing/(12*4*7*8*Math.PI))));
             return Math.floor((this.statsSum() + _.max(_.values(this.stats))) * (1 + (this.standing/(12*4*7*8*Math.PI))));
         }
     }
@@ -51,8 +51,7 @@ class WorkerModel {
             (_.random(1, 10 - this.temper.variability) !==1) // variability guys eblanyat more often
         ) ? true : false;
 
-        console.log('Worker '+this.name+' '+(is_working_time ? 'work' : 'rest')+' on hour '+time.hour+' with temper '+
-            this.temper.earliness+' '+this.temper.variability);
+     //   console.log('Worker '+this.name+' '+(is_working_time ? 'work' : 'rest')+' on hour '+time.hour+' with temper '+ this.temper.earliness+' '+this.temper.variability);
 
         return is_working_time;
     }
