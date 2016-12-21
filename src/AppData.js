@@ -21,11 +21,11 @@ var app_state =
         },
         candidates: {
             resumes: [
-                WorkerModel.generate(3)
+            //    WorkerModel.generate(3)
             ],
             agency: [],
             stars: [
-                WorkerModel.generate(30)
+            //    WorkerModel.generate(30)
             ],
         },
         offered_projects: {
@@ -35,7 +35,7 @@ var app_state =
             ],
             contract: [],
             bigdeal: [
-                ProjectModel.generate(50, 4)
+            //    ProjectModel.generate(50, 4)
             ],
         },
         workers: [WorkerModel.generatePlayer()],

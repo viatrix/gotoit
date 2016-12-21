@@ -192,7 +192,7 @@ class ProjectModel {
             10 + 10 + // Yes, its a constant
             Math.pow(10, size - 1) +
             _.random(1, 10) +
-            (_.random(1, quality) * _.random(1, hired ? hired : 1)) +
+            (_.random(1, quality) * _.random(1, Math.pow(hired, 2))) +
             (_.random(1, quality) * (1 + _.random(1, projects_done))) +
             (_.random(1, quality) * (1 + _.random(1, Math.sqrt(projects_generated))))
         );

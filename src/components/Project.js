@@ -219,17 +219,22 @@ class Project extends Component {
                                     </label>
                                 </div>
                                 <ul>
-                                {this.props.data.workers.map((worker, i) =>
-                                    <div key={worker.id + project.id} className="checkbox">
-                                        <label>
+                                {this.props.data.workers.map((worker) => {
+                                    const stats_data = _.mapValues(worker.stats, (val, key) => {
+                                        return {name: key, val: (worker.stats[key] + worker.expirience[key]/100).toFixed(2)};
+                                    });
+                                    return <div key={worker.id + project.id} className="checkbox">
+                                        <label style={{width: '100%'}}>
                                             <input
                                                 type="checkbox"
                                                 id={worker.id || ''}
                                                 checked={data.helpers.getRelation(worker.id, project.id)}
                                                 onChange={this.manage}/>
-                                        {worker.name}
+                                            {worker.name}
+                                            <StatsBar stats={stats_data} data={this.props.data} />
                                         </label>
                                     </div>
+                                    }
                                 )}
                                 </ul>
                             </div>

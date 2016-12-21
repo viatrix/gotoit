@@ -7,34 +7,55 @@ const ToastMessageFactory = React.createFactory(ToastMessage.animation);
 class ToastNest extends Component {
     constructor(props) {
         super(props);
-        this.addAlert = this.addAlert.bind(this);
-        this.clearAlert = this.clearAlert.bind(this);
+        this.addMessage = this.addMessage.bind(this);
+        this.clearMessages = this.clearMessages.bind(this);
+        this.addAction = this.addAction.bind(this);
+        this.clearActions = this.clearActions.bind(this);
     }
 
-    addAlert(text) {
-        this.refs.toast.success(text, ``, {
-            closeButton: true,
+    clearMessages() {
+        this.refs.messages.clear();
+    }
+
+    addMessage(text) {
+        this.refs.messages.success(text, ``, {
+            closeButton: false,
             preventDuplicates: false,
             timeOut: 2000,
             extendedTimeOut: 1000
         });
     }
 
-    clearAlert() {
-        this.refs.toast.clear();
+    clearActions() {
+        this.refs.actions.clear();
+    }
+
+    addAction(text, options) {
+        this.refs.actions.success(text, ``, Object.assign({
+            closeButton: true,
+            preventDuplicates: false,
+            timeOut: 30000,
+            extendedTimeOut: 10000
+        }, options));
     }
 
     componentDidMount() {
-        this.props.data.helpers.addMessage = this.addAlert;
+        this.props.data.helpers.addMessage = this.addMessage;
+        this.props.data.helpers.addAction = this.addAction;
     }
 
     render() {
         return (
             <div className="toast-nest">
                 <div>
-                    <ToastContainer ref="toast"
+                    <ToastContainer key="messages" ref="messages"
                                     toastMessageFactory={ToastMessageFactory}
                                     className="toast-bottom-right" />
+                </div>
+                <div>
+                    <ToastContainer key="actions" ref="actions"
+                                    toastMessageFactory={ToastMessageFactory}
+                                    className="toast-bottom-left" />
                 </div>
             </div>
         );

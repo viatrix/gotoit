@@ -23,6 +23,7 @@ class App extends Component {
 
         this.brutalSet = this.brutalSet.bind(this);
         this.brutalGet = this.brutalGet.bind(this);
+        this.addMoney = this.addMoney.bind(this);
 
         this.getRelation = this.getRelation.bind(this);
         this.modifyRelation = this.modifyRelation.bind(this);
@@ -48,6 +49,7 @@ class App extends Component {
 
         app_state.data.helpers['brutalSet'] = this.brutalSet;
         app_state.data.helpers['brutalGet'] = this.brutalGet;
+        app_state.data.helpers['addMoney'] = this.addMoney;
 
         app_state.data.helpers['modifyRelation'] = this.modifyRelation;
         app_state.data.helpers['getRelation'] = this.getRelation;
@@ -328,29 +330,36 @@ class App extends Component {
     rollTurn() {
         const data = this.state.data;
 
-        if (_.random(1, 24*7) === 1 && data.candidates.resumes.length < 3) {
-            data.candidates.resumes.push(WorkerModel.generate(_.random(3, 5)));
+        if (_.random(1, 24 * (15 - Math.min(10, Math.sqrt(projects_done)))) === 1 && data.candidates.resumes.length < 5) {
+            let worker = WorkerModel.generate(_.random(3, 5));
+            data.candidates.resumes.push(worker);
+            data.helpers.addAction('New resume: ' + worker.name);
         }
         if (_.random(1, 24*7*8) === 1 && data.candidates.resumes.length > 0) {
             _.remove(data.candidates.resumes, (candidate) => { return (candidate.id === data.candidates.resumes[0].id); });
         }
 
-        if (_.random(1, 24*7*4) === 1 && data.candidates.stars.length < 3) {
-            data.candidates.stars.push(WorkerModel.generate(_.random(10, 30)));
+        if (_.random(1, (24*7*4*12)/(1+projects_done)) === 1 && data.candidates.stars.length < 5) {
+            let worker = WorkerModel.generate(_.random(10, 30));
+            data.candidates.stars.push(worker);
+            let max_skill = _.maxBy(Object.keys(worker.stats), function (o) { return worker.stats[o]; });
+            data.helpers.addAction('Excellent '+max_skill+' ninja '+worker.name+' looking for a job');
         }
         if (_.random(1, 24*7*4*8) === 1 && data.candidates.stars.length > 0) {
             _.remove(data.candidates.stars, (candidate) => { return (candidate.id === data.candidates.stars[0].id); });
         }
 
-        if (_.random(1, 12) === 1 && data.offered_projects.freelance.length < 3) {
+        if (_.random(1, 24) === 1 && data.offered_projects.freelance.length < 5) {
             data.offered_projects.freelance.push(ProjectModel.generate(_.random(1, 5), _.random(1, 2)));
+            data.helpers.addAction('New freelance job!', {timeOut: 3000, extendedTimeOut: 1000});
         }
-        if (_.random(1, 7*12) === 1 && data.offered_projects.freelance.length > 0) {
+        if (_.random(1, 7*24) === 1 && data.offered_projects.freelance.length > 0) {
             _.remove(data.offered_projects.freelance, (candidate) => { return (candidate.id === data.offered_projects.freelance[0].id); });
         }
 
-        if (_.random(1, 24*7) === 1 && data.offered_projects.bigdeal.length < 3) {
+        if (_.random(1, 24*7) === 1 && data.offered_projects.bigdeal.length < 5) {
             data.offered_projects.bigdeal.push(ProjectModel.generate(_.random(30, 60), 4));
+            data.helpers.addAction('New big deal!');
         }
         if (_.random(1, 24*7*12) === 1 && data.offered_projects.bigdeal.length > 0) {
             _.remove(data.offered_projects.bigdeal, (candidate) => { return (candidate.id === data.offered_projects.bigdeal[0].id); });
