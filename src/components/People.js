@@ -33,7 +33,7 @@ class People extends Component {
             return <div key={candidate.id} className="unit_block">{candidate.name} <span> {candidate.getSalary()}$</span>
                 <StatsBar stats={stats_data} data={this.props.data} />
                 <button className="btn btn-success" id={candidate.id} onClick={(e) => this.hire(e, type)}>Hire</button>
-                <button className="btn btn-danger" id={candidate.id} onClick={(e) => this.reject(e, type)}>Reject{type === 'agency' ? ' +900$' : ''}</button>
+                <button className="btn btn-danger" id={candidate.id} onClick={(e) => this.reject(e, type)}>Reject</button>
 
             </div>
         };

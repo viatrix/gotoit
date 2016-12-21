@@ -41,7 +41,7 @@ class Projects extends Component {
                 <div>deadline: {candidate.getDeadlineText()}</div>
                 <StatsBar stats={stats_data} data={this.props.data} />
                 <button className="btn btn-success" id={candidate.id} onClick={(e) => this.startOffered(e, type)}>Start</button>
-                <button className="btn btn-danger" id={candidate.id} onClick={(e) => this.reject(e, type)}>Reject{type === 'contract' ? ' +900$' : ''}</button>
+                <button className="btn btn-danger" id={candidate.id} onClick={(e) => this.reject(e, type)}>Reject</button>
                 {candidate.reward}$
             </div>
         };
