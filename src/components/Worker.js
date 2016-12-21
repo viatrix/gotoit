@@ -93,11 +93,11 @@ class Worker extends Component {
                             <StatsBar stats={stats_data} data={this.props.data} />
                         </ul>
                         <h2>Roles</h2>
-                        <div>
-                            <ul>
-                                Which roles {worker.name} has to perform?
+                        Which roles {worker.name} has to perform?
+                        <div className="panel panel-success">
+                            <div className="row">
                                 {skills_names.map((role, i) =>
-                                    <div key={role} className="checkbox">
+                                    <div key={role} className="checkbox col-md-3">
                                         <label>
                                             <input
                                                 type="checkbox"
@@ -105,11 +105,10 @@ class Worker extends Component {
                                                 checked={this.props.data.helpers.getRole(worker.id, role)}
                                                 onChange={this.changeRole}/>
                                             <span> {roles[role].name} </span>
-                                            <span className="small"> {roles[role].description} </span>
                                         </label>
                                     </div>
                                 )}
-                            </ul>
+                            </div>
                         </div>
                         <h2>Worker Projects</h2>
                         <ul>
