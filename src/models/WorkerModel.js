@@ -51,32 +51,40 @@ class WorkerModel {
             (_.random(1, 10 - this.temper.variability) !==1) // variability guys eblanyat more often
         ) ? true : false;
 
-      //  console.log('Worker '+this.name+' '+(is_working_time ? 'work' : 'rest')+' on hour '+time.hour+' with temper '+
-      //      this.temper.earliness+' '+this.temper.variability);
+        console.log('Worker '+this.name+' '+(is_working_time ? 'work' : 'rest')+' on hour '+time.hour+' with temper '+
+            this.temper.earliness+' '+this.temper.variability);
 
         return is_working_time;
     }
 
     getResources(worker_roles, focus_on=null, micromanagement) {
+        let r = (stat) => { return _.random(1, this.stats[stat]); };
+        let resource = 0;
+        
         this.standing++;
-        var resources = {};
-        let stat = focus_on ? focus_on : _.sample(_.keys(_.pickBy(worker_roles, _.identity)));
-        if (!(stat in resources)) resources[stat] = 0;
+        //var resources = {};
+     //   let stat = focus_on ? focus_on : _.sample(_.keys(_.pickBy(worker_roles, _.identity)));
+        let stat = focus_on ? focus_on : _.sample(worker_roles);
+        //if (!(stat in resources)) resources[stat] = 0;
 
         if (micromanagement) {
-            let dices = [_.random(1, this.stats[stat]), _.random(1, this.stats[stat]), _.random(1, this.stats[stat])];
+            let dices = [r(stat), r(stat), r(stat)];
             dices.sort((a,b) => { return a - b; });
-            resources[stat] += dices[1];
+            resource = dices[1];
         }
         else {
-            resources[stat] += _.random(1, this.stats[stat]);
+            resource = r(stat);
         }
 
-        resources[stat] += micromanagement ?
-            Math.max(_.random(1, this.stats[stat]), Math.min(_.random(1, this.stats[stat]), _.random(1, this.stats[stat]))) :
-            _.random(1, this.stats[stat]);
+        let ret = {};
+        ret[stat] = resource;
+        return ret;
+
+        //resources[stat] += micromanagement ?
+        //    Math.max(r(stat), Math.min(r(stat), r(stat))) :
+        //    r(stat);
         //    console.log(resources);
-        return resources;
+        //return resources;
     }
 
     getSideResource() {

@@ -294,7 +294,7 @@ class App extends Component {
 
         this.timerID = setInterval(
             () => this.tick(),
-            200
+            250
         );
     }
 
@@ -372,9 +372,6 @@ class App extends Component {
         time.hour++;
         time.day = game_date.getUTCDay();
 
-
-        time.tick++;
-        time.hour++;
         if (time.hour > 24) {
             console.log('A new day');
             time.hour = 1;
@@ -417,15 +414,15 @@ class App extends Component {
         data.workers.forEach((worker) => {
             let is_working_time = worker.isWorkingTime(data.date);
 
-            if (!worker.is_player && (data.money - worker.getSalary()) < 0) return;
+            if (!worker.is_player && (data.money - worker.getSalary()) < 0) return false;
 
             let skip_work = false;
 
-            let worker_roles = {
-                design: this.getRole(worker.id, 'design'),
-                manage: this.getRole(worker.id, 'manage'),
-                program: this.getRole(worker.id, 'program'),
-                admin: this.getRole(worker.id, 'admin')};
+            let worker_roles = [];
+            skills_names.forEach((role) => {
+                if (this.getRole(worker.id, role)) {
+                    worker_roles.push(role);
+                } });
 
             // looking worker projects
             let worker_projects = data.projects.filter((project) => {
@@ -433,14 +430,16 @@ class App extends Component {
                     project.isNeed(worker_roles) &&
                     project.stage === 'open');
             });
+       //     console.log(worker_projects);
             // work on one of projects
             if (worker_projects.length > 0) {
                 let project = _.sample(worker_projects);
 
-
                 let focus_on = (this.getTechnology(project.id, 'agile'))
-                    ? _.maxBy(Object.keys(project.needs), function (o) { return project.needs[o]; })
+                    ? _.maxBy(Object.keys(project.getNeeds(worker_roles)), function (o) { return project.needs[o]; })
                     : _.sample(Object.keys(project.getNeeds(worker_roles)));
+
+            //    console.log('# '+focus_on);
 
                 let supporter = false;
 
@@ -448,11 +447,6 @@ class App extends Component {
                 let micromanagement = this.getTechnology(project.id, 'micromanagement');
                 let creativity = this.getTechnology(project.id, 'creativity');
                 let overtime = this.getTechnology(project.id, 'overtime');
-
-                if (creativity && data.date.day === 5 && is_working_time) {
-                    console.log('creativity day');
-                    supporter = true;
-                }
 
                 // Overtime
                 if (!is_working_time) {
@@ -485,6 +479,11 @@ class App extends Component {
                 worker.facts.money_earned += salary;
                 project.facts.money_spent += salary;
 
+                // Pet Projects on Fridays
+                if (creativity && data.date.day === 5 && is_working_time) {
+                    console.log('creativity day');
+                    supporter = true;
+                }
                 // Pair. 1 - worker, 2 - supporter
                 if (this.getTechnology(project.id, 'pair') &&
                     team_sizes[project.id] > 1 && _.random(1, 2) === 2) {
@@ -533,6 +532,10 @@ class App extends Component {
                         worker, rad, supporter),
                     creativity);
                 }
+            }
+            else {
+                console.log('worker have not projects');
+                //worker.goRest();
             }
         });
 

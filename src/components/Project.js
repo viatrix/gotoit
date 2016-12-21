@@ -118,12 +118,7 @@ class Project extends Component {
                 <Portal ref="manage" closeOnEsc closeOnOutsideClick openByClickOn={manage_button}>
                     <TeamDialog>
                         <h4> {project.name} {project.reward}$ {stage_button}</h4>
-                        <div className="flex-container-row">
-                            <div className="flex-element"> Tasks: {project.tasksQuantity()}/{project.planedTasksQuantity()} </div>
-                            <div className="flex-element"> Bugs: <label className="text-danger">{project.bugsQuantity()}</label></div>
-                            <div className="flex-element"> Complexity: {project.complexity} </div>
-                            <div className="flex-element"> Iteration: {project.iteration} </div>
-                        </div>
+
                         <div>
                             {project.deadline > 0 ? <div key="deadline" className="row">
                                 <div className="col-md-2">Deadline</div>
@@ -138,6 +133,12 @@ class Project extends Component {
                                     </div>
                                 </div>
                             </div> : ''}
+                            <div className="flex-container-row">
+                                <div className="flex-element"> Iteration: {project.iteration} </div>
+                                <div className="flex-element"> Tasks: {project.tasksQuantity()}/{project.planedTasksQuantity()} </div>
+                                <div className="flex-element"> Bugs: <label className="text-danger">{project.bugsQuantity()}</label></div>
+                                <div className="flex-element"> Complexity: {project.complexity} </div>
+                            </div>
                             {skills_names.map((skill) => {
                                 let need = project.needs[skill];
                                 let errors = project.errors[skill];
