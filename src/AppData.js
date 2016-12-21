@@ -45,6 +45,7 @@ var app_state =
         projects: [],
         projects_reports: [],
         projects_technologies: [],
+        projects_default_technologies: [],
         relations: [],
         helpers: {}
     }

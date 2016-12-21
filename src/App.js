@@ -187,6 +187,11 @@ class App extends Component {
     startProject(project) {
         let data = this.state.data;
         data.projects.push(project);
+        Object.keys(data.projects_default_technologies).forEach((technology) => {
+            if (data.projects_default_technologies[technology]) {
+                this.changeTechnology(technology, project.id, true);
+            }
+        });
         this.setState({data: data});
         this.modifyRelation(null, project.id, true);
     }
@@ -247,6 +252,7 @@ class App extends Component {
         let data = this.state.data;
         if (!(project_id in data.projects_technologies)) data.projects_technologies[project_id] = {};
         data.projects_technologies[project_id][technology] = value;
+        data.projects_default_technologies[technology] = value;
         this.setState({data: data});
     }
 
