@@ -53,6 +53,10 @@ div {
     padding-top: 0px;
     margin-top: 0px;
 }
+.slim-left {
+    padding-left: 0px;
+    margin-left: 0px;
+}
 /*
 .checkbox label {
     padding-left: 0px;
