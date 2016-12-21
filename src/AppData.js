@@ -30,8 +30,10 @@ var app_state =
         },
         offered_projects: {
             freelance: [
-                ProjectModel.generate(1, _.random(1, 2)),
-                ProjectModel.generate(1, _.random(1, 2))
+                ProjectModel.generate(5, 1),
+                ProjectModel.generate(5, 2)
+             //   ProjectModel.generate(1, _.random(1, 2)),
+             //   ProjectModel.generate(1, _.random(1, 2))
             ],
             contract: [],
             bigdeal: [

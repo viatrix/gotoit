@@ -328,8 +328,8 @@ class App extends Component {
     rollTurn() {
         const data = this.state.data;
 
-        if (_.random(1, 24 * (15 - Math.min(10, Math.sqrt(projects_done)))) === 1 && data.candidates.resumes.length < 5) {
-            let worker = WorkerModel.generate(_.random(3, 5));
+        if (_.random(1, 24 * (25 - Math.min(10, Math.sqrt(projects_done*0.1)))) === 1 && data.candidates.resumes.length < 5) {
+            let worker = WorkerModel.generate(_.random(5, 10));
             data.candidates.resumes.push(worker);
             data.helpers.addAction('New resume: ' + worker.name);
         }
@@ -337,8 +337,10 @@ class App extends Component {
             _.remove(data.candidates.resumes, (candidate) => { return (candidate.id === data.candidates.resumes[0].id); });
         }
 
-        if (_.random(1, (24*7*4*12)/(1+projects_done)) === 1 && data.candidates.stars.length < 5) {
-            let worker = WorkerModel.generate(_.random(10, 30));
+        if (( _.random(1, (24*7*4*12)/(1+(projects_done*0.1))) === 1 && data.candidates.stars.length < 5)) {
+            let experience = _.random(10, 20);
+            let worker = WorkerModel.generate(experience);
+            worker.standing += experience * 12 * _.random(10, 10+experience);
             data.candidates.stars.push(worker);
             let max_skill = _.maxBy(Object.keys(worker.stats), function (o) { return worker.stats[o]; });
             data.helpers.addAction('Excellent '+max_skill+' ninja '+worker.name+' looking for a job');
@@ -355,12 +357,9 @@ class App extends Component {
             _.remove(data.offered_projects.freelance, (candidate) => { return (candidate.id === data.offered_projects.freelance[0].id); });
         }
 
-        if (_.random(1, 24*((7*4*8)/(1+projects_done))) === 1 && data.offered_projects.bigdeal.length < 5) {
+        if (_.random(1, 24*((7*4*8*12)/(1+projects_done*0.1))) === 1 && data.offered_projects.bigdeal.length < 5) {
             data.offered_projects.bigdeal.push(ProjectModel.generate(_.random(30, 60), 4));
             data.helpers.addAction('New big deal!');
-        }
-        if (_.random(1, 24*7*4*8) === 1 && data.offered_projects.bigdeal.length > 0) {
-            _.remove(data.offered_projects.bigdeal, (candidate) => { return (candidate.id === data.offered_projects.bigdeal[0].id); });
         }
 
         this.setState({data: data});

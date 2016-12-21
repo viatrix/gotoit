@@ -35,7 +35,7 @@ class WorkerModel {
             return 0;
         }
         else {
-            //console.log("standing " + this.standing + " means " + (1 + (this.standing/(12*4*7*8*Math.PI))));
+            console.log("standing " + this.standing + " means " + (1 + (this.standing/(12*4*7*8*Math.PI))));
             return Math.floor((this.statsSum() + _.max(_.values(this.stats))) * (1 + (this.standing/(12*4*7*8*Math.PI))));
         }
     }

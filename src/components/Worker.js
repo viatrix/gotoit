@@ -84,7 +84,8 @@ class Worker extends Component {
                         <h2>{worker.name}</h2>
                         <ul>
                             <p>Hired {Math.ceil((this.props.data.date.tick - worker.facts.tick_hired)/24)} days ago.
-                                Got {worker.facts.money_earned}$ of salary.</p>
+                                {!worker.is_player ? <span>Got {worker.facts.money_earned}$ of salary. Overrate : {100-((1 + (worker.standing/(12*4*7*8*Math.PI))).toFixed(2)*100)}%</span> : ''}
+                            </p>
                             <p>Finished {worker.facts.project_finished} project.
                                 Done {worker.facts.tasks_done} of {worker.facts.tasks_done + worker.facts.bugs_passed} tasks.
                                 Passed {worker.facts.bugs_passed} bugs.
