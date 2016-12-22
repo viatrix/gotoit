@@ -94,7 +94,7 @@ class WorkerModel {
 
     addExperience(learned, creativity = false) {
         learned.forEach((stat) => {
-            this.expirience[stat] += Math.ceil(10 * (creativity ? 1.25 : 1) / (this.stats[stat]));
+            this.expirience[stat] += Math.ceil(10 * (creativity ? 1.50 : 1) / (this.stats[stat]));
             if (this.expirience[stat] >= 100) {
                 console.log('stat rise');
                 this.expirience[stat] -= 100;
