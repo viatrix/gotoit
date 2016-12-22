@@ -4,19 +4,22 @@ import _ from 'lodash';
 
 import bulkStyler from '../services/bulkStyler';
 
+import {addMessage} from '../components/ToastNest';
+
 import {skills} from '../data/knowledge';
 import {hired, projects_done} from '../App';
 
 var projects_generated = 0;
 
 class ProjectModel {
-    constructor(name, type, reward, start_needs, size, deadline, complexity = 0) {
+    constructor(name, type, reward, penalty, start_needs, size, deadline, complexity = 0) {
         this.stage = 'ready';
 
         this.id = _.uniqueId('project');
         this.name = name;
         this.type = type;
         this.reward = reward;
+        this.penalty = penalty;
         this.needs = JSON.parse(JSON.stringify(start_needs));
         this.errors = JSON.parse(JSON.stringify(skills));
         this.stored_wisdom = JSON.parse(JSON.stringify(skills));
@@ -56,20 +59,24 @@ class ProjectModel {
             //    console.log(cont, pro);
                 if (resource > 0 && cont < pro) {
                     this.complexity += (rad ? 4 : 1);
-                    let real_work = Math.min(this.needs[stat], resource);
+                    let real_work = Math.min(this.needs[stat], _.random(1, resource));
                     worker.facts.tasks_done += real_work;
                     this.facts.tasks_done += real_work;
                     this.needs[stat] -= real_work;
+                    addMessage(worker.name+' work '+real_work+' ['+resource+'('+this.stored_wisdom[stat]+'+'+work[stat]+')] in '+stat, {}, 'info');
+                    //addMessage('Work '+stat+' '+work[stat]+' where wisdom is '+this.stored_wisdom[stat], {}, 'info');
                     console.log('Work '+stat+' '+work[stat]+' where wisdom is '+this.stored_wisdom[stat]);
                     this.stored_wisdom[stat] = 0;
                 }
                 else {
                     this.stored_wisdom[stat] += work[stat];
                     if (this.runTests()) {
+                        addMessage(worker.name+' do errors in '+stat+', but test prevent', {}, 'info');
                         console.log('Test prevent errors');
                     }
                     else {
                         console.log('Do errors');
+                        addMessage(worker.name+' do errors in '+stat, {}, 'warning');
                         worker.facts.bugs_passed++;
                         this.facts.bugs_passed++;
                         this.errors[stat]++;
@@ -174,10 +181,11 @@ class ProjectModel {
         let s = _.values(stats);
         let reward = Math.pow(10, size+1) +
             Math.ceil((_.max(s) + _.sum(s)) * 5);
+        let penalty = ([0, 0, 0, 0.5, 1][size] * reward).toFixed(0);
         let deadline = Math.floor(100 + // constant for anti-weekend effect on small projects
             (((_.max(s) + _.sum(s)) * 5) / (4 * size))); //8*5*4*size*Math.sqrt(quality);
 
-        return new ProjectModel(this.genName(size), 'project', reward, stats, size, deadline);
+        return new ProjectModel(this.genName(size), 'project', reward, penalty, stats, size, deadline);
     }
 
     static genName(size) {

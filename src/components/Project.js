@@ -17,6 +17,7 @@ class Project extends Component {
         this.changeTechnology = this.changeTechnology.bind(this);
         this.finish = this.finish.bind(this);
         this.fix = this.fix.bind(this);
+        this.open = this.open.bind(this);
         this.close = this.close.bind(this);
     }
 
@@ -34,6 +35,10 @@ class Project extends Component {
 
     changeTechnology(event) {
         this.props.data.helpers.changeTechnology(event.target.id, this.props.project.id, event.target.checked);
+    }
+
+    open() {
+        this.props.data.helpers.openProject(this.props.project.id);
     }
 
     close() {
@@ -95,7 +100,7 @@ class Project extends Component {
 
         let stage_button = '';
         if (project.stage === 'ready') {
-            stage_button = <button className="btn btn-success btn-lg" onClick={() => {project.stage='open';}}>Start Project</button>;
+            stage_button = <button className="btn btn-success btn-lg" onClick={this.open}>Start Project</button>;
         }
         else {
             if (project.isFinished()) {
@@ -113,8 +118,11 @@ class Project extends Component {
 
         return (
             <div className="unit_block">
-                {project.name} ({project.reward}$)
-
+                <label>
+                    <label> {project.name} </label>
+                    <label> Reward: {project.reward}$ </label>
+                    {(project.penalty > 0 ? <label>Penalty: {project.penalty}$</label> : '')}
+                </label>
                 <Portal ref="manage" closeOnEsc closeOnOutsideClick openByClickOn={manage_button}>
                     <TeamDialog>
                         <h4> {project.name} {project.reward}$ {stage_button}</h4>

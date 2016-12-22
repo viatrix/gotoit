@@ -13,7 +13,7 @@ class WorkerModel {
         this.expirience = JSON.parse(JSON.stringify(skills));
         this.standing = 0;
         this.morale = 0;
-        this.accept_default = true;
+        this.accept_default = is_player;
 
         this.temper = {
             earliness: _.random(0, 3), variability: _.random(0, 3)

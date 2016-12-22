@@ -4,6 +4,18 @@ import _ from 'lodash';
 import {ToastContainer, ToastMessage} from "react-toastr";
 const ToastMessageFactory = React.createFactory(ToastMessage.animation);
 
+export var addMessage;
+addMessage = (text) => { console.log(text);};
+export var addAction;
+addAction = (text) => { console.log(text);};
+
+/***
+ * Short info:
+ * types: 'success', 'warning', 'error', 'info'
+ */
+
+
+
 class ToastNest extends Component {
     constructor(props) {
         super(props);
@@ -17,21 +29,21 @@ class ToastNest extends Component {
         this.refs.messages.clear();
     }
 
-    addMessage(text) {
-        this.refs.messages.success(text, ``, {
+    addMessage(text, options, type='info') {
+        this.refs.messages[type](text, ``, Object.assign({
             closeButton: false,
             preventDuplicates: false,
-            timeOut: 2000,
-            extendedTimeOut: 1000
-        });
+            timeOut: 3000,
+            extendedTimeOut: 1500
+        }, options));
     }
 
     clearActions() {
         this.refs.actions.clear();
     }
 
-    addAction(text, options) {
-        this.refs.actions.success(text, ``, Object.assign({
+    addAction(text, options, type='info') {
+        this.refs.actions[type](text, ``, Object.assign({
             closeButton: true,
             preventDuplicates: false,
             timeOut: 30000,
@@ -40,7 +52,9 @@ class ToastNest extends Component {
     }
 
     componentDidMount() {
+        addMessage = this.addMessage;
         this.props.data.helpers.addMessage = this.addMessage;
+        addAction = this.addAction;
         this.props.data.helpers.addAction = this.addAction;
     }
 

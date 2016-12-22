@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import _ from 'lodash';
 
 import Layout from './components/Layout';
+import {addMessage, addAction} from './components/ToastNest';
 import './App.css';
 import app_state from './AppData';
 import WorkerModel from './models/WorkerModel';
@@ -40,6 +41,7 @@ class App extends Component {
         this.startProject = this.startProject.bind(this);
         this.finishProject = this.finishProject.bind(this);
         this.fixProject = this.fixProject.bind(this);
+        this.openProject = this.openProject.bind(this);
         this.closeProject = this.closeProject.bind(this);
         this.getTechnology = this.getTechnology.bind(this);
         this.changeTechnology = this.changeTechnology.bind(this);
@@ -66,6 +68,7 @@ class App extends Component {
         app_state.data.helpers['startProject'] = this.startProject;
         app_state.data.helpers['finishProject'] = this.finishProject;
         app_state.data.helpers['fixProject'] = this.fixProject;
+        app_state.data.helpers['openProject'] = this.openProject;
         app_state.data.helpers['closeProject'] = this.closeProject;
         app_state.data.helpers['getTechnology'] = this.getTechnology;
         app_state.data.helpers['changeTechnology'] = this.changeTechnology;
@@ -130,7 +133,7 @@ class App extends Component {
         agency_generation_counter++;
         let data = this.state.data;
         data.money -= 1000;
-        data.candidates.agency.push(WorkerModel.generate(_.random(1, 20) + agency_generation_counter));
+        data.candidates.agency.push(WorkerModel.generate(_.random(5, 10) + agency_generation_counter));
         this.setState({data: data});
     }
 
@@ -168,7 +171,7 @@ class App extends Component {
         contract_generation_counter++;
         let data = this.state.data;
         data.money -= 1000;
-        data.offered_projects.contract.push(ProjectModel.generate(_.random(1, 20) + contract_generation_counter, 3));
+        data.offered_projects.contract.push(ProjectModel.generate(_.random(1, 10) + contract_generation_counter, 3));
         this.setState({data: data});
     }
 
@@ -180,11 +183,13 @@ class App extends Component {
 
     startOffered(id, type) {
         let data = this.state.data;
-        this.startProject((_.remove(data.offered_projects[type], (candidate) => { return (candidate.id === id); }))[0]);
+        let project = (_.remove(data.offered_projects[type], (candidate) => { return (candidate.id === id); }))[0];
+        this.startProject(project);
+        addMessage('Accept '+project.name+' project', {timeOut: 5000, extendedTimeOut: 2000}, 'info');
         this.setState({data: data});
     }
 
-    startProject(project) {
+    startProject(project) { // rename to XXX project?
         let data = this.state.data;
         data.projects.push(project);
         Object.keys(data.projects_default_technologies).forEach((technology) => {
@@ -196,9 +201,11 @@ class App extends Component {
         this.modifyRelation(null, project.id, true);
     }
 
-    runProject(id) {
+    openProject(id) {
         let data = this.state.data;
-        this.projectReporting(id, 'close');
+        let project = _.find(data.projects, (project) => { return (project.id === id); });
+        project.stage='open';
+        addMessage('Start '+project.name+' project', {timeOut: 5000, extendedTimeOut: 2000}, 'info');
         this.setState({data: data});
     }
 
@@ -217,7 +224,9 @@ class App extends Component {
 
     fixProject(id) {
         let data = this.state.data;
-        _.find(data.projects, (project) => { return (project.id === id); }).fix();
+        let project = _.find(data.projects, (project) => { return (project.id === id); });
+        project.fix();
+        addMessage(project.name+' project go to '+project.iteration+' iteration for fixing bugs.', 'error');
         this.setState({data: data});
     }
 
@@ -234,7 +243,11 @@ class App extends Component {
         let data = this.state.data;
         let project = _.remove(data.projects, (project) => { return (project.id === project_id); })[0];
 
-        this.message(project.name+' project '+stage);
+        addMessage(project.name+' project '+stage, {timeOut: 10000, extendedTimeOut: 5000}, {finish: 'success', fail: 'error', close: 'error'}[stage]);
+
+        if (stage in ['fail', 'close'] && project.penalty !== 0) {
+            this.chargeMoney(project.penalty);
+        }
 
         project.stage = stage;
         data.projects_reports.unshift(project);
@@ -260,12 +273,18 @@ class App extends Component {
     addMoney(quantity) {
         let data = this.state.data;
         data.money += quantity;
+        addAction('Income to your wallet: '+quantity+'$', {timeOut: 5000, extendedTimeOut: 1000}, 'success');
         this.setState({data: data});
     }
 
     chargeMoney(quantity) {
+        if (quantity <= 0) {
+            console.log('fix chargeMoney(0)');
+            return false;
+        }
         let data = this.state.data;
         data.money -= quantity;
+        addAction('Charge from your wallet: '+quantity+'$', {timeOut: 1500, extendedTimeOut: 500}, 'warning');
         this.setState({data: data});
     }
 
@@ -274,33 +293,17 @@ class App extends Component {
         return this.state.data.workers.length;
     }
 
-    message(text) {
-        this.state.data.helpers.addMessage(text);
-    }
-
     componentWillMount(){
-
         let callback = () => {
             return this.state.data;
         };
-
-        //console.log(callback);
-        //console.log(callback());
-
         setCallback(callback);
     }
 
     componentDidMount() {
-        /*
-        let data = this.state.data;
-        data.workers = [WorkerModel.generatePlayer()];
-        data.workers_roles = {player: {design: true, manage: true, program: true, admin: true}};
-        this.setState({data: data});
-        */
-
         this.timerID = setInterval(
             () => this.tick(),
-            250
+            1000
         );
     }
 
@@ -337,7 +340,7 @@ class App extends Component {
         if (_.random(1, 24 * (25 - Math.min(10, Math.sqrt(projects_done*0.1)))) === 1 && data.candidates.resumes.length < 5) {
             let worker = WorkerModel.generate(_.random(5, 10));
             data.candidates.resumes.push(worker);
-            data.helpers.addAction('New resume: ' + worker.name);
+            addAction('New resume: ' + worker.name);
         }
         if (_.random(1, 24*7*8) === 1 && data.candidates.resumes.length > 0) {
             _.remove(data.candidates.resumes, (candidate) => { return (candidate.id === data.candidates.resumes[0].id); });
@@ -349,7 +352,7 @@ class App extends Component {
             worker.standing += experience * 12 * _.random(10, 10+experience);
             data.candidates.stars.push(worker);
             let max_skill = _.maxBy(Object.keys(worker.stats), function (o) { return worker.stats[o]; });
-            data.helpers.addAction('Excellent '+max_skill+' ninja '+worker.name+' looking for a job');
+            addAction('Excellent '+max_skill+' ninja '+worker.name+' looking for a job');
         }
         if (_.random(1, 24*7*4*8) === 1 && data.candidates.stars.length > 0) {
             _.remove(data.candidates.stars, (candidate) => { return (candidate.id === data.candidates.stars[0].id); });
@@ -357,7 +360,7 @@ class App extends Component {
 
         if (_.random(1, 24*4) === 1 && data.offered_projects.freelance.length < 5) {
             data.offered_projects.freelance.push(ProjectModel.generate(_.random(1, 5), _.random(1, 2)));
-            data.helpers.addAction('New freelance job!', {timeOut: 3000, extendedTimeOut: 1000});
+            addAction('New freelance job!', {timeOut: 3000, extendedTimeOut: 1000});
         }
         if (_.random(1, 24*7) === 1 && data.offered_projects.freelance.length > 0) {
             _.remove(data.offered_projects.freelance, (candidate) => { return (candidate.id === data.offered_projects.freelance[0].id); });
@@ -365,7 +368,19 @@ class App extends Component {
 
         if (_.random(1, 24*((7*4*8*12)/(1+projects_done*0.1))) === 1 && data.offered_projects.bigdeal.length < 5) {
             data.offered_projects.bigdeal.push(ProjectModel.generate(_.random(30, 60), 4));
-            data.helpers.addAction('New big deal!');
+            addAction('New big deal!', {timeOut: 5000, extendedTimeOut: 3000});
+        }
+
+        let tick = data.date.tick;
+        switch (tick) {
+            case 2:
+                addAction('Hi there!', {timeOut: 3000, extendedTimeOut: 1000}, 'success');
+                break;
+            case 10:
+
+                break;
+            default:
+                break;
         }
 
         this.setState({data: data});
@@ -465,7 +480,7 @@ class App extends Component {
                     if (overtime) {
                         if (worker.morale > 0) {
                             if (_.random(1, 4) === 1) {
-                                this.message(worker.name+' overtime!');
+                                addMessage(worker.name+' overtime!');
                             //    console.log('overtime on '+worker.morale);
                                 worker.morale--;
                             }
@@ -515,7 +530,7 @@ class App extends Component {
                     worker.facts.tests_wrote += tests;
                     project.facts.tests_wrote += tests;
                     project.tests += tests;
-                    this.message(worker.name+' wrote '+tests+' test!');
+                    addMessage(worker.name+' wrote '+tests+' test!', {}, 'success');
                     skip_work = true;
                 }
 
@@ -532,7 +547,7 @@ class App extends Component {
                     worker.facts.refactored += refactoring;
                     project.facts.refactored += refactoring;
                     project.complexity -= refactoring;
-                    this.message(worker.name+' refactored '+refactoring+' complexity!');
+                    addMessage(worker.name+' refactored '+refactoring+' complexity!', {}, 'success');
                     skip_work = true;
                 }
 
