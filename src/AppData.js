@@ -3,6 +3,7 @@ import _ from 'lodash';
 
 import WorkerModel from './models/WorkerModel';
 import ProjectModel from './models/ProjectModel';
+import OfficeModel from './models/OfficeModel';
 
 
 var app_state =
@@ -19,6 +20,7 @@ var app_state =
             year: 0,
             is_working_time: false
         },
+        office: new OfficeModel(1),
         candidates: {
             resumes: [
             //    WorkerModel.generate(3)

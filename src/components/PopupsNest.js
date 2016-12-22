@@ -42,6 +42,7 @@ class PopupsNest extends Component {
 
         if (this.state.selected_background === 'coworker') {
             this.props.data.helpers.hireEmployer(WorkerModel.generate(6));
+            this.props.data.helpers.upOffice(2); // this.props.data.office = new OfficeModel(2);
         }
     }
 

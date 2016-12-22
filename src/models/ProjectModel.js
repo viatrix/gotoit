@@ -180,11 +180,11 @@ class ProjectModel {
         }
 
         let s = _.values(stats);
-        let reward = Math.pow(10, size) +
-            Math.ceil((_.max(s) + _.sum(s)) * 5);
+        let reward = Math.pow(10, size) + 1000 +
+            Math.ceil((_.max(s) + _.sum(s)) * 10);
         let penalty = ([0, 0, 0, 0.5, 1][size] * reward).toFixed(0);
         let deadline = 100 +  // constant for anti-weekend effect on small projects
-            Math.floor((((_.max(s) + _.sum(s)) * 5) / (4 * size)));
+            Math.floor((((_.max(s) + _.sum(s)) * 7) / (4 * size)));
 
         return new ProjectModel(this.genName(size), 'project', reward, penalty, stats, size, deadline);
     }

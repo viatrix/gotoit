@@ -7,6 +7,7 @@ import './App.css';
 import app_state from './AppData';
 import WorkerModel from './models/WorkerModel';
 import ProjectModel from './models/ProjectModel';
+import OfficeModel from './models/OfficeModel';
 import {skills_names} from './data/knowledge';
 import {setCallback} from './services/getData';
 
@@ -45,6 +46,7 @@ class App extends Component {
         this.closeProject = this.closeProject.bind(this);
         this.getTechnology = this.getTechnology.bind(this);
         this.changeTechnology = this.changeTechnology.bind(this);
+        this.upOffice = this.upOffice.bind(this);
 
         this.howManyEmployers = this.howManyEmployers.bind(this);
 
@@ -72,6 +74,7 @@ class App extends Component {
         app_state.data.helpers['closeProject'] = this.closeProject;
         app_state.data.helpers['getTechnology'] = this.getTechnology;
         app_state.data.helpers['changeTechnology'] = this.changeTechnology;
+        app_state.data.helpers['upOffice'] = this.upOffice;
 
         this.state = app_state;
     }
@@ -133,7 +136,9 @@ class App extends Component {
         agency_generation_counter++;
         let data = this.state.data;
         data.money -= 1000;
-        data.candidates.agency.push(WorkerModel.generate(_.random(5, 10) + agency_generation_counter));
+        let worker = WorkerModel.generate(_.random(4, 7 + (agency_generation_counter*0.1)));
+        worker.standing += 10 * _.random(1, agency_generation_counter);
+        data.candidates.agency.push(worker);
         this.setState({data: data});
     }
 
@@ -288,6 +293,12 @@ class App extends Component {
         this.setState({data: data});
     }
 
+    upOffice(new_size) {
+        let data = this.state.data;
+        data.office = new OfficeModel(new_size);
+        addAction('You rent new Office. Month price: '+data.office.price+'$', {timeOut: 10000, extendedTimeOut: 2000}, 'success');
+        this.setState({data: data});
+    }
 
     howManyEmployers() {
         return this.state.data.workers.length;
@@ -324,13 +335,19 @@ class App extends Component {
         data.projects.forEach((project) => {
             if (project.stage !== 'open') return false;
 
-            if (project.tasksQuantity() === 0 && project.bugsQuantity() === 0)
+            if (project.tasksQuantity() === 0 && project.bugsQuantity() === 0) {
                 this.finishProject(project.id);
+                return;
+            }
             project.deadline--;
-            if (project.deadline <= 0)
+            if (project.deadline <= 0) {
                 this.failProject(project.id);
-            if (project.tasksQuantity() === 0 && project.bugsQuantity() !== 0)
+                return;
+            }
+            if (project.tasksQuantity() === 0 && project.bugsQuantity() !== 0) {
                 this.fixProject(project.id);
+                return;
+            }
         });
     }
 
@@ -359,7 +376,7 @@ class App extends Component {
         }
 
 
-        if (_.random(1, 24*4) === 1 && data.offered_projects.freelance.length < 5) {
+        if (_.random(1, 24*3) === 1 && data.offered_projects.freelance.length < 5) {
             data.offered_projects.freelance.push(ProjectModel.generate(_.random(2, 4), _.random(1, 2)));
             addAction('New freelance job!', {timeOut: 3000, extendedTimeOut: 1000});
         }
@@ -401,7 +418,6 @@ class App extends Component {
 
         time.tick++;
         time.hour++;
-        time.day = game_date.getUTCDay();
 
         if (time.hour > 24) {
             console.log('A new day');
@@ -411,6 +427,15 @@ class App extends Component {
                 if (worker.morale < 100 && _.random(1, 7)) worker.morale++;
             });
         }
+
+        if (time.date !== 1 && game_date.getDate() === 1) {
+            // first day
+            if (data.office.size > 1) {
+                this.chargeMoney(data.office.price);
+            }
+        }
+        time.date = game_date.getDate();
+        time.day = game_date.getUTCDay();
 
         if (
             time.hour >= 10 &&

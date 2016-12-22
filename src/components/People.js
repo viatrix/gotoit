@@ -45,31 +45,43 @@ class People extends Component {
         return (
             <div>
                 <h4 className="text-center slim-top"><label> Team </label>
-
-                <Portal closeOnEsc closeOnOutsideClick openByClickOn={hire_button}>
-                    <TeamDialog>
-                        <h3 className="text-center">Hiring</h3>
-                        <div className="row">
-                            <div className="col-md-4">
-                                <h4 className="text-center">Resume</h4>
-                                {this.props.data.candidates.resumes.map(resumes_candidate)}
-                            </div>
-                            <div className="col-md-4">
-                                <h4 className="text-center">Agency</h4>
-                                <button  className="btn btn-info" onClick={this.props.data.helpers.agencySearch}>Search 1000$</button>
-                                {this.props.data.candidates.agency.map(agency_candidate)}
-                            </div>
-                            <div className="col-md-4">
-                                <h4 className="text-center">Stars</h4>
-                                {this.props.data.candidates.stars.map(stars_candidate)}
-                            </div>
-                        </div>
-                    </TeamDialog>
-                </Portal>
                 </h4>
                 {this.props.data.workers.map((x, i) =>
                     <Worker key={x.id} worker={x} data={this.props.data} />
                 )}
+                {(this.props.data.workers.length < this.props.data.office.space)
+                    ?
+                    <div className="unit_block">
+                        <Portal closeOnEsc closeOnOutsideClick openByClickOn={hire_button}>
+                            <TeamDialog>
+                                <h3 className="text-center">Hiring</h3>
+                                <div className="row">
+                                    <div className="col-md-4">
+                                        <h4 className="text-center">Resume</h4>
+                                        {this.props.data.candidates.resumes.map(resumes_candidate)}
+                                    </div>
+                                    <div className="col-md-4">
+                                        <h4 className="text-center">Agency</h4>
+                                        <button  className="btn btn-info" onClick={this.props.data.helpers.agencySearch}>Search 1000$</button>
+                                        {this.props.data.candidates.agency.map(agency_candidate)}
+                                    </div>
+                                    <div className="col-md-4">
+                                        <h4 className="text-center">Stars</h4>
+                                        {this.props.data.candidates.stars.map(stars_candidate)}
+                                    </div>
+                                </div>
+                            </TeamDialog>
+                        </Portal>
+                    </div>
+                    :
+                    <div className="unit_block">
+                        {(this.props.data.office.size === 1)
+                            ? <button onClick={() => {this.props.data.helpers.upOffice(2);}} className="btn btn-warning">Rent a Office</button>
+                            : ((this.props.data.office.size < 4)
+                                ? <button onClick={() => {this.props.data.helpers.upOffice(this.props.data.office.size+1);}} className="btn btn-warning">Extend the Office</button>
+                                : '')}
+                    </div>
+                    }
             </div>
         );
     }
