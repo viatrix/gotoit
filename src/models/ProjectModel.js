@@ -45,7 +45,7 @@ class ProjectModel {
             if (supporter) {
                 this.stored_wisdom[stat] += work[stat];
                 console.log('support '+stat+' '+work[stat]);
-                console.log(this.stored_wisdom);
+                //console.log(this.stored_wisdom);
                 return 'supporter';
             }
 

@@ -73,9 +73,7 @@ class Projects extends Component {
                             </div>
                         </div>
                     </TeamDialog>
-                </Portal>
-                    <button className="btn btn-warning" onClick={() => {this.setState({show_archive: !this.state.show_archive});}}>{this.state.show_archive ? 'Hide' : 'Show'} Archive</button>
-                </h4>
+                </Portal></h4>
                 <div>
                     <h3>Current Project</h3>
                     <div>
@@ -89,15 +87,22 @@ class Projects extends Component {
                      </div>
                 </div>
 
-                {this.state.show_archive ?
                 <div>
-                    <h3>Archived Project</h3>
-                    <div>
-                        {this.props.data.projects_reports.map((x, i) =>
-                            <ProjectReport key={x.id} project={x} data={this.props.data} />
-                        )}
-                    </div>
-                </div> : ''}
+                    {this.props.data.projects_reports.length > 0 ?
+                        <div>
+                            <h3>Archived Project
+                            <button className="btn btn-warning" onClick={() => {this.setState({show_archive: !this.state.show_archive});}}>{this.state.show_archive ? 'Hide' : 'Show'} Archive</button>
+                            </h3>
+                            {this.state.show_archive ?
+                                <div>
+                                    {this.props.data.projects_reports.map((x, i) =>
+                                        <ProjectReport key={x.id} project={x} data={this.props.data} />
+                                    )}
+                                </div>
+                            : ''}
+                        </div>
+                    : ''}
+                </div>
             </div>
         );
     }
