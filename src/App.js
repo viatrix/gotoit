@@ -355,7 +355,7 @@ class App extends Component {
         const data = this.state.data;
 
         if (_.random(1, 24 * (25 - Math.min(10, Math.sqrt(projects_done*0.1)))) === 1 && data.candidates.resumes.length < 5) {
-            let worker = WorkerModel.generate(_.random(3, 6));
+            let worker = WorkerModel.generate(_.random(2, 5));
             data.candidates.resumes.push(worker);
             addAction('New resume: ' + worker.name);
         }
@@ -376,7 +376,7 @@ class App extends Component {
         }
 
 
-        if (_.random(1, 24*3) === 1 && data.offered_projects.freelance.length < 5) {
+        if (_.random(1, 24*2) === 1 && data.offered_projects.freelance.length < 5) {
             data.offered_projects.freelance.push(ProjectModel.generate(_.random(2, 4), _.random(1, 2)));
             addAction('New freelance job!', {timeOut: 3000, extendedTimeOut: 1000});
         }
@@ -385,7 +385,7 @@ class App extends Component {
         }
 
         if (_.random(1, 24*((7*4*8*12)/(1+projects_done*0.1))) === 1 && data.offered_projects.bigdeal.length < 5) {
-            data.offered_projects.bigdeal.push(ProjectModel.generate(_.random(20, 50), 4));
+            data.offered_projects.bigdeal.push(ProjectModel.generate(_.random(15, 30), 4));
             addAction('New big deal!', {timeOut: 5000, extendedTimeOut: 3000});
         }
 
@@ -417,11 +417,12 @@ class App extends Component {
         game_date.setDate(real_date.getDate()+(date.tick/24));
 
         time.tick++;
-        time.hour++;
+        //time.hour++;
+        time.hour = game_date.getHours();
 
-        if (time.hour > 24) {
+        if (time.hour === 0) {
             console.log('A new day');
-            time.hour = 1;
+            //time.hour = 1;
             data.workers.forEach((worker) => {
                // console.log('worker '+worker.id+' morale '+worker.morale);
                 if (worker.morale < 100 && _.random(1, 7)) worker.morale++;

@@ -33,8 +33,8 @@ class ToastNest extends Component {
         this.refs.messages[type](text, ``, Object.assign({
             closeButton: false,
             preventDuplicates: false,
-            timeOut: 3000,
-            extendedTimeOut: 1500
+            timeOut: 2000,
+            extendedTimeOut: 1000
         }, options));
     }
 
@@ -47,7 +47,7 @@ class ToastNest extends Component {
             closeButton: true,
             preventDuplicates: false,
             timeOut: 30000,
-            extendedTimeOut: 10000
+            extendedTimeOut: 5000
         }, options));
     }
 
