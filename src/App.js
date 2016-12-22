@@ -171,7 +171,7 @@ class App extends Component {
         contract_generation_counter++;
         let data = this.state.data;
         data.money -= 1000;
-        data.offered_projects.contract.push(ProjectModel.generate(_.random(1, 10) + contract_generation_counter, 3));
+        data.offered_projects.contract.push(ProjectModel.generate(_.random(1, 5 + contract_generation_counter), 3));
         this.setState({data: data});
     }
 
@@ -245,7 +245,7 @@ class App extends Component {
 
         addMessage(project.name+' project '+stage, {timeOut: 10000, extendedTimeOut: 5000}, {finish: 'success', fail: 'error', close: 'error'}[stage]);
 
-        if (stage in ['fail', 'close'] && project.penalty !== 0) {
+        if (['fail', 'close'].includes(stage) && project.penalty !== 0) {
             this.chargeMoney(project.penalty);
         }
 
@@ -338,7 +338,7 @@ class App extends Component {
         const data = this.state.data;
 
         if (_.random(1, 24 * (25 - Math.min(10, Math.sqrt(projects_done*0.1)))) === 1 && data.candidates.resumes.length < 5) {
-            let worker = WorkerModel.generate(_.random(5, 10));
+            let worker = WorkerModel.generate(_.random(3, 6));
             data.candidates.resumes.push(worker);
             addAction('New resume: ' + worker.name);
         }
@@ -358,8 +358,9 @@ class App extends Component {
             _.remove(data.candidates.stars, (candidate) => { return (candidate.id === data.candidates.stars[0].id); });
         }
 
+
         if (_.random(1, 24*4) === 1 && data.offered_projects.freelance.length < 5) {
-            data.offered_projects.freelance.push(ProjectModel.generate(_.random(1, 5), _.random(1, 2)));
+            data.offered_projects.freelance.push(ProjectModel.generate(_.random(2, 4), _.random(1, 2)));
             addAction('New freelance job!', {timeOut: 3000, extendedTimeOut: 1000});
         }
         if (_.random(1, 24*7) === 1 && data.offered_projects.freelance.length > 0) {
@@ -367,7 +368,7 @@ class App extends Component {
         }
 
         if (_.random(1, 24*((7*4*8*12)/(1+projects_done*0.1))) === 1 && data.offered_projects.bigdeal.length < 5) {
-            data.offered_projects.bigdeal.push(ProjectModel.generate(_.random(30, 60), 4));
+            data.offered_projects.bigdeal.push(ProjectModel.generate(_.random(20, 50), 4));
             addAction('New big deal!', {timeOut: 5000, extendedTimeOut: 3000});
         }
 
@@ -411,7 +412,8 @@ class App extends Component {
         if (
             time.hour >= 10 &&
             time.hour <= 18 &&
-            time.day < 5
+            time.day !== 6 &&
+            time.day !== 0
         ) {
             time.is_working_time = true;
         }

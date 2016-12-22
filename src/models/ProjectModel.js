@@ -55,7 +55,7 @@ class ProjectModel {
             if (this.needs[stat] > 0 && work[stat] > 0) {
                 learned.push(stat);
                 let cont = _.random(0, (this.complexity * this.size) / this.iteration);
-                let pro = _.random(1, resource) + _.random(1, this.errors[stat]);
+                let pro = this.iteration + _.random(1, resource) + _.random(1, this.errors[stat]);
             //    console.log(cont, pro);
                 if (resource > 0 && cont < pro) {
                     this.complexity += (rad ? 4 : 1);
@@ -63,9 +63,10 @@ class ProjectModel {
                     worker.facts.tasks_done += real_work;
                     this.facts.tasks_done += real_work;
                     this.needs[stat] -= real_work;
-                    addMessage(worker.name+' work '+real_work+' ['+resource+'('+this.stored_wisdom[stat]+'+'+work[stat]+')] in '+stat, {}, 'info');
+                    addMessage(worker.name+' solve '+real_work+' '+stat+' tasks', {}, 'info');
+                    console.log(worker.name+' work '+real_work+' ['+resource+'('+work[stat]+'+'+this.stored_wisdom[stat]+')] in '+stat, {}, 'info');
                     //addMessage('Work '+stat+' '+work[stat]+' where wisdom is '+this.stored_wisdom[stat], {}, 'info');
-                    console.log('Work '+stat+' '+work[stat]+' where wisdom is '+this.stored_wisdom[stat]);
+                 //   console.log('Work '+stat+' '+work[stat]+' where wisdom is '+this.stored_wisdom[stat]);
                     this.stored_wisdom[stat] = 0;
                 }
                 else {
@@ -179,11 +180,11 @@ class ProjectModel {
         }
 
         let s = _.values(stats);
-        let reward = Math.pow(10, size+1) +
+        let reward = Math.pow(10, size) +
             Math.ceil((_.max(s) + _.sum(s)) * 5);
         let penalty = ([0, 0, 0, 0.5, 1][size] * reward).toFixed(0);
-        let deadline = Math.floor(100 + // constant for anti-weekend effect on small projects
-            (((_.max(s) + _.sum(s)) * 5) / (4 * size))); //8*5*4*size*Math.sqrt(quality);
+        let deadline = 100 +  // constant for anti-weekend effect on small projects
+            Math.floor((((_.max(s) + _.sum(s)) * 5) / (4 * size)));
 
         return new ProjectModel(this.genName(size), 'project', reward, penalty, stats, size, deadline);
     }
@@ -200,7 +201,7 @@ class ProjectModel {
             (quality * size) +
             Math.pow(10, size - 1) +
             _.random(1, 10) +
-            (_.random(1, quality) * _.random(1, Math.pow(hired, 2))) +
+            (_.random(1, quality) * (1 + _.random(1, Math.pow(hired, 2)))) +
             (_.random(1, quality) * (1 + _.random(1, projects_done))) +
             (_.random(1, quality) * (1 + _.random(1, Math.sqrt(projects_generated))))
         );

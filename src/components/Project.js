@@ -68,7 +68,7 @@ class Project extends Component {
             };
         });
 
-        const manage_button = <button className="btn">Manage</button>;
+        const manage_button = <button className="btn flex-element">Manage</button>;
 
         let label = (id, text) => { return <span key={id}> <label className="label-default">{text}</label> </span>; };
 
@@ -116,13 +116,14 @@ class Project extends Component {
             }
         }
 
+
+
         return (
             <div className="unit_block">
-                <label>
-                    <label> {project.name} </label>
-                    <label> Reward: {project.reward}$ </label>
-                    {(project.penalty > 0 ? <label>Penalty: {project.penalty}$</label> : '')}
-                </label>
+                <div className="flex-container-row">
+                    <label className="flex-element"> {project.name} </label>
+                    <label className="flex-element"> Reward: {project.reward}$ </label>
+                    {(project.penalty > 0 ? <label className="flex-element"> Penalty: {project.penalty}$ </label> : ' ')}
                 <Portal ref="manage" closeOnEsc closeOnOutsideClick openByClickOn={manage_button}>
                     <TeamDialog>
                         <h4> {project.name} {project.reward}$ {stage_button}</h4>
@@ -151,14 +152,15 @@ class Project extends Component {
                                     {skills_names.map((skill) => {
                                         let need = project.needs[skill];
                                         let errors = project.errors[skill];
-                                        var needs_max = project.needs_max[skill];
-                                        var max = _.max(_.values(project.needs_max));
-                                        let diff = needs_max - need - errors;
-                                        //let sum = need + errors + diff;
+                                        var needs_max = project.needs_max[skill];//+errors;
+                                        var max_skill = _.maxBy(_.keys(project.needs_max), function(skill) {
+                                            return project.needs_max[skill] +  project.errors[skill];
+                                        });
+                                        var max = project.needs_max[max_skill] + project.errors[max_skill];
+                                        let diff = needs_max - need;
                                         let tasks = need / max * 100;
                                         let bugs = errors / max * 100;
                                         let done = diff / max * 100;
-                                        //  let done = Math.max(0, (Math.floor(100-tasks-bugs)));
 
                                         return <div key={skill} className="row">
                                             <div className="col-md-2">{skill}</div>
@@ -251,6 +253,7 @@ class Project extends Component {
                         </div>
                     </TeamDialog>
                 </Portal>
+                </div>
 
                 {project.deadline > 0 ?
                     <div className="progress">
