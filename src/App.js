@@ -274,6 +274,10 @@ class App extends Component {
             this.chargeMoney(project.penalty);
         }
 
+        if (stage === 'finish') {
+            data.simplified_reports.push(project.generateReport(true));
+        }
+
         project.stage = stage;
         data.projects_reports.unshift(project);
         this.setState({data: data});

@@ -78,3 +78,7 @@ div {
 .slider.slider-horizontal {
     width: 400px;
 }
+
+.table-success {
+    background-color: #dff0d8;
+}

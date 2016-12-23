@@ -6,18 +6,20 @@ import bulkStyler from '../services/bulkStyler';
 
 import {addMessage} from '../components/ToastNest';
 
-import {skills} from '../data/knowledge';
+import {skills, project_kinds, project_platforms} from '../data/knowledge';
 import {hired, projects_done} from '../App';
 
 var projects_generated = 0;
 
 class ProjectModel {
-    constructor(name, type, reward, penalty, start_needs, size, deadline, complexity = 0) {
+    constructor(name, type, kind, platform, reward, penalty, start_needs, size, deadline, complexity = 0) {
         this.stage = 'ready';
 
         this.id = _.uniqueId('project');
         this.name = name;
         this.type = type; //  project, training, draft
+        this.kind = kind;
+        this.platform = platform;
         this.reward = reward;
         this.penalty = penalty;
         this.needs = JSON.parse(JSON.stringify(start_needs));
@@ -29,6 +31,7 @@ class ProjectModel {
         this.complexity = complexity;
         this.iteration = 1;
         this.size = size;
+        this.size_name = ['Training', 'Tiny', 'Small', 'Medium', 'Big', 'Custom'][size];
         this.tests = 0;
         this.accept_default = (this.type !== 'training') ? true : false;
 
@@ -36,6 +39,15 @@ class ProjectModel {
             money_spent: 0,
             tasks_done: 0, bugs_passed: 0,
             refactored: 0, tests_wrote: 0};
+    }
+    
+    generateReport(is_player = true) {
+        return {
+            id: this.id, name: this.getName(), is_player: is_player,
+            platform: this.platform, kind: this.kind,
+            design: this.needs_max.design, manage: this.needs_max.manage, program: this.needs_max.program, admin: this.needs_max.admin,
+            total: this.totalScore()
+        }
     }
 
     applyWork(work, worker, rad = false, creativity = false, supporter = false) {
@@ -160,7 +172,11 @@ class ProjectModel {
         //this.complexity -= (_.sum(_.values(this.needs)));
     }
 
-    static generate(quality=1, size=4) {
+    totalScore() {
+        return this.planedTasksQuantity();
+    }
+
+    static generate(quality=1, size=4, kind=_.sample(_.keys(project_kinds)), platform = _.sample(_.keys(project_platforms))) {
         //    console.log("gen quality="+quality+", size="+size);
         projects_generated++;
 
@@ -171,7 +187,12 @@ class ProjectModel {
             manage: this.genStat(quality, size)
         };
 
+        //let kind = _.sample(_.keys(project_kinds));
+        //let platform = _.sample(_.keys(project_platforms));
+
         stats_bulk = bulkStyler.speciality(stats_bulk);
+        stats_bulk = bulkStyler.projectKind(stats_bulk, kind);
+        stats_bulk = bulkStyler.projectPlatform(stats_bulk, platform);
 
         let stats = JSON.parse(JSON.stringify(skills));
 
@@ -190,34 +211,55 @@ class ProjectModel {
             Math.ceil((_.max(s) + _.sum(s)) * 10);
         let penalty = ([0, 0, 0, 0.5, 1][size] * reward).toFixed(0);
         let deadline = 100 +  // constant for anti-weekend effect on small projects
-            Math.floor((((_.max(s) + _.sum(s)) * 9) / (3 * size)));
+            Math.floor((((_.max(s) + _.sum(s)) * 9) / (2 * size)));
 
-        return new ProjectModel(this.genName(size), 'project', reward, penalty, stats, size, deadline);
+        return new ProjectModel(this.genName(), 'project', kind, platform, reward, penalty, stats, size, deadline);
     }
 
     static generateTraining(worker, skill=null) {
         let level = Math.floor(worker.statsSum()/4) + (worker.stats[skill]*2);
+
+        let kind = _.sample(_.keys(project_kinds));
+        let platform = _.sample(_.keys(project_platforms));
         let stats = JSON.parse(JSON.stringify(skills));
         stats[skill] = level*2;
         let reward = 0;
         let penalty = 0;
         let deadline = 100 + (level * 10);
-        return new ProjectModel(this.genName(0), 'training', reward, penalty, stats, 0, deadline);
+        return new ProjectModel(this.genName(), 'training', kind, platform, reward, penalty, stats, 0, deadline);
     }
 
     static generateDraft() {
+        let kind = _.sample(_.keys(project_kinds));
+        let platform = _.sample(_.keys(project_platforms));
         let stats = JSON.parse(JSON.stringify(skills));
         let reward = 0;
         let penalty = 0;
         let deadline = 0;
-        return new ProjectModel(this.genName(5), 'draft', reward, penalty, stats, 0, deadline);
+        return new ProjectModel(this.genName(), 'draft', kind, platform, reward, penalty, stats, 0, deadline);
     }
 
-    static genName(size) {
-        var size_names = ['Training', 'Tiny', 'Small', 'Medium', 'Big', 'Custom'];
-        var first_names = ['Browser', 'Desktop', 'Mobile', 'Embedded', 'Enterprise'];
-        var second_names = ['Game', 'System', 'Environment', 'Site', 'Application'];
-        return size_names[size] + ' ' + _.sample(first_names) + ' ' + _.sample(second_names);
+    static genName() {
+        var a = ['Ra', 'Rap', 'Ko', 'Si', 'Ne', 'A', 'Q-'];
+        var b = ['clo', 'ko', 'lo', 'mo', 'no', 'tor', 'de', 'kon'];
+        var c = ['pan', 'tang', 'riko', 'nik', 'ka', 'ia', 'lia', 'ink'];
+
+        var d = ['Art', 'Team', 'Sys', 'Virt', 'Cop'];
+        var e = ['tro', 'nik', 'for', 'link', 'your'];
+        var f = ['ka', 'dev', 'ops', 'ink', 'dream'];
+
+        return (_.random(0, 1)
+            ? _.sample(a)
+                + (_.random(0, 1) ? _.sample(b) : _.sample(c) + _.sample(b))
+                + (_.random(0, 1) ? _.sample(c) : _.sample(f))
+            : _.sample(d)
+                + (_.random(0, 1) ? _.sample(e) : _.sample(f) + _.sample(e))
+                + (_.random(0, 1) ? _.sample(c) : _.sample(f))
+        );
+    }
+
+    getName() {
+        return this.size_name+' '+this.platform+' '+this.kind+' '+this.name;
     }
 
     static genStat(quality, size=1) {

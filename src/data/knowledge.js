@@ -11,6 +11,23 @@ export const roles = {
 };
 
 
+export const project_kinds = {
+    application: {name: 'Application'},
+    game: {name: 'Game'},
+    service: {name: 'Service'},
+    system: {name: 'System'},
+    database: {name: 'Database'}
+};
+
+export const project_platforms = {
+    crossplatform: {name: 'Cross-platform'},
+    mobile: {name: 'Mobile'},
+    browser: {name: 'Browser'},
+    desktop: {name: 'Desktop'},
+    embedded: {name: 'Embedded'}
+};
+
+
 export const technologies = {
     tdd: {name: 'Test Driven Development', acronym: 'TDD', description: 'Developing tests that reduce the probability of errors.'},
     refactoring: {name: 'Non-stop refactoring', acronym: 'Ref', description: "The complexity of the code - it's just a task for refactoring."},

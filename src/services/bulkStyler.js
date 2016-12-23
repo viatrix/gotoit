@@ -86,6 +86,80 @@ class bulkStyler {
         }
         return _.mapValues(stats_bulk, function (stat) { return Math.ceil(stat); });
     }
+
+    static projectKind(stats_bulk, kind) {
+        switch (kind) {
+            case 'application':
+                return stats_bulk;
+            case 'game':
+                stats_bulk['design'] *= 2;
+                stats_bulk['manage'] *= 1;
+                stats_bulk['program'] *= 1;
+                stats_bulk['admin'] *= 1;
+                break;
+            case 'service':
+                stats_bulk['design'] *= 1;
+                stats_bulk['manage'] *= 2;
+                stats_bulk['program'] *= 1;
+                stats_bulk['admin'] *= 1;
+                break;
+            case 'system':
+                stats_bulk['design'] *= 1;
+                stats_bulk['manage'] *= 1;
+                stats_bulk['program'] *= 2;
+                stats_bulk['admin'] *= 1;
+                break;
+            case 'database':
+                stats_bulk['design'] *= 1;
+                stats_bulk['manage'] *= 1;
+                stats_bulk['program'] *= 1;
+                stats_bulk['admin'] *= 2;
+                break;
+            default:
+                console.log('error case: ' + kind);
+        }
+        return _.mapValues(stats_bulk, function (stat) { return Math.ceil(stat); });
+    }
+
+    static projectPlatform(stats_bulk, platform) {
+        let order = Object.keys(stats_bulk).sort(function(a,b){return stats_bulk[b]-stats_bulk[a]});
+
+        switch (platform) {
+            case 'cross-platform':
+                return stats_bulk;
+            case 'mobile':
+                stats_bulk['design'] *= 2;
+                stats_bulk[order[0]] *= 1;
+                stats_bulk[order[1]] *= 1;
+                stats_bulk[order[2]] *= 1;
+                stats_bulk[order[3]] *= 1;
+                break;
+            case 'browser':
+                stats_bulk['manage'] *= 2;
+                stats_bulk[order[0]] *= 1;
+                stats_bulk[order[1]] *= 1;
+                stats_bulk[order[2]] *= 1;
+                stats_bulk[order[3]] *= 1;
+                break;
+            case 'desktop':
+                stats_bulk['program'] *= 2;
+                stats_bulk[order[0]] *= 1;
+                stats_bulk[order[1]] *= 1;
+                stats_bulk[order[2]] *= 1;
+                stats_bulk[order[3]] *= 1;
+                break;
+            case 'embedded':
+                stats_bulk['admin'] *= 2;
+                stats_bulk[order[0]] *= 1;
+                stats_bulk[order[1]] *= 1;
+                stats_bulk[order[2]] *= 1;
+                stats_bulk[order[3]] *= 1;
+                break;
+            default:
+                console.log('error case: ' + platform);
+        }
+        return _.mapValues(stats_bulk, function (stat) { return Math.ceil(stat); });
+    }
 }
 
 

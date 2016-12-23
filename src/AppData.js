@@ -5,6 +5,8 @@ import WorkerModel from './models/WorkerModel';
 import ProjectModel from './models/ProjectModel';
 import OfficeModel from './models/OfficeModel';
 
+import {project_platforms, project_kinds} from './data/knowledge';
+
 
 var app_state =
 {
@@ -46,11 +48,24 @@ var app_state =
         workers_roles: {player: {design: true, manage: true, program: true, admin: true}},
         projects: [],
         projects_reports: [],
+        simplified_reports: [],
         projects_technologies: [],
         projects_default_technologies: [],
         relations: [],
         helpers: {}
     }
 };
+
+
+_.keys(project_platforms).forEach((platform) => {
+    _.keys(project_kinds).forEach((kind) => {
+        for (let top = 1; top <= 10; top++) {
+            let q = 11-top;
+            let size = Math.ceil(q/4);
+            app_state.data.simplified_reports.push(ProjectModel.generate(q, size, kind, platform).generateReport(false));
+        }
+    });
+});
+
 
 export default app_state;

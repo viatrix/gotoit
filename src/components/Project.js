@@ -9,6 +9,7 @@ import classNames from 'classnames';
 
 import TeamDialog from './TeamDialog';
 import StatsBar from './StatsBar';
+import ProjectName from './ProjectName';
 
 import {skills_names, skills, technologies} from '../data/knowledge';
 
@@ -128,13 +129,13 @@ class Project extends Component {
         return (
             <div className="unit_block">
                 <div className="flex-container-row">
-                    <label className="flex-element"> {project.name} </label>
+                    <label className="flex-element"> <ProjectName project={project} /> </label>
                     <label className="flex-element"> Reward: {project.reward}$ </label>
                     {(project.penalty > 0 ? <label className="flex-element"> Penalty: {project.penalty}$ </label> : ' ')}
                     <Portal ref="manage" closeOnEsc closeOnOutsideClick openByClickOn={manage_button}>
                         <TeamDialog>
                             <h4 className="flex-container-row">
-                                <label className="flex-element"> {project.name} </label>
+                                <label className="flex-element"> <ProjectName project={project} /> </label>
                                 <label className="flex-element"> Reward: {project.reward}$ </label>
                                 {(project.penalty > 0 ? <label className="flex-element"> Penalty: {project.penalty}$ </label> : ' ')}
                                 <div className="flex-element"> <labe>{stage_button}</labe> </div>
@@ -234,7 +235,7 @@ class Project extends Component {
                                         </div> : ''}
                                     </div>
                                     <div className="panel panel-success">
-                                        Who will work on {project.name} project?
+                                        Who will work on <ProjectName project={project} /> project?
                                         <div className="checkbox-inline">
                                             <label>
                                                 <input
@@ -310,9 +311,9 @@ class Project extends Component {
                     let errors = project.bugsQuantity();
                     let need = project.tasksQuantity();
                     var max = project.planedTasksQuantity();
-                    let diff = max - need - errors;
+                    let diff = max - need;
 
-                    let sum = need + errors + diff;
+                    let sum = max + errors;
 
                     let tasks = need / sum * 100;
                     let bugs = errors / sum * 100;
