@@ -122,10 +122,10 @@ class PopupsNest extends Component {
                             </div>
                         </div>
                         <div className="panel panel-warning">
-                            <div>Your start money:
-                                {player_backgrounds[this.state.selected_background].money +
+                            <div className="text-center">
+                                Your start money: {player_backgrounds[this.state.selected_background].money +
                                 player_education[this.state.selected_education].money}
-                                . Your start skills:
+                                $. Your start skills:
                                 <StatsBar stats={stats_data} data={this.props.data}/>
                             </div>
                         </div>

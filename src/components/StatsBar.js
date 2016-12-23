@@ -7,9 +7,9 @@ class StatsBar extends Component {
         //console.log(stats);
 
         return (
-                <div className="flex-container-row">
+                <div className="flex-container-row text-center">
                 {Object.keys(stats).map((stat) => {
-                    return <div className="small flex-element" key={stat}>
+                    return <div className='flex-element' key={stat}>
                         {stats[stat].name}: {stats[stat].val}
                     </div>
                 })}

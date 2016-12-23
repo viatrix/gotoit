@@ -4,6 +4,7 @@ import _ from 'lodash';
 
 import TeamDialog from './TeamDialog';
 import StatsBar from './StatsBar';
+
 import {skills_names, roles, education} from '../data/knowledge';
 
 class Worker extends Component {
@@ -37,6 +38,14 @@ class Worker extends Component {
 
     teach(skill, source) {
         console.log(skill, source);
+
+        switch (source) {
+            case 'training':
+                this.props.data.helpers.trainingProject(this.props.worker, skill);
+                break;
+            default:
+                console.log('WTF?');
+        }
     }
 
     render() {
@@ -91,11 +100,9 @@ class Worker extends Component {
                                 Passed {worker.facts.bugs_passed} bugs.
                                 Do {worker.facts.refactored} refactoring and wrote {worker.facts.tests_wrote} tests.
                             </p>
-                            <StatsBar stats={stats_data} data={this.props.data} />
                         </ul>
-                        <h2>Roles</h2>
-                        Which roles {worker.name} has to perform?
-                        <div className="panel panel-success">
+                        <div className="panel panel-success text-center">
+                            <StatsBar stats={stats_data} data={this.props.data} />
                             <div className="row">
                                 {skills_names.map((role, i) =>
                                     <div key={role} className="checkbox col-md-3">
@@ -110,8 +117,21 @@ class Worker extends Component {
                                     </div>
                                 )}
                             </div>
+                            <div>
+                                {Object.keys(education).map((source) =>
+                                    ((!education[source].hide)
+                                        ? <div className="flex-container-row" key={source}>
+                                        {skills_names.map((skill) => {
+                                            return <div  className="flex-element" key={skill}>
+                                                <button title={education[source].description} id={source} onClick={() => this.teach(skill, source)}>{education[source].name}</button>
+                                            </div>;
+                                        })}
+                                    </div>
+                                        : '')
+                                )}
+                            </div>
                         </div>
-                        <h2>Worker Projects</h2>
+                        <h3>Worker Projects</h3>
                         <ul>
                             Which projects {worker.name} has to work?
                             <div className="checkbox-inline">

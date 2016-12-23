@@ -44,6 +44,7 @@ class App extends Component {
         this.fixProject = this.fixProject.bind(this);
         this.openProject = this.openProject.bind(this);
         this.closeProject = this.closeProject.bind(this);
+        this.trainingProject = this.trainingProject.bind(this);
         this.getTechnology = this.getTechnology.bind(this);
         this.changeTechnology = this.changeTechnology.bind(this);
         this.upOffice = this.upOffice.bind(this);
@@ -72,6 +73,7 @@ class App extends Component {
         app_state.data.helpers['fixProject'] = this.fixProject;
         app_state.data.helpers['openProject'] = this.openProject;
         app_state.data.helpers['closeProject'] = this.closeProject;
+        app_state.data.helpers['trainingProject'] = this.trainingProject;
         app_state.data.helpers['getTechnology'] = this.getTechnology;
         app_state.data.helpers['changeTechnology'] = this.changeTechnology;
         app_state.data.helpers['upOffice'] = this.upOffice;
@@ -206,6 +208,14 @@ class App extends Component {
         this.modifyRelation(null, project.id, true);
     }
 
+    trainingProject(worker, skill) {
+        let data = this.state.data;
+        let project = ProjectModel.generateTraining(worker, skill);
+        data.projects.push(project);
+        this.setState({data: data});
+        this.modifyRelation(worker.id, project.id, true);
+    }
+
     openProject(id) {
         let data = this.state.data;
         let project = _.find(data.projects, (project) => { return (project.id === id); });
@@ -314,7 +324,7 @@ class App extends Component {
     componentDidMount() {
         this.timerID = setInterval(
             () => this.tick(),
-            1000
+            _.random(1, 0) ? 100 : 500
         );
     }
 
@@ -589,8 +599,7 @@ class App extends Component {
                     worker.addExperience(
                         project.applyWork(
                             worker.getResources(worker_roles, focus_on, micromanagement),
-                        worker, rad, supporter),
-                    creativity);
+                        worker, rad, creativity, supporter));
                 }
             }
             else {

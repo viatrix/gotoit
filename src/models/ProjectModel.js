@@ -30,7 +30,7 @@ class ProjectModel {
         this.iteration = 1;
         this.size = size;
         this.tests = 0;
-        this.accept_default = true;
+        this.accept_default = (this.type !== 'training') ? true : false;
 
         this.facts = {
             money_spent: 0,
@@ -38,29 +38,29 @@ class ProjectModel {
             refactored: 0, tests_wrote: 0};
     }
 
-    applyWork(work, worker, rad = false, supporter = false) {
-        var learned = [];
+    applyWork(work, worker, rad = false, creativity = false, supporter = false) {
+        var learned = JSON.parse(JSON.stringify(skills));
 
         Object.keys(work).forEach((stat) => {
-            if (supporter) {
-                this.stored_wisdom[stat] += work[stat];
-                console.log('support '+stat+' '+work[stat]);
-                //console.log(this.stored_wisdom);
-                return 'supporter';
-            }
-
-            let resource = work[stat] +
-                (rad ? worker.getSideResource() : 0) - Math.floor(_.random(0, Math.sqrt(this.complexity)-this.iteration));
-            let potential = this.stored_wisdom[stat] + resource;
-
             if (this.needs[stat] > 0 && work[stat] > 0) {
-                learned.push(stat);
+
+                if (supporter) {
+                    this.stored_wisdom[stat] += work[stat];
+                    console.log('support '+stat+' '+work[stat]);
+                    //console.log(this.stored_wisdom);
+                    return 'supporter';
+                }
+
+                let resource = work[stat] +
+                    (rad ? worker.getSideResource() : 0) - Math.floor(_.random(0, Math.sqrt(this.complexity)-this.iteration));
+                let potential = this.stored_wisdom[stat] + resource;
+
                 let cont = _.random(0, (this.complexity * this.size) / this.iteration);
                 let pro = this.iteration + _.random(1, potential) + _.random(1, this.errors[stat]);
             //    console.log(cont, pro);
                 if (potential > 0 && cont < pro) {
                     this.complexity += (rad ? 4 : 1);
-                    let real_work = Math.min(this.needs[stat], _.random(1, resource));
+                    var real_work = Math.min(this.needs[stat], _.random(1, resource));
                     worker.facts.tasks_done += real_work;
                     this.facts.tasks_done += real_work;
                     this.needs[stat] -= real_work;
@@ -83,6 +83,11 @@ class ProjectModel {
                         this.facts.bugs_passed++;
                         this.errors[stat]++;
                     }
+                }
+                let learn = (real_work ? real_work : work[stat]);
+                learned[stat] += (learn) * (creativity ? 2 : 1) * (this.type === 'training' ? 2 : 1);
+                if (isNaN(learned[stat])) {
+                    console.log([learn, creativity, this.type].map((e) => e));
                 }
             }
             else {
@@ -156,7 +161,7 @@ class ProjectModel {
     }
 
     static generate(quality=1, size=4) {
-    //    console.log("gen quality="+quality+", size="+size);
+        //    console.log("gen quality="+quality+", size="+size);
         projects_generated++;
 
         let stats_bulk = {
@@ -189,19 +194,28 @@ class ProjectModel {
 
         return new ProjectModel(this.genName(size), 'project', reward, penalty, stats, size, deadline);
     }
+    static generateTraining(worker, skill=null) {
+        let level = Math.floor(worker.statsSum()/4) + (worker.stats[skill]*2);
+        let stats = JSON.parse(JSON.stringify(skills));
+        stats[skill] = level*2;
+        let reward = 0;
+        let penalty = 0;
+        let deadline = 100 + (level * 10);
+        return new ProjectModel(this.genName(0), 'training', reward, penalty, stats, 0, deadline);
+    }
 
     static genName(size) {
-        var size_names = ['Test', 'Tiny', 'Small', 'Medium', 'Big'];
+        var size_names = ['Training', 'Tiny', 'Small', 'Medium', 'Big'];
         var first_names = ['Browser', 'Desktop', 'Mobile', 'Embedded', 'Enterprise'];
         var second_names = ['Game', 'System', 'Environment', 'Site', 'Application'];
         return size_names[size] + ' ' + _.sample(first_names) + ' ' + _.sample(second_names);
     }
 
     static genStat(quality, size=1) {
-        let q = (quality * size * 0.1);
+        let q = Math.floor(quality * size * 0.1);
         let h = (_.random(1, quality) * (1 + _.random(1, Math.pow(hired, 2))));
         let d = (_.random(1, quality) * (1 + _.random(1, projects_done)));
-        let g = (_.random(1, quality) * (1 + _.random(1, Math.sqrt(projects_generated))));
+        let g = (_.random(1, quality) * (1 + _.random(1, Math.floor(Math.sqrt(projects_generated/2)))));
         let r = _.random(1, 10);
 
         console.log('gen_stats: q: '+q+' h: '+h+' d: '+d+' g: '+g+' r: '+r);

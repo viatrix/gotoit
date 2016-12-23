@@ -84,13 +84,15 @@ class WorkerModel {
         return Math.floor(_.random(1, s*2));
     }
 
-    addExperience(learned, creativity = false) {
-        learned.forEach((stat) => {
-            this.expirience[stat] += Math.ceil(10 * (creativity ? 1.50 : 1) / (this.stats[stat]));
-            if (this.expirience[stat] >= 100) {
-                console.log('stat rise');
-                this.expirience[stat] -= 100;
-                this.stats[stat]++;
+    addExperience(learned) {
+        Object.keys(learned).forEach((stat) => {
+            if (learned[stat] !== 0) {
+                this.expirience[stat] += Math.ceil((learned[stat] * 10) / (this.stats[stat]));
+                if (this.expirience[stat] >= 100) {
+                    console.log('stat rise');
+                    this.expirience[stat] -= 100;
+                    this.stats[stat]++;
+                }
             }
         });
     }
@@ -114,8 +116,8 @@ class WorkerModel {
     }
 
     static genName() {
-        var first_names = ['Jack', 'Kristofer', 'Mike', 'Micheal', 'Marlena', 'Loris', 'Breana', 'Gregorio', 'Freddy', 'Devin', 'Nicol', 'Alex', 'Peter'];
-        var second_names = ['Smith', 'Eisenhauer', 'Kirschbaum', 'Larose', 'Alvarado', 'Christon', 'Jaynes', 'Mcmillian', 'Radcliffe', 'Engelhard', 'Prambpharatha'];
+        var first_names = ['Oleg', 'Igor', 'Jack', 'Kristofer', 'Mike', 'Micheal', 'Marlena', 'Loris', 'Breana', 'Gregorio', 'Freddy', 'Devin', 'Nicol', 'Alexey', 'Aleksandr', 'Peter'];
+        var second_names = ['Down', 'Kolpak', 'Vasilenko', 'Smith', 'Eisenhauer', 'Kirschbaum', 'Larose', 'Alvarado', 'Christon', 'Jaynes', 'Mcmillian', 'Radcliffe', 'Engelhard', 'Prambpharatha'];
         return _.sample(first_names) + ' ' + _.sample(second_names);
     }
 
