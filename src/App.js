@@ -324,7 +324,7 @@ class App extends Component {
     componentDidMount() {
         this.timerID = setInterval(
             () => this.tick(),
-            _.random(1, 0) ? 100 : 500
+            500
         );
     }
 
