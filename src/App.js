@@ -532,10 +532,12 @@ class App extends Component {
                 }
 
                 // get Salary
-                let salary = worker.getSalary();
-                this.chargeMoney(salary);
-                worker.facts.money_earned += salary;
-                project.facts.money_spent += salary;
+                if (!worker.is_player) {
+                    let salary = worker.getSalary();
+                    this.chargeMoney(salary);
+                    worker.facts.money_earned += salary;
+                    project.facts.money_spent += salary;
+                }
 
                 // Pet Projects on Fridays
                 if (creativity && data.date.day === 5 && is_working_time) {

@@ -47,7 +47,7 @@ class WorkerModel {
         let is_working_time = (
             time.hour >= 9 + mod &&
             time.hour <= 17 + mod &&
-            ((time.day !== 6 && time.day !== 0) || _.random(1, (12-(this.temper.variability*2))) === 1) && // variability guys work on weekends more often
+            ((time.day !== 6 && time.day !== 0) || _.random(1, (20-(this.temper.variability*2))) === 1) && // variability guys work on weekends more often
             (_.random(1, 10 - this.temper.variability) !==1) // variability guys eblanyat more often
         ) ? true : false;
 
@@ -61,10 +61,8 @@ class WorkerModel {
         let resource = 0;
         
         this.standing++;
-        //var resources = {};
-     //   let stat = focus_on ? focus_on : _.sample(_.keys(_.pickBy(worker_roles, _.identity)));
+
         let stat = focus_on ? focus_on : _.sample(worker_roles);
-        //if (!(stat in resources)) resources[stat] = 0;
 
         if (micromanagement) {
             let dices = [r(stat), r(stat), r(stat)];
@@ -78,12 +76,6 @@ class WorkerModel {
         let ret = {};
         ret[stat] = resource;
         return ret;
-
-        //resources[stat] += micromanagement ?
-        //    Math.max(r(stat), Math.min(r(stat), r(stat))) :
-        //    r(stat);
-        //    console.log(resources);
-        //return resources;
     }
 
     getSideResource() {

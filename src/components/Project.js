@@ -126,7 +126,12 @@ class Project extends Component {
                     {(project.penalty > 0 ? <label className="flex-element"> Penalty: {project.penalty}$ </label> : ' ')}
                 <Portal ref="manage" closeOnEsc closeOnOutsideClick openByClickOn={manage_button}>
                     <TeamDialog>
-                        <h4> {project.name} {project.reward}$ {stage_button}</h4>
+                        <h4 className="flex-container-row">
+                            <label className="flex-element"> {project.name} </label>
+                            <label className="flex-element"> Reward: {project.reward}$ </label>
+                            {(project.penalty > 0 ? <label className="flex-element"> Penalty: {project.penalty}$ </label> : ' ')}
+                            <label className="flex-element"> {stage_button}</label>
+                        </h4>
                         <div className="row">
                             <div className="col-md-8">
                                 <div>

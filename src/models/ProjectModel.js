@@ -49,22 +49,23 @@ class ProjectModel {
                 return 'supporter';
             }
 
-            let resource = this.stored_wisdom[stat] + work[stat] +
-                (rad ? worker.getSideResource() : 0) - Math.floor(_.random(0, Math.sqrt(this.complexity)));
+            let resource = work[stat] +
+                (rad ? worker.getSideResource() : 0) - Math.floor(_.random(0, Math.sqrt(this.complexity)-this.iteration));
+            let potential = this.stored_wisdom[stat] + resource;
 
             if (this.needs[stat] > 0 && work[stat] > 0) {
                 learned.push(stat);
                 let cont = _.random(0, (this.complexity * this.size) / this.iteration);
-                let pro = this.iteration + _.random(1, resource) + _.random(1, this.errors[stat]);
+                let pro = this.iteration + _.random(1, potential) + _.random(1, this.errors[stat]);
             //    console.log(cont, pro);
-                if (resource > 0 && cont < pro) {
+                if (potential > 0 && cont < pro) {
                     this.complexity += (rad ? 4 : 1);
                     let real_work = Math.min(this.needs[stat], _.random(1, resource));
                     worker.facts.tasks_done += real_work;
                     this.facts.tasks_done += real_work;
                     this.needs[stat] -= real_work;
                     addMessage(worker.name+' solve '+real_work+' '+stat+' tasks', {}, 'info');
-                    console.log(worker.name+' work '+real_work+' ['+resource+'('+work[stat]+'+'+this.stored_wisdom[stat]+')] in '+stat, {}, 'info');
+                    console.log(worker.name+' work '+real_work+' ['+resource+'/'+potential+'('+work[stat]+'+'+this.stored_wisdom[stat]+')] in '+stat, {}, 'info');
                     //addMessage('Work '+stat+' '+work[stat]+' where wisdom is '+this.stored_wisdom[stat], {}, 'info');
                  //   console.log('Work '+stat+' '+work[stat]+' where wisdom is '+this.stored_wisdom[stat]);
                     this.stored_wisdom[stat] = 0;
@@ -184,7 +185,7 @@ class ProjectModel {
             Math.ceil((_.max(s) + _.sum(s)) * 10);
         let penalty = ([0, 0, 0, 0.5, 1][size] * reward).toFixed(0);
         let deadline = 100 +  // constant for anti-weekend effect on small projects
-            Math.floor((((_.max(s) + _.sum(s)) * 7) / (3 * size)));
+            Math.floor((((_.max(s) + _.sum(s)) * 9) / (3 * size)));
 
         return new ProjectModel(this.genName(size), 'project', reward, penalty, stats, size, deadline);
     }
@@ -197,14 +198,14 @@ class ProjectModel {
     }
 
     static genStat(quality, size=1) {
-        return Math.floor(
-            (quality * size * 0.1) +
-            Math.pow(10, size - 1) +
-            _.random(1, 10) +
-            (_.random(1, quality) * (1 + _.random(1, Math.pow(hired, 2)))) +
-            (_.random(1, quality) * (1 + _.random(1, projects_done))) +
-            (_.random(1, quality) * (1 + _.random(1, Math.sqrt(projects_generated))))
-        );
+        let q = (quality * size * 0.1);
+        let h = (_.random(1, quality) * (1 + _.random(1, Math.pow(hired, 2))));
+        let d = (_.random(1, quality) * (1 + _.random(1, projects_done)));
+        let g = (_.random(1, quality) * (1 + _.random(1, Math.sqrt(projects_generated))));
+        let r = _.random(1, 10);
+
+        console.log('gen_stats: q: '+q+' h: '+h+' d: '+d+' g: '+g+' r: '+r);
+        return Math.floor( q + h + d + g + r);
     }
 
 }

@@ -43,4 +43,11 @@ export const player_education = {
     businessman: {name: 'Businessman', money: 6000, text: 'Made a fortune doing business. More money.'}
 };
 
+export const offices = {
+    1: {space: 1, price: 0,     name: 'Home', text: ''},
+    2: {space: 4, price: 500,   name: 'Small Office', text: ''},
+    3: {space: 7, price: 2500,  name: 'Medium Office', text: ''},
+    4: {space: 10, price: 10000, name: 'Big office', text: ''}
+};
+
 export default {};
