@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import Portal from 'react-portal';
+
+import ReactBootstrapSlider from 'react-bootstrap-slider';
+import '../../node_modules/bootstrap-slider/dist/css/bootstrap-slider.min.css';
+
 import _ from 'lodash';
 import classNames from 'classnames';
 
@@ -12,6 +16,9 @@ import {skills_names, skills, technologies} from '../data/knowledge';
 class Project extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {test_value: 1000};
+
         this.manage = this.manage.bind(this);
         this.manageAll = this.manageAll.bind(this);
         this.changeTechnology = this.changeTechnology.bind(this);
@@ -39,6 +46,7 @@ class Project extends Component {
 
     open() {
         this.props.data.helpers.openProject(this.props.project.id);
+        this.forceUpdate();
     }
 
     close() {
@@ -153,37 +161,64 @@ class Project extends Component {
                                             <div className="flex-element"> Bugs: <label className="text-danger">{project.bugsQuantity()}</label></div>
                                             <div className="flex-element"> Complexity: {project.complexity} </div>
                                         </div>
-                                        {skills_names.map((skill) => {
-                                            let need = project.needs[skill];
-                                            let errors = project.errors[skill];
-                                            var needs_max = project.needs_max[skill];//+errors;
-                                            var max_skill = _.maxBy(_.keys(project.needs_max), function(skill) {
-                                                return project.needs_max[skill] +  project.errors[skill];
-                                            });
-                                            var max = project.needs_max[max_skill] + project.errors[max_skill];
-                                            let diff = needs_max - need;
-                                            let tasks = need / max * 100;
-                                            let bugs = errors / max * 100;
-                                            let done = diff / max * 100;
 
-                                            return <div key={skill} className="row">
-                                                <div className="col-md-2">{skill}</div>
-                                                <div className="col-md-10 progress">
-                                                    <div className="progress-bar progress-bar-warning" role="progressbar"
-                                                         style={{width: tasks+'%'}}>
-                                                        {need ? <label>{need} tasks</label> : ''}
-                                                    </div>
-                                                    <div className="progress-bar progress-bar-danger" role="progressbar"
-                                                         style={{width: bugs+'%'}}>
-                                                        {errors ? <label>{errors} bugs</label> : ''}
-                                                    </div>
-                                                    <div className="progress-bar progress-bar-success" role="progressbar"
-                                                         style={{width: done+'%'}}>
-                                                        {(diff) ? <label>{diff} done</label> : ''}
-                                                    </div>
-                                                </div>
-                                            </div>;
-                                        })}
+                                        <div>
+                                            {project.type === 'draft' && project.stage === 'ready'
+                                                ? skills_names.map((skill) => {
+                                                   return <div key={skill} className="row">
+                                                       <div className="col-md-2">{skill}</div>
+                                                       <div className="col-md-10 ">
+                                                       <ReactBootstrapSlider
+                                                           scale='logarithmic'
+                                                           value={project.needs_max[skill]}
+                                                           change={(e) => { project.needs[skill] = e.target.value; project.needs_max[skill] = e.target.value; }}
+                                                           step={1}
+                                                           max={100000}
+                                                           min={0}/>
+                                                       </div>
+                                                   </div>;
+                                                }) : ''}
+                                        </div>
+                                        <div>
+                                            {project.type === 'draft' && project.stage === 'ready'
+                                                ? ''
+                                                : skills_names.map((skill) => {
+                                                    let need = project.needs[skill];
+                                                    let errors = project.errors[skill];
+                                                    var needs_max = project.needs_max[skill];//+errors;
+                                                    var max_skill = _.maxBy(_.keys(project.needs_max), function (skill) {
+                                                        return project.needs_max[skill] + project.errors[skill];
+                                                    });
+                                                    var max = project.needs_max[max_skill] + project.errors[max_skill];
+                                                    let diff = needs_max - need;
+                                                    let tasks = need / max * 100;
+                                                    let bugs = errors / max * 100;
+                                                    let done = diff / max * 100;
+
+                                                    return <div key={skill} className="row">
+                                                        <div className="col-md-2">{skill}</div>
+                                                        <div className="col-md-10 progress">
+                                                            <div className="progress-bar progress-bar-warning"
+                                                                 role="progressbar"
+                                                                 style={{width: tasks + '%'}}>
+                                                                {need ? <label>{need} tasks</label> : ''}
+                                                            </div>
+                                                            <div className="progress-bar progress-bar-danger"
+                                                                 role="progressbar"
+                                                                 style={{width: bugs + '%'}}>
+                                                                {errors ? <label>{errors} bugs</label> : ''}
+                                                            </div>
+                                                            <div className="progress-bar progress-bar-success"
+                                                                 role="progressbar"
+                                                                 style={{width: done + '%'}}>
+                                                                {(diff) ? <label>{diff} done</label> : ''}
+                                                            </div>
+                                                        </div>
+                                                    </div>;
+                                                })
+                                            }
+                                        </div>
+
                                         {project.tests > 0 ? <div key="tests" className="row">
                                             <div className="col-md-2">tests</div>
                                             <div className="col-md-10 progress">

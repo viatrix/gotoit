@@ -45,6 +45,7 @@ class App extends Component {
         this.openProject = this.openProject.bind(this);
         this.closeProject = this.closeProject.bind(this);
         this.trainingProject = this.trainingProject.bind(this);
+        this.draftProject = this.draftProject.bind(this);
         this.getTechnology = this.getTechnology.bind(this);
         this.changeTechnology = this.changeTechnology.bind(this);
         this.upOffice = this.upOffice.bind(this);
@@ -74,6 +75,7 @@ class App extends Component {
         app_state.data.helpers['openProject'] = this.openProject;
         app_state.data.helpers['closeProject'] = this.closeProject;
         app_state.data.helpers['trainingProject'] = this.trainingProject;
+        app_state.data.helpers['draftProject'] = this.draftProject;
         app_state.data.helpers['getTechnology'] = this.getTechnology;
         app_state.data.helpers['changeTechnology'] = this.changeTechnology;
         app_state.data.helpers['upOffice'] = this.upOffice;
@@ -216,10 +218,18 @@ class App extends Component {
         this.modifyRelation(worker.id, project.id, true);
     }
 
+    draftProject() {
+        let data = this.state.data;
+        let project = ProjectModel.generateDraft();
+        data.projects.push(project);
+        this.setState({data: data});
+        this.modifyRelation(null, project.id, true);
+    }
+
     openProject(id) {
         let data = this.state.data;
         let project = _.find(data.projects, (project) => { return (project.id === id); });
-        project.stage='open';
+        project.stage = 'open';
         addMessage('Start '+project.name+' project', {timeOut: 5000, extendedTimeOut: 2000}, 'info');
         this.setState({data: data});
     }
@@ -350,7 +360,7 @@ class App extends Component {
                 return;
             }
             project.deadline--;
-            if (project.deadline <= 0) {
+            if (project.deadline <= 0 && project.type !== 'draft') {
                 this.failProject(project.id);
                 return;
             }

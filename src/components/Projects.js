@@ -56,7 +56,12 @@ class Projects extends Component {
                 <h4 className="text-center"><label> Projects </label>
                 <Portal closeOnEsc closeOnOutsideClick openByClickOn={find_projects}>
                     <TeamDialog>
-                        <h3 className="text-center">Find Projects</h3>
+                        <h3 className="text-center">
+                            Find Projects
+                            <span className="hidden"> or
+                                <button className="btn btn-info" onClick={this.props.data.helpers.draftProject}>Invent Startup</button>
+                            </span>
+                        </h3>
                         <div className="row">
                             <div className="col-md-4">
                                 <h4 className="text-center">Freelance</h4>
