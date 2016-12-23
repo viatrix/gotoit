@@ -3,6 +3,7 @@ import _ from 'lodash';
 import classNames from 'classnames';
 
 import StatsBar from './StatsBar';
+import ProjectName from './ProjectName';
 
 import {skills, technologies} from '../data/knowledge';
 
@@ -55,7 +56,7 @@ class Project extends Component {
 
         return (
             <div className="unit_block">
-                {project.name} ({project.reward}$)
+                <ProjectName project={project} /> ({project.reward}$)
 
                 {project.deadline > 0 ?
                     <div className="progress">
