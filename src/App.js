@@ -343,7 +343,7 @@ class App extends Component {
     componentDidMount() {
         this.timerID = setInterval(
             () => this.tick(),
-            500
+            250
         );
     }
 
@@ -499,6 +499,34 @@ class App extends Component {
        // console.log(team_sizes);  HERE PROBLEMS - maybe need another way store
         
         data.workers.forEach((worker) => {
+            // vacation
+            if (!worker.to_vacation && !worker.in_vacation && worker.stamina <= 0) {
+                worker.to_vacation = true;
+                worker.to_vacation_ticker = 24 * 7 * 2; // 2 weeks
+                addAction(worker.name+' leaves on vacation in two weeks', {timeOut: 10000, extendedTimeOut: 5000}, 'error');
+            }
+            if (worker.to_vacation) {
+                worker.to_vacation_ticker--;
+                if (worker.to_vacation_ticker <= 0) {
+                    worker.to_vacation = false;
+                    worker.in_vacation = true;
+                    let long =  _.random(1, 3);
+                    worker.in_vacation_ticker = 24 * 7 * long; // 1-3 weeks
+                    addAction(worker.name+' leaves on vacation '+long+' weeks long', {timeOut: 15000, extendedTimeOut: 8000}, 'error');
+                }
+            }
+            if (worker.in_vacation) {
+                //console.log('worker in vacation');
+                worker.in_vacation_ticker--;
+                if (worker.in_vacation_ticker === 0) {
+                    worker.in_vacation = false;
+                    worker.stamina = 1000;
+                    addAction(worker.name+' come back from vacation', {timeOut: 5000, extendedTimeOut: 3000}, 'success');
+                }
+                return false;
+            }
+
+
             let is_working_time = worker.isWorkingTime(data.date);
 
             if (!worker.is_player && (data.money - worker.getSalary()) < 0) return false;
@@ -567,6 +595,7 @@ class App extends Component {
                     worker.facts.money_earned += salary;
                     project.facts.money_spent += salary;
                 }
+                worker.drainStamina(); // move inside top block in future
 
                 // Pet Projects on Fridays
                 if (creativity && data.date.day === 5 && is_working_time) {

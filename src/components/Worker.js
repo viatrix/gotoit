@@ -61,6 +61,7 @@ class Worker extends Component {
         return (
             <div className="unit_block">
                 {worker.name} {worker.is_player ? 'Player' : <span>{worker.getSalary()}$</span>}
+                {worker.in_vacation ? ' in vacation! ' : ''}
                 <Portal closeOnEsc closeOnOutsideClick openByClickOn={educate_button}>
                     <TeamDialog>
                         <h2>Worker Education</h2>
@@ -90,7 +91,7 @@ class Worker extends Component {
 
                 <Portal ref="manage" closeOnEsc closeOnOutsideClick openByClickOn={manage_button}>
                     <TeamDialog>
-                        <h2>{worker.name}</h2>
+                        <h2>{worker.name} {worker.in_vacation ? ' in vacation! ' : ''}</h2>
                         <ul>
                             <p>Hired {Math.ceil((this.props.data.date.tick - worker.facts.tick_hired)/24)} days ago.
                                 {!worker.is_player ? <span>Got {worker.facts.money_earned}$ of salary. Overrate : {((1 + (worker.standing/(12*4*7*8*Math.PI))).toFixed(2)*100)-100}%</span> : ''}

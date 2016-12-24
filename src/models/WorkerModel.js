@@ -19,6 +19,12 @@ class WorkerModel {
             earliness: _.random(0, 3), variability: _.random(0, 3)
         };
 
+        this.stamina = 1000;
+        this.to_vacation_ticker = 0;
+        this.to_vacation = false;
+        this.in_vacation_ticker = 0;
+        this.in_vacation = false;
+
         this.facts = {
             project_finished: 0,
             tick_hired: 0, money_earned: 0,
@@ -28,6 +34,11 @@ class WorkerModel {
 
     statsSum() {
         return _.sum(_.values(this.stats));
+    }
+
+    drainStamina() {
+        this.stamina--;
+        console.log(this.stamina);
     }
 
     getSalary() {
