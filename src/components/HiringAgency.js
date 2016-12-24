@@ -17,15 +17,19 @@ class HiringAgency extends Component {
 
         let max = JSON.parse(JSON.stringify(skills));
         _.keys(max).forEach((skill) => {
+            max[skill] = 1;
+        });
+        let min = JSON.parse(JSON.stringify(skills));
+        _.keys(max).forEach((skill) => {
             max[skill] = 10;
         });
 
         this.state = {
             candidate_blank: WorkerModel.generateBlank(),
-            min_stats: JSON.parse(JSON.stringify(skills)),
+            min_stats: JSON.parse(JSON.stringify(min)),
             max_stats: JSON.parse(JSON.stringify(max)),
             min_salary: 25,
-            max_salary: 75,
+            max_salary: 50,
         };
 
         this.calcCost = this.calcCost.bind(this);

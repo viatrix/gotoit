@@ -12,7 +12,7 @@ import {skills_names} from './data/knowledge';
 import {setCallback} from './services/getData';
 
 
-var agency_generation_counter = 0;
+//var agency_generation_counter = 0;
 var contract_generation_counter = 0;
 
 export var hired = 1;
@@ -137,7 +137,7 @@ class App extends Component {
     }
 
     agencySearch(agency_state, agency_reward) {
-        agency_generation_counter++;
+        //agency_generation_counter++;
         let data = this.state.data;
         data.money -= agency_reward;
         let worker = WorkerModel.generateAgency(agency_state);
