@@ -141,6 +141,7 @@ class App extends Component {
         let data = this.state.data;
         data.money -= agency_reward;
         let worker = WorkerModel.generateAgency(agency_state);
+        data.hiring_agency_state = agency_state;
         data.candidates.agency.push(worker);
         this.setState({data: data});
     }

@@ -7,7 +7,6 @@ import '../../node_modules/bootstrap-slider/dist/css/bootstrap-slider.min.css';
 
 import TeamDialog from './TeamDialog';
 
-import WorkerModel from '../models/WorkerModel';
 import {skills_names, skills} from '../data/knowledge';
 
 
@@ -24,13 +23,12 @@ class HiringAgency extends Component {
             max[skill] = 10;
         });
 
-        this.state = {
-            candidate_blank: WorkerModel.generateBlank(),
+        this.state = Object.assign({
             min_stats: JSON.parse(JSON.stringify(min)),
             max_stats: JSON.parse(JSON.stringify(max)),
             min_salary: 25,
             max_salary: 50,
-        };
+        }, this.props.hiring_agency_state);
 
         this.calcCost = this.calcCost.bind(this);
         this.search = this.search.bind(this);
@@ -39,9 +37,9 @@ class HiringAgency extends Component {
     calcCost() {
         let s = this.state;
 
-        let min_sum = Math.pow(_.sum(_.values(s.min_stats)), 1.6);
-        let max_sum = Math.pow((_.sum(_.values(s.max_stats))), 1.8);
-        let pike_factor = Math.pow(_.max(_.values(s.max_stats)), 2);
+        let min_sum = Math.pow(_.sum(_.values(s.min_stats)), 2.5);
+        let max_sum = Math.pow((_.sum(_.values(s.max_stats))), 2);
+        let pike_factor = Math.pow(_.max(_.values(s.max_stats)), 2.4);
         let salary_factor = s.min_salary + (s.max_salary * 2);
 
         return Math.floor((1000 + min_sum + max_sum + pike_factor) / (0.005 * (100 + salary_factor)));
@@ -61,7 +59,7 @@ class HiringAgency extends Component {
             return <div key={name} className="row">
                 <div className="col-md-2">{name}</div>
                 <div className="col-md-10 ">
-                    <div style={{padding: '8px'}}>
+                    <div style={{padding: '18px'}}>
                         {child}
                     </div>
                 </div>

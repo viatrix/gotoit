@@ -44,6 +44,7 @@ var app_state =
             //    ProjectModel.generate(30, 4)
             ],
         },
+        hiring_agency_state: {},
         workers: [WorkerModel.generatePlayer()],
         workers_roles: {player: {design: true, manage: true, program: true, admin: true}},
         projects: [],
