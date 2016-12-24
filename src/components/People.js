@@ -4,12 +4,16 @@ import _ from 'lodash';
 
 import TeamDialog from './TeamDialog';
 import StatsBar from './StatsBar';
+
 import Worker from './Worker';
+import HiringAgency from './HiringAgency';
+
 import {skills} from '../data/knowledge';
 
 class People extends Component {
     constructor(props) {
         super(props);
+
         this.hire = this.hire.bind(this);
         this.reject = this.reject.bind(this);
     }
@@ -52,7 +56,7 @@ class People extends Component {
                 {(this.props.data.workers.length < this.props.data.office.space)
                     ?
                     <div className="unit_block">
-                        <Portal closeOnEsc closeOnOutsideClick openByClickOn={hire_button}>
+                        <Portal closeOnEsc openByClickOn={hire_button}>
                             <TeamDialog>
                                 <h3 className="text-center">Hiring</h3>
                                 <div className="row">
@@ -62,7 +66,8 @@ class People extends Component {
                                     </div>
                                     <div className="col-md-4">
                                         <h4 className="text-center">Agency</h4>
-                                        <button  className="btn btn-info" onClick={this.props.data.helpers.agencySearch}>Search 1000$</button>
+                                        <button  className="btn btn-info hidden" onClick={this.props.data.helpers.agencySearch}>Search 1000$</button>
+                                        <HiringAgency data={this.props.data} />
                                         {this.props.data.candidates.agency.map(agency_candidate)}
                                     </div>
                                     <div className="col-md-4">

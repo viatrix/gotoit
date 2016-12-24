@@ -93,7 +93,7 @@ class Worker extends Component {
                         <h2>{worker.name}</h2>
                         <ul>
                             <p>Hired {Math.ceil((this.props.data.date.tick - worker.facts.tick_hired)/24)} days ago.
-                                {!worker.is_player ? <span>Got {worker.facts.money_earned}$ of salary. Overrate : {100-((1 + (worker.standing/(12*4*7*8*Math.PI))).toFixed(2)*100)}%</span> : ''}
+                                {!worker.is_player ? <span>Got {worker.facts.money_earned}$ of salary. Overrate : {((1 + (worker.standing/(12*4*7*8*Math.PI))).toFixed(2)*100)-100}%</span> : ''}
                             </p>
                             <p>Finished {worker.facts.project_finished} project.
                                 Done {worker.facts.tasks_done} of {worker.facts.tasks_done + worker.facts.bugs_passed} tasks.
@@ -123,7 +123,7 @@ class Worker extends Component {
                                         ? <div className="flex-container-row" key={source}>
                                         {skills_names.map((skill) => {
                                             return <div  className="flex-element" key={skill}>
-                                                <button title={education[source].description} id={source} onClick={() => this.teach(skill, source)}>{education[source].name}</button>
+                                                <button className="btn btn-info" title={education[source].description} id={source} onClick={() => this.teach(skill, source)}>{education[source].name}</button>
                                             </div>;
                                         })}
                                     </div>

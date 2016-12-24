@@ -125,7 +125,7 @@ class bulkStyler {
         let order = Object.keys(stats_bulk).sort(function(a,b){return stats_bulk[b]-stats_bulk[a]});
 
         switch (platform) {
-            case 'cross-platform':
+            case 'crossplatform':
                 return stats_bulk;
             case 'mobile':
                 stats_bulk['design'] *= 2;

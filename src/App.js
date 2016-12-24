@@ -136,12 +136,11 @@ class App extends Component {
         this.setState({data: data});
     }
 
-    agencySearch() {
+    agencySearch(agency_state, agency_reward) {
         agency_generation_counter++;
         let data = this.state.data;
-        data.money -= 1000;
-        let worker = WorkerModel.generate(_.random(4, 7 + (agency_generation_counter*0.1)));
-        worker.standing += 10 * _.random(1, agency_generation_counter);
+        data.money -= agency_reward;
+        let worker = WorkerModel.generateAgency(agency_state);
         data.candidates.agency.push(worker);
         this.setState({data: data});
     }
@@ -214,6 +213,11 @@ class App extends Component {
         let data = this.state.data;
         let project = ProjectModel.generateTraining(worker, skill);
         data.projects.push(project);
+        Object.keys(data.projects_default_technologies).forEach((technology) => {
+            if (data.projects_default_technologies[technology]) {
+                this.changeTechnology(technology, project.id, true);
+            }
+        });
         this.setState({data: data});
         this.modifyRelation(worker.id, project.id, true);
     }

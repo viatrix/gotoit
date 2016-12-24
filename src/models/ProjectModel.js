@@ -269,7 +269,7 @@ class ProjectModel {
         let g = (_.random(1, quality) * (1 + _.random(1, Math.floor(Math.sqrt(projects_generated/2)))));
         let r = _.random(1, 10);
 
-        console.log('gen_stats: q: '+q+' h: '+h+' d: '+d+' g: '+g+' r: '+r);
+        //console.log('gen_stats: q: '+q+' h: '+h+' d: '+d+' g: '+g+' r: '+r);
         return Math.floor( q + h + d + g + r);
     }
 

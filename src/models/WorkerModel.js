@@ -105,6 +105,24 @@ class WorkerModel {
         return new WorkerModel(this.genName(), stats);
     }
 
+    static generateBlank() {
+        return new WorkerModel(this.genName(), JSON.parse(JSON.stringify(skills)));
+    }
+
+    static generateAgency(agency_state) {
+        console.log(agency_state);
+        let stats = _.mapValues(skills, (value, skill) => {
+            let stat = _.random(agency_state.min_stats[skill], agency_state.max_stats[skill]);
+            console.log(skill, stat);
+            return stat;
+        });
+        console.log(stats);
+        let worker =  new WorkerModel(this.genName(), stats);
+        worker.standing = _.random(agency_state.min_salary, agency_state.max_salary) * 80;
+        console.log(worker);
+        return worker;
+    }
+
     static generatePlayer() {
         let name = '';//prompt('Type your name', this.genName());
 
