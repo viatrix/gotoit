@@ -100,7 +100,7 @@ class ProjectModel {
                     }
                 }
                 let learn = (real_work ? real_work : work[stat]);
-                learned[stat] += (learn) * (creativity ? 2 : 1) * (this.type === 'training' ? 2 : 1);
+                learned[stat] += (learn) * (creativity ? 1.5 : 1) * (this.type === 'training' ? 2 : 1);
                 if (isNaN(learned[stat])) {
                     console.log([learn, creativity, this.type].map((e) => e));
                 }

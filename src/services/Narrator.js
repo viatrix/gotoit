@@ -14,10 +14,10 @@ class Narrator {
             let quantum = {level: '', value: num, text: ''};
 
             switch (true) {
-                case num === -25:
+                case num === -20:
                     quantum.level = 'very low';
                     break;
-                case num <= -20:
+                case num <= -15:
                     quantum.level = 'lower';
                     break;
                 case num <= -5:
@@ -26,13 +26,13 @@ class Narrator {
                 case num < 5:
                     quantum.level = 'normal';
                     break;
-                case num < 20:
+                case num < 15:
                     quantum.level = 'high';
                     break;
-                case num < 25:
+                case num < 20:
                     quantum.level = 'higher';
                     break;
-                case num === 25:
+                case num === 20:
                     quantum.level = 'very high';
                     break;
                 default:
@@ -45,10 +45,10 @@ class Narrator {
         const aboutHappiness = () => {
             let num = worker.calcEfficiency();
             switch (true) {
-                case num === 20: return 'Worker '+worker.name+' hate job.';
+                case num < 20: return 'Worker '+worker.name+' hate job.';
                 case num < 30: return 'Worker '+worker.name+' almost hate job.';
-                case num < 40: return 'Worker '+worker.name+' very dissatisfied with work';
-                case num < 50: return 'Worker '+worker.name+' dissatisfied with work';
+                case num < 40: return 'Worker '+worker.name+' very dissatisfied with work.';
+                case num < 50: return 'Worker '+worker.name+' dissatisfied with work.';
                 case num < 60: return 'Worker '+worker.name+' is indifferent to work.';
                 case num < 70: return 'Worker '+worker.name+' almost satisfied with work.';
                 case num < 80: return 'Worker '+worker.name+' satisfied with work.';

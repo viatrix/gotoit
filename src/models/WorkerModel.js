@@ -87,30 +87,30 @@ class WorkerModel {
     }
 
     workloadPenalty() {
-        const task_preferred = (Math.ceil((tick - this.facts.tick_hired)/24) * 4);
-        const tasks_stream = Math.min(25, 25 * (1-((100+task_preferred) / ((100+(this.facts.tasks_done - this.facts.training_tasks_done))))));
-        return Math.max(Math.min(Math.floor(tasks_stream), 25), -25);
+        const task_preferred = (Math.ceil((tick - this.facts.tick_hired)/24) * 3);
+        const tasks_stream = Math.min(20, 20 * (1-((100+task_preferred) / ((100+(this.facts.tasks_done - this.facts.training_tasks_done))))));
+        return Math.max(Math.min(Math.floor(tasks_stream), 20), -20);
     }
 
     difficultyPenalty() {
-        const tasks_difficulty = Math.min(25, 25 * (1-((100+(this.facts.bugs_passed * 10)) / ((100+(this.facts.tasks_done))))));
-        return Math.max(Math.min(Math.floor(tasks_difficulty), 25), -25);
+        const tasks_difficulty = Math.min(20, 20 * (1-((100+(this.facts.bugs_passed * 10    )) / ((100+(this.facts.tasks_done))))));
+        return Math.max(Math.min(Math.floor(tasks_difficulty), 20), -20);
     }
 
     educationPenalty() {
-        let knowledge_ratio = (100+this.facts.training_tasks_done) / (100+this.facts.tasks_done);
+        let knowledge_ratio = (100+(this.facts.training_tasks_done*3)) / (100+this.facts.tasks_done);
         let thirst_for_knowledge = (100+(this.statsSum()/4)) / (100+_.max(_.values(this.stats)));
         console.log(knowledge_ratio, thirst_for_knowledge);
-        const education_stream = Math.min(25, 25 * (1-(knowledge_ratio/thirst_for_knowledge)));
-        return Math.max(Math.min(Math.floor(education_stream), 25), -25);
+        const education_stream = Math.min(20, 20 * (1-(knowledge_ratio/thirst_for_knowledge)));
+        return Math.max(Math.min(Math.floor(education_stream), 20), -20);
     }
 
     collectivePenalty() {
         let collective_sum = 0;
         getData().workers.forEach((worker) => { collective_sum += worker.statsSum(); });
         const collective_avg = collective_sum/getData().workers.length;
-        const collective = Math.min(25, 25 * (1-((10 + collective_avg)/(10 + this.statsSum()))));
-        return Math.max(Math.min(Math.floor(collective), 25), -25);
+        const collective = Math.min(20, 20 * (1-((10 + collective_avg)/(10 + this.statsSum()))));
+        return Math.max(Math.min(Math.floor(collective), 20), -20);
     }
 
     calcEfficiency() {
@@ -119,11 +119,11 @@ class WorkerModel {
         const education_stream = this.educationPenalty();
         const collective = this.collectivePenalty();
 
-        let efficiency =
-              (25 - Math.abs(tasks_stream))
-            + (25 - Math.abs(tasks_difficulty))
-            + (25 - Math.abs(education_stream))
-            + (25 - Math.abs(collective));
+        let efficiency = 20 +
+            + (20 - Math.abs(tasks_stream))
+            + (20 - Math.abs(tasks_difficulty))
+            + (20 - Math.abs(education_stream))
+            + (20 - Math.abs(collective));
 
         //console.log(efficiency);
         //console.log(tasks_stream, tasks_difficulty, education_stream, collective);

@@ -194,6 +194,14 @@ class Worker extends Component {
                         </div>
                     </TeamDialog>
                 </Portal>
+
+                <div className="progress">
+                    <div className={classNames('progress-bar', (100 / worker.getEfficiency() < 0.5 ? 'progress-bar-danger' : 'progress-bar-warning'))} role="progressbar"
+                         style={{width: worker.getEfficiency()+'%'}}>
+                        <label>{worker.getEfficiency()}%</label>
+                    </div>
+                </div>
+
                 <StatsBar stats={stats_data} data={this.props.data} />
             </div>
         );
