@@ -220,7 +220,7 @@ class ProjectModel {
     }
 
     static generateTraining(worker, skill=null) {
-        let level = Math.floor(worker.statsSum()/4) + (worker.stats[skill]*2);
+        let level = Math.floor((worker.statsSum()/4*0.75) + (worker.stats[skill]*3));
 
         let kind = _.sample(_.keys(project_kinds));
         let platform = _.sample(_.keys(project_platforms));

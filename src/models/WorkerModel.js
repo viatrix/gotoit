@@ -93,7 +93,7 @@ class WorkerModel {
     }
 
     difficultyPenalty() {
-        const tasks_difficulty = Math.min(20, 20 * (1-((100+(this.facts.bugs_passed * 10    )) / ((100+(this.facts.tasks_done))))));
+        const tasks_difficulty = Math.min(20, 20 * (1-((200+(this.facts.bugs_passed * 8)) / ((200+(this.facts.tasks_done))))));
         return Math.max(Math.min(Math.floor(tasks_difficulty), 20), -20);
     }
 
@@ -164,7 +164,7 @@ class WorkerModel {
     addExperience(learned) {
         Object.keys(learned).forEach((stat) => {
             if (learned[stat] !== 0) {
-                this.expirience[stat] += Math.ceil((learned[stat] * 5) / (this.stats[stat]));
+                this.expirience[stat] += Math.ceil((learned[stat] * 7) / (this.stats[stat]));
                 if (this.expirience[stat] >= 100) {
                     console.log('stat rise');
                     this.expirience[stat] -= 100;

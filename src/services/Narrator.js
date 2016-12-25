@@ -75,13 +75,13 @@ class Narrator {
             },
             difficultyPenalty: (level) => {
                 switch (level) {
-                    case'very low': return 'which have impossible complexity. ';
-                    case 'lower': return 'which have very hard complexity. ';
-                    case 'low': return 'which have hard complexity. ';
-                    case 'normal': return 'which have enjoyable complexity. ';
-                    case 'high': return 'which have easy complexity. ';
-                    case 'higher': return 'which have very easy complexity. ';
-                    case 'very high': return 'which have ridiculous complexity. ';
+                    case'very low': return 'with impossible complexity. ';
+                    case 'lower': return 'with very hard complexity. ';
+                    case 'low': return 'with hard complexity. ';
+                    case 'normal': return 'with enjoyable complexity. ';
+                    case 'high': return 'with easy complexity. ';
+                    case 'higher': return 'with very easy complexity. ';
+                    case 'very high': return 'with ridiculous complexity. ';
                     default: console.log('error case: ' + level); return ' # Error! # ';
                 }
             },
