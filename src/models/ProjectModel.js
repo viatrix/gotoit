@@ -73,6 +73,9 @@ class ProjectModel {
                 if (resource > 0 && cont < pro) {
                     this.complexity += (rad ? 4 : 1);
                     var real_work = Math.min(this.needs[stat], _.random(1, resource));
+                    if (this.type === 'training') {
+                        worker.facts.training_tasks_done += real_work;
+                    }
                     worker.facts.tasks_done += real_work;
                     this.facts.tasks_done += real_work;
                     this.needs[stat] -= real_work;

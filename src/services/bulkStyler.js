@@ -35,21 +35,21 @@ class bulkStyler {
         let order = _.shuffle(Object.keys(stats_bulk)); //.sort(function(a,b){return stats_bulk[b]-stats_bulk[a]});
 
         switch (background) {
-            case 'specialist':
+            case 'specialist': // med like 8
                 stats_bulk[order[0]] += 5;
-                stats_bulk[order[1]] += 0;
-                stats_bulk[order[2]] += 0;
-                stats_bulk[order[3]] += 0;
+                stats_bulk[order[1]] += 1;
+                stats_bulk[order[2]] += 1;
+                stats_bulk[order[3]] += 1;
                 break;
-            case 'comprehensive':
-                stats_bulk[order[0]] += 2;
-                stats_bulk[order[1]] += 2;
-                stats_bulk[order[2]] += 2;
-                stats_bulk[order[3]] += 2;
-                break;
-            case 'coworker':
+            case 'comprehensive': // high like 12
                 stats_bulk[order[0]] += 3;
                 stats_bulk[order[1]] += 3;
+                stats_bulk[order[2]] += 3;
+                stats_bulk[order[3]] += 3;
+                break;
+            case 'coworker': // low like 6
+                stats_bulk[order[0]] += 2;
+                stats_bulk[order[1]] += 2;
                 stats_bulk[order[2]] += 1;
                 stats_bulk[order[3]] += 1;
                 break;
@@ -63,23 +63,23 @@ class bulkStyler {
         let order = Object.keys(stats_bulk).sort(function(a,b){return stats_bulk[b]-stats_bulk[a]});
 
         switch (education) {
-            case 'autodidact':
-                stats_bulk[order[0]] += 4;
-                stats_bulk[order[1]] += 2;
-                stats_bulk[order[2]] += 1;
-                stats_bulk[order[3]] += 1;
+            case 'autodidact': // high like 10
+                stats_bulk[order[0]] += 3;
+                stats_bulk[order[1]] += 5;
+                stats_bulk[order[2]] += 0;
+                stats_bulk[order[3]] += 2;
                 break;
-            case 'university':
+            case 'university': // mid like 8
                 stats_bulk[order[0]] += 2;
                 stats_bulk[order[1]] += 2;
                 stats_bulk[order[2]] += 2;
                 stats_bulk[order[3]] += 2;
                 break;
-            case 'businessman':
-                stats_bulk[order[0]] += 0;
-                stats_bulk[order[1]] += 0;
-                stats_bulk[order[2]] += 0;
-                stats_bulk[order[3]] += 0;
+            case 'businessman': // low like 4
+                stats_bulk[order[0]] += 1;
+                stats_bulk[order[1]] += 1;
+                stats_bulk[order[2]] += 1;
+                stats_bulk[order[3]] += 1;
                 break;
             default:
                 console.log('error case: ' + education);

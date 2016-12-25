@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import Portal from 'react-portal';
 import _ from 'lodash';
+import classNames from 'classnames';
 
 import TeamDialog from './TeamDialog';
 import StatsBar from './StatsBar';
 
 import {skills_names, roles, education} from '../data/knowledge';
+import Narrator from '../services/Narrator';
 
 class Worker extends Component {
     constructor(props) {
@@ -58,6 +60,13 @@ class Worker extends Component {
             return {name: key, val: (worker.stats[key] + worker.expirience[key]/100).toFixed(2)};
         });
 
+        const efficiency_data = {
+            work_load: {name: 'Work Load', val: worker.workloadPenalty()},
+            work_difficulty: {name: 'Task Difficulty', val: worker.difficultyPenalty()},
+            education: {name: 'Education Balance', val: worker.educationPenalty()},
+            collective: {name: 'Collective', val: worker.collectivePenalty()}
+        };
+
         return (
             <div className="unit_block">
                 {worker.name} {worker.is_player ? 'Player' : <span>{worker.getSalary()}$</span>}
@@ -94,15 +103,29 @@ class Worker extends Component {
                         <h2>{worker.name} {worker.in_vacation ? ' in vacation! ' : ''}</h2>
                         <ul>
                             <p>Hired {Math.ceil((this.props.data.date.tick - worker.facts.tick_hired)/24)} days ago.
-                                {!worker.is_player ? <span>Got {worker.facts.money_earned}$ of salary. Overrate : {((1 + (worker.standing/(12*4*7*8*Math.PI))).toFixed(2)*100)-100}%</span> : ''}
-                            </p>
-                            <p>Finished {worker.facts.project_finished} project.
+                                {!worker.is_player ? <span>Got {worker.facts.money_earned}$ of salary. Overrate : {((1 + (worker.standing/(12*4*7*8*Math.PI))).toFixed(2)*100)-100}% </span> : ' '}
+                                Finished {worker.facts.project_finished} project.
                                 Done {worker.facts.tasks_done} of {worker.facts.tasks_done + worker.facts.bugs_passed} tasks.
                                 Passed {worker.facts.bugs_passed} bugs.
                                 Do {worker.facts.refactored} refactoring and wrote {worker.facts.tests_wrote} tests.
                             </p>
                         </ul>
+
                         <div className="panel panel-success text-center">
+                            <div key="efficiency" className="row">
+                                <div className="col-md-2">Efficiency</div>
+                                <div className="col-md-9 progress">
+                                    <div className={classNames('progress-bar', (100 / worker.getEfficiency() < 0.5 ? 'progress-bar-danger' : 'progress-bar-warning'))} role="progressbar"
+                                         style={{width: worker.getEfficiency()+'%'}}>
+                                        <label>{worker.getEfficiency()}%</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <StatsBar stats={efficiency_data} data={this.props.data} />
+                            <h4>{Narrator.workerFeelings(worker)}</h4>
+                        </div>
+
+                            <div className="panel panel-success text-center">
                             <StatsBar stats={stats_data} data={this.props.data} />
                             <div className="row">
                                 {skills_names.map((role, i) =>

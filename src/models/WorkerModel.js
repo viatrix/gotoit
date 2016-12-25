@@ -4,6 +4,8 @@ import _ from 'lodash';
 import bulkStyler from '../services/bulkStyler';
 import {skills} from '../data/knowledge';
 
+import {getData, tick} from '../App';
+
 class WorkerModel {
     constructor(name, stats, is_player = false) {
         this.id = is_player ? 'player' : _.uniqueId('worker');
@@ -28,7 +30,7 @@ class WorkerModel {
         this.facts = {
             project_finished: 0,
             tick_hired: 0, money_earned: 0,
-            tasks_done: 0, bugs_passed: 0,
+            tasks_done: 0, training_tasks_done: 0, bugs_passed: 0,
             refactored: 0, tests_wrote: 0};
     }
 
@@ -64,7 +66,71 @@ class WorkerModel {
 
      //   console.log('Worker '+this.name+' '+(is_working_time ? 'work' : 'rest')+' on hour '+time.hour+' with temper '+ this.temper.earliness+' '+this.temper.variability);
 
-        return is_working_time;
+
+        //return is_working_time;
+        return this.efficiencyCheck() ? is_working_time : false;
+    }
+
+    efficiencyCheck() {
+        return (_.random(1, 100) <= this.getEfficiency());
+    }
+
+    getEfficiency() {
+        if (tick < 10) return 100;
+
+        let efficiency = this.calcEfficiency();
+
+        if (((tick - this.facts.tick_hired)/24) < 30) return 100;
+        if (((tick - this.facts.tick_hired)/24) < 100) return Math.floor((efficiency + 100) / 2);
+
+        return efficiency;
+    }
+
+    workloadPenalty() {
+        const task_preferred = (Math.ceil((tick - this.facts.tick_hired)/24) * 4);
+        const tasks_stream = Math.min(25, 25 * (1-((100+task_preferred) / ((100+(this.facts.tasks_done - this.facts.training_tasks_done))))));
+        return Math.max(Math.min(Math.floor(tasks_stream), 25), -25);
+    }
+
+    difficultyPenalty() {
+        const tasks_difficulty = Math.min(25, 25 * (1-((100+(this.facts.bugs_passed * 10)) / ((100+(this.facts.tasks_done))))));
+        return Math.max(Math.min(Math.floor(tasks_difficulty), 25), -25);
+    }
+
+    educationPenalty() {
+        let knowledge_ratio = (100+this.facts.training_tasks_done) / (100+this.facts.tasks_done);
+        let thirst_for_knowledge = (100+(this.statsSum()/4)) / (100+_.max(_.values(this.stats)));
+        console.log(knowledge_ratio, thirst_for_knowledge);
+        const education_stream = Math.min(25, 25 * (1-(knowledge_ratio/thirst_for_knowledge)));
+        return Math.max(Math.min(Math.floor(education_stream), 25), -25);
+    }
+
+    collectivePenalty() {
+        let collective_sum = 0;
+        getData().workers.forEach((worker) => { collective_sum += worker.statsSum(); });
+        const collective_avg = collective_sum/getData().workers.length;
+        const collective = Math.min(25, 25 * (1-((10 + collective_avg)/(10 + this.statsSum()))));
+        return Math.max(Math.min(Math.floor(collective), 25), -25);
+    }
+
+    calcEfficiency() {
+        const tasks_stream = this.workloadPenalty();
+        const tasks_difficulty = this.difficultyPenalty();
+        const education_stream = this.educationPenalty();
+        const collective = this.collectivePenalty();
+
+        let efficiency =
+              (25 - Math.abs(tasks_stream))
+            + (25 - Math.abs(tasks_difficulty))
+            + (25 - Math.abs(education_stream))
+            + (25 - Math.abs(collective));
+
+        //console.log(efficiency);
+        //console.log(tasks_stream, tasks_difficulty, education_stream, collective);
+
+        return Math.ceil(efficiency);
+
+        //return 100;
     }
 
     getResources(worker_roles, focus_on=null, micromanagement) {

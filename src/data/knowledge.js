@@ -50,15 +50,15 @@ export const education = {
 
 
 export const player_backgrounds = {
-    specialist: {name: 'Specialist', money: 4000, text: 'Honed skills in the profession to heights. Besides richer.'},
+    specialist: {name: 'Specialist', money: 5000, text: 'Honed skills in the profession to heights.'},
     comprehensive: {name: 'Comprehensive', money: 1000, text: 'Has no weaknesses. But is not the special.'},
-    coworker: {name: 'Coworker', money: 3000, text: 'Works with the partner, covering each other.'}
+    coworker: {name: 'Coworker', money: 5000, text: 'Works with the partner, covering each other.'}
 };
 
 export const player_education = {
     autodidact: {name: 'Autodidact', money: 1000, text: 'Inspired researcher, looking own way. Eclectic stats.'},
-    university: {name: 'University', money: 3000, text: 'Fundamental education according to verified program. Flat stats.'},
-    businessman: {name: 'Businessman', money: 6000, text: 'Made a fortune doing business. More money.'}
+    university: {name: 'University', money: 5000, text: 'Fundamental education according to verified program. Flat stats.'},
+    businessman: {name: 'Businessman', money: 10000, text: 'Made a fortune doing business. Has a money.'}
 };
 
 

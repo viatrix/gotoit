@@ -7,7 +7,6 @@ import OfficeModel from './models/OfficeModel';
 
 import {project_platforms, project_kinds} from './data/knowledge';
 
-
 var app_state =
 {
     data: {
@@ -57,7 +56,6 @@ var app_state =
     }
 };
 
-
 _.keys(project_platforms).forEach((platform) => {
     _.keys(project_kinds).forEach((kind) => {
         for (let top = 1; top <= 10; top++) {
@@ -67,6 +65,5 @@ _.keys(project_platforms).forEach((platform) => {
         }
     });
 });
-
 
 export default app_state;

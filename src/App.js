@@ -4,13 +4,14 @@ import _ from 'lodash';
 import Layout from './components/Layout';
 import {addMessage, addAction} from './components/ToastNest';
 import './App.css';
-import app_state from './AppData';
 import WorkerModel from './models/WorkerModel';
 import ProjectModel from './models/ProjectModel';
 import OfficeModel from './models/OfficeModel';
 import {skills_names} from './data/knowledge';
-import {setCallback} from './services/getData';
 
+import app_state from './AppData';
+
+export var tick = 0;
 
 //var agency_generation_counter = 0;
 var contract_generation_counter = 0;
@@ -18,6 +19,7 @@ var contract_generation_counter = 0;
 export var hired = 1;
 export var projects_done = 0;
 
+export var getData = () => { return {}; };
 
 class App extends Component {
     constructor(props) {
@@ -81,6 +83,10 @@ class App extends Component {
         app_state.data.helpers['upOffice'] = this.upOffice;
 
         this.state = app_state;
+
+        getData = () => {
+            return this.state.data;
+        };
     }
 
 
@@ -334,10 +340,6 @@ class App extends Component {
     }
 
     componentWillMount(){
-        let callback = () => {
-            return this.state.data;
-        };
-        setCallback(callback);
     }
 
     componentDidMount() {
@@ -414,7 +416,7 @@ class App extends Component {
         }
 
         if (_.random(1, 24*((7*4*8*12)/(1+projects_done*0.1))) === 1 && data.offered_projects.bigdeal.length < 5) {
-            data.offered_projects.bigdeal.push(ProjectModel.generate(_.random(15, 30), 4));
+            data.offered_projects.bigdeal.push(ProjectModel.generate(_.random(15, 30 + Math.sqrt(projects_done)), 4));
             addAction('New big deal!', {timeOut: 5000, extendedTimeOut: 3000});
         }
 
@@ -446,6 +448,7 @@ class App extends Component {
         game_date.setDate(real_date.getDate()+(date.tick/24));
 
         time.tick++;
+        tick = time.tick;
         //time.hour++;
         time.hour = game_date.getHours();
 
