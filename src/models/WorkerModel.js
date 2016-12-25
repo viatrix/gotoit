@@ -88,7 +88,7 @@ class WorkerModel {
 
     workloadPenalty() {
         const task_preferred = (Math.ceil((tick - this.facts.tick_hired)/24) * 3);
-        const tasks_stream = Math.min(20, 20 * (1-((100+task_preferred) / ((100+(this.facts.tasks_done - this.facts.training_tasks_done))))));
+        const tasks_stream = Math.min(20, 20 * (1-((200+task_preferred) / ((200+(this.facts.tasks_done - this.facts.training_tasks_done))))));
         return Math.max(Math.min(Math.floor(tasks_stream), 20), -20);
     }
 
