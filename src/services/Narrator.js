@@ -115,6 +115,26 @@ class Narrator {
             }
         };
 
+        const aboutStamina = () => {
+            let num = worker.stamina;
+            switch (true) {
+                case num < 10: return ' Packed up suitcase.';
+                case num < 100: return ' Thoughts are already on vacation.';
+                case num < 200: return ' Bought plane tickets.';
+                case num < 300: return ' Selects the travel route.';
+                case num < 400: return ' Planning a trip.';
+                case num < 500: return ' Thinking about vacation.';
+                case num < 600: return ' Dreaming about vacation.';
+                case num < 700: return ' It looks normal.';
+                case num < 800: return ' Encouraged.';
+                case num < 900: return ' Full of energy.';
+                case num < 1000: return ' Rested and full of energy.';
+                case num === 1000: return ' Fresh from holidays';
+                default:
+                    console.log('error case: ' + num);
+            }
+        };
+
         penalties_names.forEach((penalty_name) => {
             penalties[penalty_name] = formQuantum(penalty_name, worker[penalty_name]());
         });
@@ -125,6 +145,8 @@ class Narrator {
         tale += penalties_names.reduce((string, penalty_name) => {
             return string + ' ' + tellers[penalty_name](penalties[penalty_name].level);
         }, '');
+
+        tale += aboutStamina();
 
         console.log(tale);
         return tale;

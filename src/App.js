@@ -528,6 +528,9 @@ class App extends Component {
                 }
                 return false;
             }
+            if (_.random(1, 10)) {
+                worker.drainStamina();
+            }
 
 
             let is_working_time = worker.isWorkingTime(data.date);
@@ -598,7 +601,7 @@ class App extends Component {
                     worker.facts.money_earned += salary;
                     project.facts.money_spent += salary;
                 }
-                worker.drainStamina(); // move inside top block in future
+                worker.drainStamina();
 
                 // Pet Projects on Fridays
                 if (creativity && data.date.day === 5 && is_working_time) {

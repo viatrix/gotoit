@@ -164,7 +164,7 @@ class WorkerModel {
     addExperience(learned) {
         Object.keys(learned).forEach((stat) => {
             if (learned[stat] !== 0) {
-                this.expirience[stat] += Math.ceil((learned[stat] * 10) / (this.stats[stat]));
+                this.expirience[stat] += Math.ceil((learned[stat] * 5) / (this.stats[stat]));
                 if (this.expirience[stat] >= 100) {
                     console.log('stat rise');
                     this.expirience[stat] -= 100;
