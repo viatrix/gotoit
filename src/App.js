@@ -528,7 +528,7 @@ class App extends Component {
                 }
                 return false;
             }
-            if (_.random(1, 10)) {
+            if (_.random(1, 10) === 1) {
                 worker.drainStamina();
             }
 
