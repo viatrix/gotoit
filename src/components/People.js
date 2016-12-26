@@ -44,7 +44,6 @@ class People extends Component {
 
         let resumes_candidate = (candidate) => { return unit_block_template(candidate, 'resumes'); };
         let agency_candidate  = (candidate) => { return unit_block_template(candidate, 'agency'); };
-        let stars_candidate   = (candidate) => { return unit_block_template(candidate, 'stars'); };
 
         return (
             <div>
@@ -60,19 +59,15 @@ class People extends Component {
                             <TeamDialog>
                                 <h3 className="text-center">Hiring</h3>
                                 <div className="row">
-                                    <div className="col-md-4">
+                                    <div className="col-md-6">
                                         <h4 className="text-center">Resume</h4>
                                         {this.props.data.candidates.resumes.map(resumes_candidate)}
                                     </div>
-                                    <div className="col-md-4">
-                                        <h4 className="text-center">Agency</h4>
-                                        <button  className="btn btn-info hidden" onClick={this.props.data.helpers.agencySearch}>Search 1000$</button>
+                                    <div className="col-md-6">
+                                        <h4 className="text-center">Agency
+                                        <button  className="btn btn-info hidden" onClick={this.props.data.helpers.agencySearch}>Search 1000$</button></h4>
                                         <HiringAgency data={this.props.data} />
                                         {this.props.data.candidates.agency.map(agency_candidate)}
-                                    </div>
-                                    <div className="col-md-4">
-                                        <h4 className="text-center">Stars</h4>
-                                        {this.props.data.candidates.stars.map(stars_candidate)}
                                     </div>
                                 </div>
                             </TeamDialog>

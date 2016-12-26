@@ -421,16 +421,13 @@ class App extends Component {
             _.remove(data.candidates.resumes, (candidate) => { return (candidate.id === data.candidates.resumes[0].id); });
         }
 
-        if (( _.random(1, (24*7*4*12)/(1+(projects_done*0.1))) === 1 && data.candidates.stars.length < 5)) {
+        if (( _.random(1, (24*7*4*12)/(1+(projects_done*0.1))) === 1 && data.candidates.resumes.length < 5)) {
             let experience = _.random(10, 20);
             let worker = WorkerModel.generate(experience);
-            worker.standing += experience * 12 * _.random(10, 10+experience);
-            data.candidates.stars.push(worker);
+            worker.standing += experience * 12 * _.random(5, 10+experience);
+            data.candidates.resumes.push(worker);
             let max_skill = _.maxBy(Object.keys(worker.stats), function (o) { return worker.stats[o]; });
             addAction('Excellent '+max_skill+' ninja '+worker.name+' looking for a job');
-        }
-        if (_.random(1, 24*7*4*8) === 1 && data.candidates.stars.length > 0) {
-            _.remove(data.candidates.stars, (candidate) => { return (candidate.id === data.candidates.stars[0].id); });
         }
 
 
@@ -442,8 +439,8 @@ class App extends Component {
             _.remove(data.offered_projects.freelance, (candidate) => { return (candidate.id === data.offered_projects.freelance[0].id); });
         }
 
-        if (_.random(1, 24*((7*4*8)/(1+projects_done*0.1))) === 1 && data.offered_projects.bigdeal.length < 5) {
-            data.offered_projects.bigdeal.push(ProjectModel.generate(_.random(15, 30 + Math.sqrt(projects_done)), 4));
+        if (_.random(1, 24*((7*4*8)/(1+projects_done*0.1))) === 1 && data.offered_projects.freelance.length < 5) {
+            data.offered_projects.freelance.push(ProjectModel.generate(_.random(15, 30 + Math.sqrt(projects_done)), 4));
             addAction('New big deal!', {timeOut: 5000, extendedTimeOut: 3000});
         }
 

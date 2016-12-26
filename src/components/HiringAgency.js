@@ -28,7 +28,7 @@ class HiringAgency extends Component {
             max_stats: JSON.parse(JSON.stringify(max)),
             min_salary: 25,
             max_salary: 50,
-        }, this.props.hiring_agency_state);
+        }, this.props.data.hiring_agency_state);
 
         this.calcCost = this.calcCost.bind(this);
         this.search = this.search.bind(this);
@@ -37,13 +37,25 @@ class HiringAgency extends Component {
     calcCost() {
         let s = this.state;
 
-        let min_sum = Math.pow(_.sum(_.values(s.min_stats)), 2.5);
-        let max_sum = Math.pow((_.sum(_.values(s.max_stats))), 2);
-        let pike_factor = Math.pow(_.max(_.values(s.max_stats)), 2.4);
-        let salary_factor = s.min_salary + (s.max_salary * 2);
-        let control_factor = Math.pow(_.sum(_.values(s.max_stats)) - _.sum(_.values(s.max_stats)), 2);
+        let min_sum = _.sum(_.values(s.min_stats));
+        let max_sum = _.sum(_.values(s.max_stats));
+        let min_sum_factor = Math.pow(min_sum, 2.8);
+        let max_sum_factor = Math.pow(max_sum, 2.4);
+        let pike_factor = Math.pow((_.max(_.values(s.min_stats)) + _.max(_.values(s.max_stats))), 2.5);
+        //let salary_factor = s.min_salary + (s.max_salary * 2);
+        //let salary_factor = Math.pow(s.max_salary, 2);
+        let min_salary_factor = Math.pow(s.min_salary, 1.8);
+        let max_salary_factor = Math.pow(s.max_salary, 1.6);
+        let sum_control_factor = Math.pow(max_sum - min_sum, 2)
+            / (1+(max_sum - min_sum));
+        let salary_control_factor = Math.pow(s.max_salary - s.min_salary, 2)
+            / (201 - s.min_salary - s.max_salary);
 
-        return Math.floor((1000 + min_sum + max_sum + pike_factor) / (0.001 * (100 + salary_factor + control_factor)));
+        console.log(min_sum_factor, max_sum_factor, pike_factor);
+        console.log(min_salary_factor, max_salary_factor, sum_control_factor, salary_control_factor);
+
+        return Math.floor((1000 + min_sum_factor + max_sum_factor + pike_factor)
+            / (0.0005 * (1000 + min_salary_factor + max_salary_factor + sum_control_factor + salary_control_factor)));
     }
 
     search() {
@@ -81,6 +93,7 @@ class HiringAgency extends Component {
                                             state.max_stats[skill] = e.target.value[1];
                                             this.setState(state);
                                         }}
+                                        tooltip='always'
                                         step={1}
                                         max={50}
                                         min={1}/>)
@@ -94,6 +107,7 @@ class HiringAgency extends Component {
                                 state.max_salary = e.target.value[1];
                                 this.setState(state);
                             }}
+                            tooltip='always'
                             step={1}
                             max={100}
                             min={0}/>)}

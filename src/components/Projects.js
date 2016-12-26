@@ -57,7 +57,6 @@ class Projects extends Component {
 
         let freelance_offered = (candidate) => { return project_block_template(candidate, 'freelance'); };
         let contract_offered  = (candidate) => { return project_block_template(candidate, 'contract'); };
-        let bigdeal_offered   = (candidate) => { return project_block_template(candidate, 'bigdeal'); };
 
         return (
             <div>
@@ -70,18 +69,14 @@ class Projects extends Component {
                                 Find Projects
                             </h3>
                             <div className="row">
-                                <div className="col-md-4">
+                                <div className="col-md-6">
                                     <h4 className="text-center">Freelance</h4>
                                     {this.props.data.offered_projects.freelance.map(freelance_offered)}
                                 </div>
-                                <div className="col-md-4">
-                                    <h4 className="text-center">Contract</h4>
-                                    <button className="btn btn-info" onClick={this.props.data.helpers.contractSearch}>Search 1000$</button>
+                                <div className="col-md-6">
+                                    <h4 className="text-center">Contract
+                                    <button className="btn btn-info" onClick={this.props.data.helpers.contractSearch}>Search 1000$</button></h4>
                                     {this.props.data.offered_projects.contract.map(contract_offered)}
-                                </div>
-                                <div className="col-md-4">
-                                    <h4 className="text-center">Big Deal</h4>
-                                    {this.props.data.offered_projects.bigdeal.map(bigdeal_offered)}
                                 </div>
                             </div>
                         </TeamDialog>
