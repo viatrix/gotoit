@@ -37,25 +37,41 @@ class HiringAgency extends Component {
     calcCost() {
         let s = this.state;
 
+
         let min_sum = _.sum(_.values(s.min_stats));
         let max_sum = _.sum(_.values(s.max_stats));
-        let min_sum_factor = Math.pow(min_sum, 2.8);
-        let max_sum_factor = Math.pow(max_sum, 2.4);
-        let pike_factor = Math.pow((_.max(_.values(s.min_stats)) + _.max(_.values(s.max_stats))), 2.5);
+        //let min_sum_factor = Math.pow(min_sum, 2.8);
+        //let max_sum_factor = Math.pow(max_sum, 3);
+
+        let min_sum_factor = _.values(s.min_stats).reduce((sum, val) => {
+            return _.sum(sum, Math.pow(val, 8));
+        }, '');
+        let max_sum_factor = _.values(s.max_stats).reduce((sum, val) => {
+            return _.sum(sum, Math.pow(val, 6));
+        }, '');
+
+        let pike_factor1 = Math.pow((_.max(_.values(s.min_stats)) + _.max(_.values(s.max_stats))), 2.5);
+        let pike_factor2 = Math.pow(_.max(_.values(s.max_stats)) - (_.min(_.values(s.max_stats))), 2);
         //let salary_factor = s.min_salary + (s.max_salary * 2);
         //let salary_factor = Math.pow(s.max_salary, 2);
         let min_salary_factor = Math.pow(s.min_salary, 1.8);
         let max_salary_factor = Math.pow(s.max_salary, 1.6);
         let sum_control_factor = Math.pow(max_sum - min_sum, 2)
             / (1+(max_sum - min_sum));
+
+        sum_control_factor = 0;
+        skills_names.forEach((skill) => {
+            sum_control_factor += Math.pow(s.max_stats[skill] - s.min_stats[skill], 2);
+        });
+
         let salary_control_factor = Math.pow(s.max_salary - s.min_salary, 2)
             / (201 - s.min_salary - s.max_salary);
 
-        console.log(min_sum_factor, max_sum_factor, pike_factor);
-        console.log(min_salary_factor, max_salary_factor, sum_control_factor, salary_control_factor);
+        console.log(min_sum_factor, max_sum_factor, pike_factor1);
+        console.log(min_salary_factor, max_salary_factor, sum_control_factor, salary_control_factor, pike_factor2);
 
-        return Math.floor((1000 + min_sum_factor + max_sum_factor + pike_factor)
-            / (0.0005 * (1000 + min_salary_factor + max_salary_factor + sum_control_factor + salary_control_factor)));
+        return Math.floor((1000 + min_sum_factor + max_sum_factor + pike_factor1)
+            / (0.0001 * (1000 + min_salary_factor + max_salary_factor + sum_control_factor + salary_control_factor + pike_factor2)));
     }
 
     search() {
