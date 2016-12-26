@@ -376,7 +376,7 @@ class App extends Component {
         this.work(); // now we can work on weekends and at night
 
         data.projects.forEach((project) => {
-            if (project.stage !== 'open') return false;
+            if (project.stage !== 'open' && project.stage !== 'paused') return false;
 
             if (project.tasksQuantity() === 0 && project.bugsQuantity() === 0) {
                 this.finishProject(project.id);
