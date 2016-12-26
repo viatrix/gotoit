@@ -55,7 +55,7 @@ class Project extends Component {
 
 
         return (
-            <div className="unit_block">
+            <div className="panel panel-success">
                 <ProjectName project={project} /> ({project.reward}$)
 
                 {project.deadline > 0 ?

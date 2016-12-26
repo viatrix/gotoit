@@ -130,7 +130,7 @@ class Project extends Component {
 
 
         return (
-            <div className="unit_block">
+            <div className="panel panel-success">
                 <div className="flex-container-row">
                     <label className="flex-element"> <ProjectName project={project} /> </label>
                     <label className="flex-element"> Reward: {project.reward}$ </label>

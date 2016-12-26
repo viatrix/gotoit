@@ -54,7 +54,7 @@ class Worker extends Component {
         const data = this.props.data;
         const worker = this.props.worker;
 
-        const manage_button = <button className="btn btn-default">Manage Work</button>;
+        const manage_button = <button className="btn btn-success btn-sm">Manage Work</button>;
         const educate_button = <button className="btn btn-default invisible">Educate</button>;
 
         const stats_data = _.mapValues(worker.stats, (val, key) => {
@@ -69,7 +69,7 @@ class Worker extends Component {
         };
 
         return (
-            <div className="unit_block">
+            <div className="panel panel-success">
                 {worker.name} {worker.is_player ? 'Player' : <span>{worker.getSalary()}$</span>}
                 {worker.in_vacation ? ' in vacation! ' : ''}
                 <Portal closeOnEsc closeOnOutsideClick openByClickOn={educate_button}>
@@ -211,7 +211,7 @@ class Worker extends Component {
                     </TeamDialog>
                 </Portal>
 
-                <div className="progress">
+                <div className="progress slim">
                     <div className={classNames('progress-bar', (100 / worker.getEfficiency() < 0.5 ? 'progress-bar-danger' : 'progress-bar-warning'))} role="progressbar"
                          style={{width: worker.getEfficiency()+'%'}}>
                         <label>{worker.getEfficiency()}%</label>

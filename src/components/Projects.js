@@ -43,7 +43,7 @@ class Projects extends Component {
                 return { name: key, val: <span>{candidate.needs[key]}</span> };
             });
 
-            return <div key={candidate.id} className="unit_block">
+            return <div key={candidate.id} className="panel panel-warning">
                 <ProjectName project={candidate} />
                 <div>deadline: {candidate.getDeadlineText()}</div>
                 <StatsBar stats={stats_data} data={this.props.data} />

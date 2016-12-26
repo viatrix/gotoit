@@ -122,7 +122,7 @@ class App extends Component {
 
         let put = (worker_id, project_id) => {
             if (!(worker_id in data.relations)) data.relations[worker_id] = {};
-            if (!(project_id in data.relations[worker_id])) data.relations[worker_id][project_id] = JSON.parse(JSON.stringify(data.workers_roles[worker_id]));
+            if (!(project_id in data.relations[worker_id])) data.relations[worker_id][project_id] = {}; //JSON.parse(JSON.stringify(data.workers_roles[worker_id]));
             if (role) {
                 data.relations[worker_id][project_id][role] = value;
             }

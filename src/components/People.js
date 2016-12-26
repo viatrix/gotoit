@@ -34,7 +34,7 @@ class People extends Component {
                 return { name: key, val: <span>{candidate.stats[key]}</span> };
             });
 
-            return <div key={candidate.id} className="unit_block">{candidate.name} <span> {candidate.getSalary()}$</span>
+            return <div key={candidate.id} className="panel panel-info">{candidate.name} <span> {candidate.getSalary()}$</span>
                 <StatsBar stats={stats_data} data={this.props.data} />
                 <button className="btn btn-success" id={candidate.id} onClick={(e) => this.hire(e, type)}>Hire</button>
                 <button className="btn btn-danger" id={candidate.id} onClick={(e) => this.reject(e, type)}>Reject</button>
@@ -55,7 +55,7 @@ class People extends Component {
                 )}
                 {(this.props.data.workers.length < this.props.data.office.space)
                     ?
-                    <div className="unit_block">
+                    <div className="panel panel-success">
                         <Portal closeOnEsc openByClickOn={hire_button}>
                             <TeamDialog>
                                 <h3 className="text-center">Hiring</h3>
@@ -79,7 +79,7 @@ class People extends Component {
                         </Portal>
                     </div>
                     :
-                    <div className="unit_block">
+                    <div className="panel panel-warning">
                         {(this.props.data.office.size === 1)
                             ? <button onClick={() => {this.props.data.helpers.upOffice(2);}} className="btn btn-warning">Rent a Office</button>
                             : ((this.props.data.office.size < 4)
