@@ -5,6 +5,7 @@ import classNames from 'classnames';
 
 import TeamDialog from './TeamDialog';
 import StatsBar from './StatsBar';
+import ProjectName from './ProjectName';
 
 import {skills_names, roles, education} from '../data/knowledge';
 
@@ -100,7 +101,10 @@ class Worker extends Component {
 
                 <Portal ref="manage" closeOnEsc closeOnOutsideClick openByClickOn={manage_button}>
                     <TeamDialog>
-                        <h2>{worker.name} {worker.in_vacation ? ' in vacation! ' : ''}</h2>
+                        <h2>
+                            {worker.name}
+                            {worker.in_vacation ? ' in vacation! ' : ''}
+                        </h2>
                         <ul>
                             <p>Hired {Math.ceil((this.props.data.date.tick - worker.facts.tick_hired)/24)} days ago.
                                 {!worker.is_player ? <span>Got {worker.facts.money_earned}$ of salary. Overrate : {((1 + (worker.standing/(12*4*7*8*Math.PI))).toFixed(2)*100)-100}% </span> : ' '}
@@ -122,14 +126,27 @@ class Worker extends Component {
                                 </div>
                             </div>
                             <StatsBar stats={efficiency_data} data={this.props.data} />
-                            <h4>{worker.tellFeelings()}</h4>
+                            <h5>{worker.tellFeelings()}</h5>
                         </div>
 
-                            <div className="panel panel-success text-center">
-                            <StatsBar stats={stats_data} data={this.props.data} />
-                            <div className="row">
+                        <div className="panel panel-success text-center">
+                            <div className="checkbox-inline">
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        id={worker.id}
+                                        checked={worker.accept_default}
+                                        onChange={(e) => {
+                                            worker.accept_default = e.target.checked;
+                                            this.manageAll(e);
+                                            console.log(worker.accept_default);
+                                        }}/>
+                                    Auto join new projects
+                                </label>
+                            </div>
+                            <div className="row slim">
                                 {skills_names.map((role, i) =>
-                                    <div key={role} className="checkbox col-md-3">
+                                    <div key={role} className="checkbox col-md-3 slim">
                                         <label>
                                             <input
                                                 type="checkbox"
@@ -141,6 +158,10 @@ class Worker extends Component {
                                     </div>
                                 )}
                             </div>
+                        </div>
+
+                        <div className="panel panel-success text-center">
+                            <StatsBar stats={stats_data} data={this.props.data} />
                             <div>
                                 {Object.keys(education).map((source) =>
                                     ((!education[source].hide)
@@ -155,43 +176,33 @@ class Worker extends Component {
                                 )}
                             </div>
                         </div>
-                        <h3>Worker Projects</h3>
-                        <ul>
-                            Which projects {worker.name} has to work?
-                            <div className="checkbox-inline">
-                                <label>
-                                    <input
-                                        type="checkbox"
-                                        id={worker.id}
-                                        checked={worker.accept_default}
-                                        onChange={(e) => {
-                                            worker.accept_default = e.target.checked;
-                                            this.manageAll(e);
-                                            console.log(worker.accept_default);
-                                        }}/>
-                                    All
-                                </label>
-                            </div>
-                            <ul>
+                        <div>
+                            {/*    Which projects {worker.name} has to work?   */}
+                            <div className="panel panel-info">
                                 {data.projects.map((project) => {
-                                        const stats_data = _.mapValues(project.needs, (val, key) => {
-                                            return {name: key, val: project.needs[key] +'/'+ project.needs_max[key]};
+                                        const stats_data = _.mapValues(project.needs, (val, skill) => {
+                                            return {name: skill,
+                                                val: <div key={worker.id + project.id} className="checkbox-inline">
+                                                    <label style={{width: '100%'}}>
+                                                        <input
+                                                            type="checkbox"
+                                                            id={project.id || ''}
+                                                            checked={data.helpers.getRelation(worker.id, project.id, skill)}
+                                                            onChange={(event) => {
+                                                                data.helpers.modifyRelation(worker.id, event.target.id, event.target.checked, skill);
+                                                            }}/>
+                                                        {project.needs[skill] +'/'+ project.needs_max[skill]}
+                                                    </label>
+                                                </div>};
                                         });
-                                        return <div key={worker.id + project.id} className="checkbox">
-                                            <label style={{width: '100%'}}>
-                                                <input
-                                                    type="checkbox"
-                                                    id={project.id || ''}
-                                                    checked={data.helpers.getRelation(worker.id, project.id)}
-                                                    onChange={this.manage}/>
-                                                {project.name}
-                                                <StatsBar stats={stats_data} data={this.props.data} />
-                                            </label>
+                                        return <div key={worker.id + project.id}>
+                                            <div><ProjectName project={project} /></div>
+                                            <StatsBar stats={stats_data} data={this.props.data} />
                                         </div>
                                     }
                                 )}
-                            </ul>
-                        </ul>
+                            </div>
+                        </div>
                         <div>
                             {worker.is_player ? '' :
                                 <button className="btn btn-danger btn-sm" onClick={this.dismiss}>Dismiss an

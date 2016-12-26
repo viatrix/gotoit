@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
 
+/***
+ * KILL THIS ASAP
+ */
+
+
 class StatsBar extends Component {
     render() {
         const stats = this.props.stats;
@@ -10,7 +15,7 @@ class StatsBar extends Component {
                 <div className="flex-container-row text-center">
                 {Object.keys(stats).map((stat) => {
                     return <div className='flex-element' key={stat}>
-                        {stats[stat].name}: {stats[stat].val}
+                        {stats[stat].name}: <span>{stats[stat].val}</span>
                     </div>
                 })}
                 </div>

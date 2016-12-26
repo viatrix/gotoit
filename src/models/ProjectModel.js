@@ -147,7 +147,7 @@ class ProjectModel {
         let needed = false;
         //console.log(roles, this.needs);
         Object.keys(this.needs).forEach((skill) => {
-            if (this.needs[skill] > 0 && roles.includes(skill)) {
+            if (this.needs[skill] > 0 && roles[skill]) {
                 needed = true;
             }
         });
@@ -158,7 +158,7 @@ class ProjectModel {
         let needed = {};
         //console.log(roles, this.needs);
         Object.keys(this.needs).forEach((skill) => {
-            if (this.needs[skill] > 0 && roles.includes(skill)) {
+            if (this.needs[skill] > 0 && roles[skill]) {
                 needed[skill] = roles[skill];
             }
         });

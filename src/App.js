@@ -101,20 +101,35 @@ class App extends Component {
     }
 
 
-    getRelation(worker_id, project_id) {
-        return (
-        worker_id in this.state.data.relations &&
-        project_id in this.state.data.relations[worker_id] &&
-        this.state.data.relations[worker_id][project_id]);
+    getRelation(worker_id, project_id, role = null) {
+        if (role !== null) {
+            return (
+            worker_id in this.state.data.relations &&
+            project_id in this.state.data.relations[worker_id] &&
+            this.state.data.relations[worker_id][project_id][role]);
+        }
+        else {
+            return (
+            worker_id in this.state.data.relations &&
+            project_id in this.state.data.relations[worker_id] &&
+            this.state.data.relations[worker_id][project_id]);
+        }
     }
 
-    modifyRelation(worker_id, project_id, value) {
+    modifyRelation(worker_id, project_id, value, role = null) {
       //  console.log(worker_id, project_id, value);
         let data = this.state.data;
 
         let put = (worker_id, project_id) => {
             if (!(worker_id in data.relations)) data.relations[worker_id] = {};
-            data.relations[worker_id][project_id] = value;
+            if (!(project_id in data.relations[worker_id])) data.relations[worker_id][project_id] = JSON.parse(JSON.stringify(data.workers_roles[worker_id]));
+            if (role) {
+                data.relations[worker_id][project_id][role] = value;
+            }
+            else {
+                data.relations[worker_id][project_id] = JSON.parse(JSON.stringify(data.workers_roles[worker_id]));
+                //data.relations[worker_id][project_id] = value;
+            }
         };
 
         if (worker_id === null) {
@@ -550,7 +565,8 @@ class App extends Component {
             if (!worker.is_player && (data.money - worker.getSalary()) < 0) return false;
 
             let skip_work = false;
-
+/*
+            //let worker_roles = this.getRelation(worker.id, pr); //[];
             let worker_roles = [];
             skills_names.forEach((role) => {
                 if (this.getRole(worker.id, role)) {
@@ -563,10 +579,16 @@ class App extends Component {
                     project.isNeed(worker_roles) &&
                     project.stage === 'open');
             });
+            */
+
+            let worker_projects = data.projects.filter((project) => {
+                return (project.isNeed(this.getRelation(worker.id, project.id)) && project.stage === 'open');
+            });
        //     console.log(worker_projects);
             // work on one of projects
             if (worker_projects.length > 0) {
                 let project = _.sample(worker_projects);
+                let worker_roles = this.getRelation(worker.id, project.id);
 
                 let focus_on = (this.getTechnology(project.id, 'agile'))
                     ? _.maxBy(Object.keys(project.getNeeds(worker_roles)), function (o) { return project.needs[o]; })

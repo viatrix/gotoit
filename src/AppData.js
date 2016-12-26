@@ -60,7 +60,7 @@ _.keys(project_platforms).forEach((platform) => {
     _.keys(project_kinds).forEach((kind) => {
         for (let top = 1; top <= 10; top++) {
             let q = 11-top;
-            let size = Math.ceil(q/4);
+            let size = Math.ceil(q/3);
             app_state.data.simplified_reports.push(ProjectModel.generate(q, size, kind, platform).generateReport(false));
         }
     });

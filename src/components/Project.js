@@ -242,7 +242,7 @@ class Project extends Component {
                                                 </div>
                                             </div> : ''}
                                         </div>
-                                        <div className="panel panel-success">
+                                        <div className="panel panel-success">{/*
                                             Who will work on <ProjectName project={project} /> project?
                                             <div className="checkbox-inline">
                                                 <label>
@@ -253,26 +253,36 @@ class Project extends Component {
                                                         onChange={(e) => { project.accept_default = e.target.checked; this.manageAll(e); console.log(project.accept_default);}}/>
                                                     All
                                                 </label>
-                                            </div>
-                                            <ul>
+                                            </div>*/}
+                                            <div>
                                                 {this.props.data.workers.map((worker) => {
+                                                    /*
                                                         const stats_data = _.mapValues(worker.stats, (val, key) => {
                                                             return {name: key, val: (worker.stats[key] + worker.expirience[key]/100).toFixed(2)};
                                                         });
-                                                        return <div key={worker.id + project.id} className="checkbox">
-                                                            <label style={{width: '100%'}}>
-                                                                <input
-                                                                    type="checkbox"
-                                                                    id={worker.id || ''}
-                                                                    checked={data.helpers.getRelation(worker.id, project.id)}
-                                                                    onChange={this.manage}/>
-                                                                {worker.name}
-                                                                <StatsBar stats={stats_data} data={this.props.data} />
-                                                            </label>
-                                                        </div>
-                                                    }
-                                                )}
-                                            </ul>
+                                                        */
+
+                                                    const stats_data = _.mapValues(worker.stats, (val, skill) => {
+                                                        return {name: skill,
+                                                            val: <div key={worker.id + project.id} className="checkbox-inline">
+                                                                <label style={{width: '100%'}}>
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        id={worker.id || ''}
+                                                                        checked={data.helpers.getRelation(worker.id, project.id, skill)}
+                                                                        onChange={(event) => {
+                                                                            data.helpers.modifyRelation(event.target.id, project.id, event.target.checked, skill);
+                                                                        }}/>
+                                                                    {(worker.stats[skill] + worker.expirience[skill]/100).toFixed(2)}
+                                                                </label>
+                                                            </div>};
+                                                    });
+                                                    return <div key={worker.id + project.id}>
+                                                            <div>{worker.name}</div>
+                                                            <StatsBar stats={stats_data} data={this.props.data} />
+                                                    </div>
+                                                })}
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="col-md-4">

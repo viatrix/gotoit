@@ -82,3 +82,7 @@ div {
 .table-success {
     background-color: #dff0d8;
 }
+
+.panel {
+    margin-bottom: 4px;
+}
