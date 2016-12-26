@@ -50,6 +50,7 @@ class Worker extends Component {
     }
 
     render() {
+        const data = this.props.data;
         const worker = this.props.worker;
 
         const manage_button = <button className="btn btn-default">Manage Work</button>;
@@ -171,20 +172,25 @@ class Worker extends Component {
                                     All
                                 </label>
                             </div>
-                            <div>
-                                {this.props.data.projects.map((project, i) =>
-                                    <div key={worker.id + project.id} className="checkbox">
-                                        <label>
-                                            <input
-                                                type="checkbox"
-                                                id={project.id || ''}
-                                                checked={this.props.data.helpers.getRelation(worker.id, project.id)}
-                                                onChange={this.manage}/>
-                                            {project.name}
-                                        </label>
-                                    </div>
+                            <ul>
+                                {data.projects.map((project) => {
+                                        const stats_data = _.mapValues(project.needs, (val, key) => {
+                                            return {name: key, val: project.needs[key] +'/'+ project.needs_max[key]};
+                                        });
+                                        return <div key={worker.id + project.id} className="checkbox">
+                                            <label style={{width: '100%'}}>
+                                                <input
+                                                    type="checkbox"
+                                                    id={project.id || ''}
+                                                    checked={data.helpers.getRelation(worker.id, project.id)}
+                                                    onChange={this.manage}/>
+                                                {project.name}
+                                                <StatsBar stats={stats_data} data={this.props.data} />
+                                            </label>
+                                        </div>
+                                    }
                                 )}
-                            </div>
+                            </ul>
                         </ul>
                         <div>
                             {worker.is_player ? '' :
