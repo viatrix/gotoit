@@ -40,11 +40,12 @@ class App extends Component {
         this.dismissEmployer = this.dismissEmployer.bind(this);
         this.contractSearch = this.contractSearch.bind(this);
         this.rejectOffered = this.rejectOffered.bind(this);
+        this.acceptOffered = this.acceptOffered.bind(this);
         this.startOffered = this.startOffered.bind(this);
-        this.startProject = this.startProject.bind(this);
+        this.acceptAndMoveProject = this.acceptAndMoveProject.bind(this);
         this.finishProject = this.finishProject.bind(this);
         this.fixProject = this.fixProject.bind(this);
-        this.openProject = this.openProject.bind(this);
+        this.startProject = this.startProject.bind(this);
         this.closeProject = this.closeProject.bind(this);
         this.trainingProject = this.trainingProject.bind(this);
         this.draftProject = this.draftProject.bind(this);
@@ -70,11 +71,12 @@ class App extends Component {
         app_state.data.helpers['dismissEmployer'] = this.dismissEmployer;
         app_state.data.helpers['contractSearch'] = this.contractSearch;
         app_state.data.helpers['rejectOffered'] = this.rejectOffered;
+        app_state.data.helpers['acceptOffered'] = this.acceptOffered;
         app_state.data.helpers['startOffered'] = this.startOffered;
-        app_state.data.helpers['startProject'] = this.startProject;
+        app_state.data.helpers['acceptAndMoveProject'] = this.acceptAndMoveProject;
         app_state.data.helpers['finishProject'] = this.finishProject;
         app_state.data.helpers['fixProject'] = this.fixProject;
-        app_state.data.helpers['openProject'] = this.openProject;
+        app_state.data.helpers['startProject'] = this.startProject;
         app_state.data.helpers['closeProject'] = this.closeProject;
         app_state.data.helpers['trainingProject'] = this.trainingProject;
         app_state.data.helpers['draftProject'] = this.draftProject;
@@ -196,15 +198,25 @@ class App extends Component {
         this.setState({data: data});
     }
 
-    startOffered(id, type) {
+    acceptOffered(id, type) {
         let data = this.state.data;
         let project = (_.remove(data.offered_projects[type], (candidate) => { return (candidate.id === id); }))[0];
-        this.startProject(project);
+        this.acceptAndMoveProject(project);
         addMessage('Accept '+project.name+' project', {timeOut: 5000, extendedTimeOut: 2000}, 'info');
         this.setState({data: data});
     }
 
-    startProject(project) { // rename to XXX project?
+    startOffered(id, type) {
+        let data = this.state.data;
+        let project = (_.remove(data.offered_projects[type], (candidate) => { return (candidate.id === id); }))[0];
+        project.briefing = true;
+        this.acceptAndMoveProject(project);
+        //addMessage('Accept '+project.name+' project', {timeOut: 5000, extendedTimeOut: 2000}, 'info');
+        this.startProject(id);
+        this.setState({data: data});
+    }
+
+    acceptAndMoveProject(project) {
         let data = this.state.data;
         data.projects.push(project);
         Object.keys(data.projects_default_technologies).forEach((technology) => {
@@ -237,7 +249,7 @@ class App extends Component {
         this.modifyRelation(null, project.id, true);
     }
 
-    openProject(id) {
+    startProject(id) {
         let data = this.state.data;
         let project = _.find(data.projects, (project) => { return (project.id === id); });
         project.stage = 'open';
@@ -415,7 +427,7 @@ class App extends Component {
             _.remove(data.offered_projects.freelance, (candidate) => { return (candidate.id === data.offered_projects.freelance[0].id); });
         }
 
-        if (_.random(1, 24*((7*4*8*12)/(1+projects_done*0.1))) === 1 && data.offered_projects.bigdeal.length < 5) {
+        if (_.random(1, 24*((7*4*8)/(1+projects_done*0.1))) === 1 && data.offered_projects.bigdeal.length < 5) {
             data.offered_projects.bigdeal.push(ProjectModel.generate(_.random(15, 30 + Math.sqrt(projects_done)), 4));
             addAction('New big deal!', {timeOut: 5000, extendedTimeOut: 3000});
         }

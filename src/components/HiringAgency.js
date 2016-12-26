@@ -41,8 +41,9 @@ class HiringAgency extends Component {
         let max_sum = Math.pow((_.sum(_.values(s.max_stats))), 2);
         let pike_factor = Math.pow(_.max(_.values(s.max_stats)), 2.4);
         let salary_factor = s.min_salary + (s.max_salary * 2);
+        let control_factor = Math.pow(_.sum(_.values(s.max_stats)) - _.sum(_.values(s.max_stats)), 2);
 
-        return Math.floor((1000 + min_sum + max_sum + pike_factor) / (0.005 * (100 + salary_factor)));
+        return Math.floor((1000 + min_sum + max_sum + pike_factor) / (0.001 * (100 + salary_factor + control_factor)));
     }
 
     search() {
@@ -81,7 +82,7 @@ class HiringAgency extends Component {
                                             this.setState(state);
                                         }}
                                         step={1}
-                                        max={100}
+                                        max={50}
                                         min={1}/>)
                         })}
                         {draw_row('Salary overrate', <ReactBootstrapSlider

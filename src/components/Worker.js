@@ -7,7 +7,6 @@ import TeamDialog from './TeamDialog';
 import StatsBar from './StatsBar';
 
 import {skills_names, roles, education} from '../data/knowledge';
-import Narrator from '../services/Narrator';
 
 class Worker extends Component {
     constructor(props) {
@@ -122,7 +121,7 @@ class Worker extends Component {
                                 </div>
                             </div>
                             <StatsBar stats={efficiency_data} data={this.props.data} />
-                            <h4>{Narrator.workerFeelings(worker)}</h4>
+                            <h4>{worker.tellFeelings()}</h4>
                         </div>
 
                             <div className="panel panel-success text-center">

@@ -1,8 +1,13 @@
 
 import _ from 'lodash';
 
+export var addMessage;
+
 import bulkStyler from '../services/bulkStyler';
 import {skills} from '../data/knowledge';
+
+import Narrator from '../services/Narrator';
+import ValueCache from '../services/ValueCache';
 
 import {getData, tick} from '../App';
 
@@ -20,6 +25,8 @@ class WorkerModel {
         this.temper = {
             earliness: _.random(0, 3), variability: _.random(0, 3)
         };
+
+        this.feelings = new ValueCache(24, () => { return Narrator.workerFeelings(this); }); //{tick: 0, value: ''};
 
         this.stamina = 1000;
         this.to_vacation_ticker = 0;
@@ -41,6 +48,10 @@ class WorkerModel {
     drainStamina() {
         this.stamina--;
         console.log(this.stamina);
+    }
+
+    tellFeelings() {
+        return this.feelings.get();
     }
 
     getSalary() {
@@ -93,14 +104,14 @@ class WorkerModel {
     }
 
     difficultyPenalty() {
-        const tasks_difficulty = Math.min(20, 20 * (1-((200+(this.facts.bugs_passed * 8)) / ((200+(this.facts.tasks_done))))));
+        const tasks_difficulty = Math.min(20, 20 * (1-((200+(this.facts.bugs_passed * 6.66)) / ((200+(this.facts.tasks_done))))));
         return Math.max(Math.min(Math.floor(tasks_difficulty), 20), -20);
     }
 
     educationPenalty() {
         let knowledge_ratio = (100+(this.facts.training_tasks_done*3)) / (100+this.facts.tasks_done);
         let thirst_for_knowledge = (100+(this.statsSum()/4)) / (100+_.max(_.values(this.stats)));
-        console.log(knowledge_ratio, thirst_for_knowledge);
+       // console.log(knowledge_ratio, thirst_for_knowledge);
         const education_stream = Math.min(20, 20 * (1-(knowledge_ratio/thirst_for_knowledge)));
         return Math.max(Math.min(Math.floor(education_stream), 20), -20);
     }
@@ -167,6 +178,7 @@ class WorkerModel {
                 this.expirience[stat] += Math.ceil((learned[stat] * 7) / (this.stats[stat]));
                 if (this.expirience[stat] >= 100) {
                     console.log('stat rise');
+                    addMessage(this.name+' rise '+stat+'!', {}, 'success');
                     this.expirience[stat] -= 100;
                     this.stats[stat]++;
                 }

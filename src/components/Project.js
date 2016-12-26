@@ -30,7 +30,10 @@ class Project extends Component {
     }
 
     componentDidMount() {
-        this.refs.manage.openPortal();
+        if (!this.props.project.briefing) {
+            this.props.project.briefing = true;
+            this.refs.manage.openPortal();
+        }
     }
 
     manage(event) {
@@ -46,7 +49,7 @@ class Project extends Component {
     }
 
     open() {
-        this.props.data.helpers.openProject(this.props.project.id);
+        this.props.data.helpers.startProject(this.props.project.id);
         this.forceUpdate();
     }
 

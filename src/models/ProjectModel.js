@@ -33,6 +33,8 @@ class ProjectModel {
         this.size = size;
         this.size_name = ['Training', 'Tiny', 'Small', 'Medium', 'Big', 'Custom'][size];
         this.tests = 0;
+
+        this.briefing = false;
         this.accept_default = (this.type !== 'training') ? true : false;
 
         this.facts = {
@@ -63,16 +65,15 @@ class ProjectModel {
                     return 'supporter';
                 }
 
-                let resource = work[stat] +
-                    (rad ? worker.getSideResource() : 0) - Math.floor(_.random(0, Math.sqrt(this.complexity)-this.iteration));
+                let resource = work[stat] - Math.floor(_.random(0, Math.sqrt(this.complexity)-this.iteration));
                 let potential = this.stored_wisdom[stat] + resource;
 
                 let cont = _.random(0, (this.complexity * this.size) / this.iteration);
-                let pro = this.iteration + _.random(1, potential) + _.random(1, this.errors[stat]);
+                let pro = Math.pow(this.iteration, 2) + _.random(1, potential) + _.random(1, this.errors[stat]);
             //    console.log(cont, pro);
                 if (resource > 0 && cont < pro) {
                     this.complexity += (rad ? 4 : 1);
-                    var real_work = Math.min(this.needs[stat], _.random(1, resource));
+                    var real_work = Math.min(this.needs[stat], _.random(1, resource + (rad ? worker.getSideResource() : 0)));
                     if (this.type === 'training') {
                         worker.facts.training_tasks_done += real_work;
                     }
@@ -190,9 +191,6 @@ class ProjectModel {
             manage: this.genStat(quality, size)
         };
 
-        //let kind = _.sample(_.keys(project_kinds));
-        //let platform = _.sample(_.keys(project_platforms));
-
         stats_bulk = bulkStyler.speciality(stats_bulk);
         stats_bulk = bulkStyler.projectKind(stats_bulk, kind);
         stats_bulk = bulkStyler.projectPlatform(stats_bulk, platform);
@@ -200,21 +198,30 @@ class ProjectModel {
         let stats = JSON.parse(JSON.stringify(skills));
 
         if (size !== 4) {
-            let sk = _.shuffle(Object.keys(stats));
+            //let sk = _.shuffle(Object.keys(stats));
+
+            let pairs = _.toPairs(stats_bulk);
+
+            let sk = pairs.sort(function(a, b) {
+                return b[1] - a[1];
+            });
+
+            sk = _.keys(_.fromPairs(sk));
+
             for (let i = 0; i < size; i++) {
                 stats[sk[i]] = stats_bulk[sk[i]];
             }
+            console.log(stats_bulk, sk, stats);
         }
         else {
             stats = stats_bulk;
         }
 
         let s = _.values(stats);
-        let reward = (size * 1000) +
-            Math.ceil((_.max(s) + _.sum(s)) * 10);
+        let reward = 1000 + Math.ceil((_.max(s) + _.sum(s)) * 10 * size);
         let penalty = ([0, 0, 0, 0.5, 1][size] * reward).toFixed(0);
         let deadline = 100 +  // constant for anti-weekend effect on small projects
-            Math.floor((((_.max(s) + _.sum(s)) * 9) / (2 * size)));
+            Math.floor((((_.max(s) + _.sum(s)) * 10) / (3 * size)));
 
         return new ProjectModel(this.genName(), 'project', kind, platform, reward, penalty, stats, size, deadline);
     }

@@ -138,7 +138,7 @@ class Narrator {
         penalties_names.forEach((penalty_name) => {
             penalties[penalty_name] = formQuantum(penalty_name, worker[penalty_name]());
         });
-        console.log(penalties);
+    //    console.log(penalties);
 
         let tale = aboutHappiness();
 
