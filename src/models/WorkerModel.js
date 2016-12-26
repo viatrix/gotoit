@@ -1,7 +1,7 @@
 
 import _ from 'lodash';
 
-export var addMessage;
+import {addMessage} from '../components/ToastNest';
 
 import bulkStyler from '../services/bulkStyler';
 import {skills} from '../data/knowledge';
