@@ -26,13 +26,6 @@ div {
 .modal-dialog {
     width: 800px;
 }
-
-.slim-margin {
-    margin: 0px;
-}
-.slim-padding {
-    padding: 0px;
-}
 .slim {
     padding: 0px;
     margin: 0px;
@@ -44,6 +37,16 @@ div {
 .slim-left {
     padding-left: 0px;
     margin-left: 0px;
+}
+.slim-margin {
+    margin: 0px;
+}
+.slim-padding {
+    padding: 0px;
+}
+.fat {
+    padding: 6px;
+    margin: 6px;
 }
 /*
 .checkbox label {
