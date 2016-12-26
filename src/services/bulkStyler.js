@@ -95,22 +95,22 @@ class bulkStyler {
                 stats_bulk['design'] *= 2;
                 stats_bulk['manage'] *= 1;
                 stats_bulk['program'] *= 1;
-                stats_bulk['admin'] *= 1;
+                stats_bulk['admin'] *= 0.5;
                 break;
             case 'service':
                 stats_bulk['design'] *= 1;
                 stats_bulk['manage'] *= 2;
-                stats_bulk['program'] *= 1;
+                stats_bulk['program'] *= 0.5;
                 stats_bulk['admin'] *= 1;
                 break;
             case 'system':
                 stats_bulk['design'] *= 1;
-                stats_bulk['manage'] *= 1;
+                stats_bulk['manage'] *= 0.5;
                 stats_bulk['program'] *= 2;
                 stats_bulk['admin'] *= 1;
                 break;
             case 'database':
-                stats_bulk['design'] *= 1;
+                stats_bulk['design'] *= 0.5;
                 stats_bulk['manage'] *= 1;
                 stats_bulk['program'] *= 1;
                 stats_bulk['admin'] *= 2;
@@ -129,31 +129,31 @@ class bulkStyler {
                 return stats_bulk;
             case 'mobile':
                 stats_bulk['design'] *= 2;
-                stats_bulk[order[0]] *= 1;
-                stats_bulk[order[1]] *= 1;
-                stats_bulk[order[2]] *= 1;
-                stats_bulk[order[3]] *= 1;
+                stats_bulk[order[0]] *= 1.5;
+                stats_bulk[order[1]] *= 1.7;
+                stats_bulk[order[2]] *= 0.5;
+                stats_bulk[order[3]] *= 0.8;
                 break;
             case 'browser':
                 stats_bulk['manage'] *= 2;
-                stats_bulk[order[0]] *= 1;
-                stats_bulk[order[1]] *= 1;
-                stats_bulk[order[2]] *= 1;
-                stats_bulk[order[3]] *= 1;
+                stats_bulk[order[0]] *= 1.5;
+                stats_bulk[order[1]] *= 1.5;
+                stats_bulk[order[2]] *= 0.5;
+                stats_bulk[order[3]] *= 0.5;
                 break;
             case 'desktop':
                 stats_bulk['program'] *= 2;
-                stats_bulk[order[0]] *= 1;
-                stats_bulk[order[1]] *= 1;
-                stats_bulk[order[2]] *= 1;
-                stats_bulk[order[3]] *= 1;
+                stats_bulk[order[0]] *= 1.5;
+                stats_bulk[order[1]] *= 1.2;
+                stats_bulk[order[2]] *= 0.8;
+                stats_bulk[order[3]] *= 0.5;
                 break;
             case 'embedded':
                 stats_bulk['admin'] *= 2;
-                stats_bulk[order[0]] *= 1;
-                stats_bulk[order[1]] *= 1;
-                stats_bulk[order[2]] *= 1;
-                stats_bulk[order[3]] *= 1;
+                stats_bulk[order[0]] *= 0.5;
+                stats_bulk[order[1]] *= 0.8;
+                stats_bulk[order[2]] *= 1.2;
+                stats_bulk[order[3]] *= 1.5;
                 break;
             default:
                 console.log('error case: ' + platform);

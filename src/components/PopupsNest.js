@@ -4,10 +4,10 @@ import _ from 'lodash';
 
 import SimpleModal from './SimpleModal';
 import StatsBar from './StatsBar';
-
 import bulkStyler from '../services/bulkStyler';
 
 import WorkerModel from '../models/WorkerModel';
+import ProjectEndScreen from './ProjectEndScreen';
 
 import {player_backgrounds, player_education} from '../data/knowledge';
 
@@ -18,7 +18,8 @@ class PopupsNest extends Component {
         this.state = {
             suggest_name: WorkerModel.genName(),
             selected_background: 'comprehensive',
-            selected_education: 'university'
+            selected_education: 'university',
+         //   end_screen_project: null
         };
 
         this.embark = this.embark.bind(this);
@@ -63,78 +64,103 @@ class PopupsNest extends Component {
             return {name: key, val: stats[key]};
         });
 
+        /*
+        let end_screen_project = this.state.end_screen_project;
+        console.log(data.projects_end_reports);
+        if (end_screen_project === null) {
+            if (data.projects_end_reports.length > 0) {
+                this.setState({end_screen_project: data.projects_end_reports[0]});
+                this.refs.end_screen_project.openPortal();
+            }
+        }
+        */
+        let end_screen_project = null;
+        if (data.projects_end_reports.length > 0) {
+            end_screen_project = data.projects_end_reports[0];
+            //this.refs.end_screen_project.openPortal();
+        }
+
+        //console.log(data.projects_end_reports, end_screen_project);
+
         return (
             <div className="hidden popups-nest">
-                {(data.stage === 'start') ?
-                <Portal ref="creation">
-                    <SimpleModal>
-                        <h3 className="text-center">
-                            Choose <input type="text" name="background" className="form-inline"
-                                          value={this.state.suggest_name}
-                                          onChange={(event) => {
-                                              this.setState({suggest_name: event.target.value})
-                                          }}
-                                          onKeyPress={(event) => {
-                                              event.target.style.width = ((event.target.value.length + 2) * 14) + 'px';
-                                          }}
-                        /> Background
-                        </h3>
-                        <div className="panel panel-info">
-                            <div className="row">
-                                {Object.keys(player_backgrounds).map((background) => {
-                                    return <div key={background} className="col-md-4">
-                                        <div className="radio">
-                                            <label>
-                                                <h3 className="text-center">
-                                                    <input type="radio" name="background" value={background}
-                                                           checked={this.state.selected_background === background}
-                                                           onChange={(event) => {
-                                                               this.setState({selected_background: event.target.value})
-                                                           }}/>
-                                                    {player_backgrounds[background].name}
-                                                </h3>
-                                                <p>{player_backgrounds[background].text}</p>
-                                            </label>
-                                        </div>
+                <div>
+                    {(data.stage === 'start') ?
+                        <Portal ref="creation">
+                            <SimpleModal>
+                                <h3 className="text-center">
+                                    Choose <input type="text" name="background" className="form-inline"
+                                                  value={this.state.suggest_name}
+                                                  onChange={(event) => {
+                                                      this.setState({suggest_name: event.target.value})
+                                                  }}
+                                                  onKeyPress={(event) => {
+                                                      event.target.style.width = ((event.target.value.length + 2) * 14) + 'px';
+                                                  }}
+                                /> Background
+                                </h3>
+                                <div className="panel panel-info">
+                                    <div className="row">
+                                        {Object.keys(player_backgrounds).map((background) => {
+                                            return <div key={background} className="col-md-4">
+                                                <div className="radio">
+                                                    <label>
+                                                        <h3 className="text-center">
+                                                            <input type="radio" name="background" value={background}
+                                                                   checked={this.state.selected_background === background}
+                                                                   onChange={(event) => {
+                                                                       this.setState({selected_background: event.target.value})
+                                                                   }}/>
+                                                            {player_backgrounds[background].name}
+                                                        </h3>
+                                                        <p>{player_backgrounds[background].text}</p>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        })}
                                     </div>
-                                })}
-                            </div>
-                        </div>
-                        <div className="panel panel-success">
-                            <div className="row">
-                                {Object.keys(player_education).map((institute) => {
-                                    return <div key={institute} className="col-md-4">
-                                        <div className="radio">
-                                            <label>
-                                                <h3 className="text-center">
-                                                    <input type="radio" name="education" value={institute}
-                                                           checked={this.state.selected_education === institute}
-                                                           onChange={(event) => {
-                                                               this.setState({selected_education: event.target.value})
-                                                           }}/>
-                                                    {player_education[institute].name}
-                                                </h3>
-                                                <p>{player_education[institute].text}</p>
-                                            </label>
-                                        </div>
+                                </div>
+                                <div className="panel panel-success">
+                                    <div className="row">
+                                        {Object.keys(player_education).map((institute) => {
+                                            return <div key={institute} className="col-md-4">
+                                                <div className="radio">
+                                                    <label>
+                                                        <h3 className="text-center">
+                                                            <input type="radio" name="education" value={institute}
+                                                                   checked={this.state.selected_education === institute}
+                                                                   onChange={(event) => {
+                                                                       this.setState({selected_education: event.target.value})
+                                                                   }}/>
+                                                            {player_education[institute].name}
+                                                        </h3>
+                                                        <p>{player_education[institute].text}</p>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        })}
                                     </div>
-                                })}
-                            </div>
-                        </div>
-                        <div className="panel panel-warning">
-                            <div className="text-center">
-                                Your start money: {player_backgrounds[this.state.selected_background].money +
-                                player_education[this.state.selected_education].money}
-                                $. Your start skills:
-                                <StatsBar stats={stats_data} data={this.props.data}/>
-                            </div>
-                        </div>
-                        <div className="text-center">
-                            <button className="big btn-success btn-lg" onClick={this.embark}>Embark</button>
-                        </div>
-                    </SimpleModal>
-                </Portal>
-            : ''}
+                                </div>
+                                <div className="panel panel-warning">
+                                    <div className="text-center">
+                                        Your start money: {player_backgrounds[this.state.selected_background].money +
+                                    player_education[this.state.selected_education].money}
+                                        $. Your start skills:
+                                        <StatsBar stats={stats_data} data={this.props.data}/>
+                                    </div>
+                                </div>
+                                <div className="text-center">
+                                    <button className="big btn-success btn-lg" onClick={this.embark}>Embark</button>
+                                </div>
+                            </SimpleModal>
+                        </Portal>
+                        : ''}
+                </div>
+                <div>
+                    {end_screen_project !== null ?
+                        <ProjectEndScreen project={end_screen_project} data={this.props.data} />
+                    : ''}
+                </div>
             </div>
         );
     }

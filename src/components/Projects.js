@@ -94,16 +94,16 @@ class Projects extends Component {
                     : 'You have not projects in work.'}
                 </div>
                 <div>
-                    {this.props.data.projects_reports.length > 0 ?
-                        <div>
+                    {this.props.data.projects_archive_reports.length > 0 ?
+                        <div key='projects_archive_reports'>
                             <div className="flex-container-row">
                                 <h4 className="flex-element">Archived Projects</h4>
                                 <span className="flex-element"><button className="btn btn-warning" onClick={() => {this.setState({show_archive: !this.state.show_archive});}}>{this.state.show_archive ? 'Hide' : 'Show'} Archive</button></span>
                                 <span className="flex-element"><MarketTop data={this.props.data} /></span>
                             </div>
                             {this.state.show_archive ?
-                                <div>
-                                    {this.props.data.projects_reports.map((x, i) =>
+                                <div key='archive_reports'>
+                                    {this.props.data.projects_archive_reports.map((x, i) =>
                                         <ProjectReport key={x.id} project={x} data={this.props.data} />
                                     )}
                                 </div>

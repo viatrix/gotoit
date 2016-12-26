@@ -7,6 +7,7 @@ import './App.css';
 import WorkerModel from './models/WorkerModel';
 import ProjectModel from './models/ProjectModel';
 import OfficeModel from './models/OfficeModel';
+
 import {skills_names} from './data/knowledge';
 
 import app_state from './AppData';
@@ -43,6 +44,7 @@ class App extends Component {
         this.acceptOffered = this.acceptOffered.bind(this);
         this.startOffered = this.startOffered.bind(this);
         this.acceptAndMoveProject = this.acceptAndMoveProject.bind(this);
+        this.projectArchiving = this.projectArchiving.bind(this);
         this.finishProject = this.finishProject.bind(this);
         this.fixProject = this.fixProject.bind(this);
         this.startProject = this.startProject.bind(this);
@@ -74,6 +76,7 @@ class App extends Component {
         app_state.data.helpers['acceptOffered'] = this.acceptOffered;
         app_state.data.helpers['startOffered'] = this.startOffered;
         app_state.data.helpers['acceptAndMoveProject'] = this.acceptAndMoveProject;
+        app_state.data.helpers['projectArchiving'] = this.projectArchiving;
         app_state.data.helpers['finishProject'] = this.finishProject;
         app_state.data.helpers['fixProject'] = this.fixProject;
         app_state.data.helpers['startProject'] = this.startProject;
@@ -317,7 +320,21 @@ class App extends Component {
         }
 
         project.stage = stage;
-        data.projects_reports.unshift(project);
+        data.projects_end_reports.push(project);
+        //data.projects_archive_reports.unshift(project);
+        this.setState({data: data});
+    }
+
+    projectArchiving() {
+        let data = this.state.data;
+        let projects = data.projects_end_reports.splice(0, 1); //_.remove(data.projects, (project) => { return (project.id === project_id); })[0];
+        let project = projects[0]; //_.remove(data.projects, (project) => { return (project.id === project_id); })[0];
+
+        //addMessage(project.name+' project '+stage, {timeOut: 10000, extendedTimeOut: 5000}, {finish: 'success', fail: 'error', close: 'error'}[stage]);
+
+        //data.projects_end_reports.unshift(project);
+        data.projects_archive_reports.unshift(project);
+        console.log('archiving', data.projects_end_reports, data.projects_archive_reports, projects, project);
         this.setState({data: data});
     }
 
@@ -432,7 +449,7 @@ class App extends Component {
 
 
         if (_.random(1, 24*2) === 1 && data.offered_projects.freelance.length < 5) {
-            data.offered_projects.freelance.push(ProjectModel.generate(_.random(2, 4), _.random(1, 2)));
+            data.offered_projects.freelance.push(ProjectModel.generate(_.random(1, 3), _.random(1, 2)));
             addAction('New freelance job!', {timeOut: 3000, extendedTimeOut: 1000});
         }
         if (_.random(1, 24*7) === 1 && data.offered_projects.freelance.length > 0) {

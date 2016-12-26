@@ -25,7 +25,7 @@ class Office extends Component {
                         </span>
 
                         <label className="flex-element" onClick={() => {
-                            this.props.data.helpers.addMoney(10000);
+                            this.props.data.helpers.addMoney(100000);
                         }}>Money {this.props.data.money}</label>
 
                         <span className="pull-right">

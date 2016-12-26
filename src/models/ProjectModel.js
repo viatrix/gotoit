@@ -191,9 +191,9 @@ class ProjectModel {
             manage: this.genStat(quality, size)
         };
 
-        stats_bulk = bulkStyler.speciality(stats_bulk);
         stats_bulk = bulkStyler.projectKind(stats_bulk, kind);
         stats_bulk = bulkStyler.projectPlatform(stats_bulk, platform);
+        stats_bulk = bulkStyler.speciality(stats_bulk);
 
         let stats = JSON.parse(JSON.stringify(skills));
 
@@ -274,9 +274,9 @@ class ProjectModel {
 
     static genStat(quality, size=1) {
         let q = Math.floor(quality * size * 0.1);
-        let h = (_.random(1, quality) * (1 + _.random(1, Math.pow(hired, 2))));
-        let d = (_.random(1, quality) * (1 + _.random(1, projects_done)));
-        let g = (_.random(1, quality) * (1 + _.random(1, Math.floor(Math.sqrt(projects_generated/2)))));
+        let h = (_.random(0, quality) * (0 + _.random(1, Math.pow(hired, 2))));
+        let d = (_.random(0, quality) * (0 + _.random(1, projects_done)));
+        let g = (_.random(0, quality) * (0 + _.random(1, Math.floor(Math.sqrt(projects_generated/2)))));
         let r = _.random(1, 10);
 
         //console.log('gen_stats: q: '+q+' h: '+h+' d: '+d+' g: '+g+' r: '+r);

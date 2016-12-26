@@ -11,20 +11,20 @@ export const roles = {
 };
 
 
-export const project_kinds = {
-    application: {name: 'Application'},
-    game: {name: 'Game'},
-    service: {name: 'Service'},
-    system: {name: 'System'},
-    database: {name: 'Database'}
-};
-
 export const project_platforms = {
     crossplatform: {name: 'Cross-platform'},
     mobile: {name: 'Mobile'},
     browser: {name: 'Browser'},
     desktop: {name: 'Desktop'},
     embedded: {name: 'Embedded'}
+};
+
+export const project_kinds = {
+    application: {name: 'Application'},
+    game: {name: 'Game'},
+    service: {name: 'Service'},
+    system: {name: 'System'},
+    database: {name: 'Database'}
 };
 
 

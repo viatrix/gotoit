@@ -23,8 +23,6 @@ class MarketTop extends Component {
     render() {
         const data = this.props.data;
 
-        let table_data = [];
-
         let filtered_reports = [];
         let put = (report) => { filtered_reports.push(report); };
 
@@ -47,7 +45,10 @@ class MarketTop extends Component {
                 }
             }
         });
-        table_data = (_.sortBy(filtered_reports, 'total')).slice(-10);
+
+        let table_data_full = _.sortBy(filtered_reports, 'total');
+        let category_count = table_data_full.length;
+        let table_data = table_data_full.slice(-10);
         table_data.forEach((val, key) => { table_data[key].top = table_data.length-key; });
 
         table_data = table_data.reverse();
@@ -87,6 +88,9 @@ class MarketTop extends Component {
                                         options={kind_options}
                                         onChange={(e) => { this.setState({selected_kind: e.value}); }}
                                     />
+                                </span>
+                                <span className="flex-element">
+                                    Project in category: {category_count}
                                 </span>
                             </div>
                             <div className="text-center">
