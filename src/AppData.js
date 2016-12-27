@@ -44,7 +44,7 @@ var app_state =
             ],
         },
         hiring_agency_state: {},
-        workers: [WorkerModel.generatePlayer()],
+        workers: [],
         workers_roles: {player: {design: true, manage: true, program: true, admin: true}},
         projects: [],
         projects_end_reports: [],

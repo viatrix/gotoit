@@ -440,6 +440,24 @@ class App extends Component {
     rollTurn() {
         const data = this.state.data;
 
+        let tick = data.date.tick;
+        switch (tick) {
+            case 5:
+                addAction('Hi there! In this corner of the screen will appear the important messages.', {timeOut: 15000, extendedTimeOut: 5000}, 'success');
+                break;
+            case 24:
+                addAction('But first of all choose the origin and formation of your character.', {timeOut: 15000, extendedTimeOut: 5000}, 'success');
+                break;
+            case 10:
+             //   addAction('Then find your first project.', {timeOut: 15000, extendedTimeOut: 5000}, 'success');
+                break;
+            default:
+                break;
+        }
+
+
+        if (tick < 24 * 7) return;
+
         if (_.random(1, 24 * (25 - Math.min(10, Math.sqrt(projects_done*0.1)))) === 1 && data.candidates.resumes.length < 5) {
             let worker = WorkerModel.generate(_.random(2, 5));
             data.candidates.resumes.push(worker);
@@ -472,20 +490,6 @@ class App extends Component {
             addAction('New big deal!', {timeOut: 5000, extendedTimeOut: 3000});
         }
 
-        let tick = data.date.tick;
-        switch (tick) {
-            case 1:
-                addAction('Hi there! In this corner of the screen will appear the important messages.', {timeOut: 10000, extendedTimeOut: 2000}, 'success');
-                break;
-            case 5:
-                addAction('But first of all choose the origin and formation of your character.', {timeOut: 10000, extendedTimeOut: 2000}, 'success');
-                break;
-            case 10:
-                addAction('Then find your first project.', {timeOut: 15000, extendedTimeOut: 2000}, 'success');
-                break;
-            default:
-                break;
-        }
 
         this.setState({data: data});
     }

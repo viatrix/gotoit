@@ -135,7 +135,7 @@ class Project extends Component {
             } }}>Reject</button>;
 
         return (
-            <div className="panel panel-success">
+            <div className="well well-sm fat">
                 <div className="flex-container-row">
                     <label className="flex-element"> <ProjectName project={project} /> </label>
                     <label className="flex-element"> Reward: {project.reward}$ </label>
@@ -304,7 +304,7 @@ class Project extends Component {
                                                                         onChange={this.changeTechnology}/>
                                                                     {technologies[technology].name}
                                                                 </h5>
-                                                                <p className="small">{technologies[technology].description}</p>
+                                                                <p className="small slim">{technologies[technology].description}</p>
                                                             </label>
                                                         </div>
                                                     </div>
@@ -323,7 +323,7 @@ class Project extends Component {
                                                                     </button>
                                                                     {technologies[technology].name}
                                                                 </h5>
-                                                                <p className="small">{technologies[technology].description}</p>
+                                                                <p className="small slim">{technologies[technology].description}</p>
                                                             </label> : ''}
                                                         </div>
                                                     </div>
@@ -387,8 +387,8 @@ class Project extends Component {
                 </div>
 
                 <div className="small slim">
-                    <p className="small">Team: {team_label}</p>
-                    {tech.length ? <p className="small">Tech: {tech_label}</p> : ''}
+                    <p className="small slim">Team: {team_label}</p>
+                    {tech.length ? <p className="small slim">Tech: {tech_label}</p> : ''}
                 </div>
             </div>
         );

@@ -6,6 +6,8 @@ import TeamDialog from './TeamDialog';
 import StatsBar from './StatsBar';
 import ProjectName from './ProjectName';
 
+import {addAction} from '../components/ToastNest';
+
 import {skills_names, roles, education} from '../data/knowledge';
 
 class Worker extends Component {
@@ -18,7 +20,10 @@ class Worker extends Component {
     }
 
     componentDidMount() {
-        if (!this.props.worker.is_player) this.refs.manage.openPortal();
+        if (this.props.worker.is_player) {
+            addAction('This is the management screen of your character. Here you can select its roles in the company. Carefully review information on this screen.', {timeOut: 15000, extendedTimeOut: 5000}, 'success');
+        }
+        this.refs.manage.openPortal();
     }
 
     manage(event) {
@@ -78,7 +83,7 @@ class Worker extends Component {
         }) ();
 
         return (
-            <div className="panel panel-success">
+            <div className="well well-sm fat">
                 {worker.name} {worker.is_player ? 'Player' : <span>{worker.getSalary()}$</span>}
                 {worker.in_vacation ? ' in vacation! ' : ''}
                 <Portal closeOnEsc closeOnOutsideClick openByClickOn={educate_button}>

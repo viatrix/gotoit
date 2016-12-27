@@ -8,7 +8,7 @@ import bulkStyler from '../services/bulkStyler';
 
 import WorkerModel from '../models/WorkerModel';
 
-import {player_backgrounds, player_education} from '../data/knowledge';
+import {player_backgrounds, player_education, technologies, skills_1} from '../data/knowledge';
 
 class Creation extends Component {
     constructor(props) {
@@ -26,16 +26,22 @@ class Creation extends Component {
     embark() {
         console.log('embrk');
 
+
         let data = this.props.data;
         data.money +=
             player_backgrounds[this.state.selected_background].money +
             player_education[this.state.selected_education].money;
-        let stats = data.workers[0].stats;
+        let stats = JSON.parse(JSON.stringify(skills_1));
         stats = bulkStyler.background(stats, this.state.selected_background);
         stats = bulkStyler.education(stats, this.state.selected_education);
 
-        data.workers[0].stats = stats;
-        data.workers[0].name = this.state.suggest_name;
+        let worker = WorkerModel.generatePlayer();
+
+        worker.stats = stats;
+        worker.name = this.state.suggest_name;
+
+        data.workers[0] = worker; //: [WorkerModel.generatePlayer()]
+
         data.stage = 'game';
         data.projects_known_technologies = data.projects_known_technologies.concat(player_backgrounds[this.state.selected_background].start_tech);
         data.projects_known_technologies = data.projects_known_technologies.concat(player_education[this.state.selected_education].start_tech);
@@ -53,10 +59,10 @@ class Creation extends Component {
 
     render() {
         const data = this.props.data;
-        const worker = data.workers[0];
+        //const worker = data.workers[0];
 
         let stats = bulkStyler.education(
-                    bulkStyler.background(JSON.parse(JSON.stringify(worker.stats)),
+                    bulkStyler.background(JSON.parse(JSON.stringify(skills_1)),
                         this.state.selected_background),
                         this.state.selected_education);
 
@@ -81,9 +87,9 @@ class Creation extends Component {
                                 /> Background
                                 </h3>
                                 <div className="panel panel-info">
-                                    <div className="row">
+                                    <div className="flex-container-row">
                                         {Object.keys(player_backgrounds).map((background) => {
-                                            return <div key={background} className="col-md-4">
+                                            return <div key={background} className="flex-element">
                                                 <div className="radio">
                                                     <label>
                                                         <h3 className="text-center">
@@ -95,7 +101,7 @@ class Creation extends Component {
                                                             {player_backgrounds[background].name}
                                                         </h3>
                                                         <p>{player_backgrounds[background].text}</p>
-                                                        <p>Start tech: {player_backgrounds[background].start_tech}</p>
+                                                        <p>Start tech: {technologies[player_backgrounds[background].start_tech].name}</p>
                                                     </label>
                                                 </div>
                                             </div>
@@ -103,9 +109,9 @@ class Creation extends Component {
                                     </div>
                                 </div>
                                 <div className="panel panel-success">
-                                    <div className="row">
+                                    <div className="flex-container-row">
                                         {Object.keys(player_education).map((institute) => {
-                                            return <div key={institute} className="col-md-4">
+                                            return <div key={institute} className="flex-element">
                                                 <div className="radio">
                                                     <label>
                                                         <h3 className="text-center">
@@ -117,7 +123,7 @@ class Creation extends Component {
                                                             {player_education[institute].name}
                                                         </h3>
                                                         <p>{player_education[institute].text}</p>
-                                                        <p>Start tech: {player_education[institute].start_tech}</p>
+                                                        <p>Start tech: {technologies[player_education[institute].start_tech].name}</p>
                                                     </label>
                                                 </div>
                                             </div>

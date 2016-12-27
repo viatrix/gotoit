@@ -211,7 +211,7 @@ class ProjectModel {
             for (let i = 0; i < size; i++) {
                 stats[sk[i]] = stats_bulk[sk[i]];
             }
-            console.log(stats_bulk, sk, stats);
+           // console.log(stats_bulk, sk, stats);
         }
         else {
             stats = stats_bulk;

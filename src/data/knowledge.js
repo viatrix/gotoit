@@ -1,5 +1,8 @@
 
+import _ from 'lodash';
+
 export const skills = {design: 0, manage: 0, program: 0, admin: 0};
+export const skills_1 = _.mapValues(skills, () => { return 1; });
 export const skills_names = Object.keys(skills);
 
 
@@ -36,7 +39,7 @@ export const technologies = {
     agile: {name: 'Agile Development', acronym: 'Agile', price: 100000, description: 'Focus on priority, cut out unnecessary, lighter the project.'},
     pair: {name: 'Pair Programming', acronym: 'Pair', price: 100000, description: 'Working in tandem allows us to solve complex problems.'},
 
-    creativity: {name: 'Creativity on Fridays', acronym: 'Free', price: 100000, description: "Fridays devoted to pet projects which boosting experience."},
+    creativity: {name: 'Four Day Work Week', acronym: 'Free', price: 100000, description: "Fridays devoted to pet projects which boosting experience and lead to insight."},
     tdd: {name: 'Test Driven Development', acronym: 'TDD', price: 100000, description: 'Developing tests that reduce the probability of errors.'},
     micromanagement: {name: 'Micromanagement', acronym: 'Micro', price: 100000, description: 'Solid control over the objectives is averaging performance.'}
 };

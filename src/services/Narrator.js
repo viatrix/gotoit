@@ -148,7 +148,7 @@ class Narrator {
 
         tale += aboutStamina();
 
-        console.log(tale);
+      //  console.log(tale); // BUT! FIX repeatable calls
         return tale;
     }
 
