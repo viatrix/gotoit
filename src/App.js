@@ -275,7 +275,7 @@ class App extends Component {
         let project = _.find(data.projects, (project) => { return (project.id === id); });
         project.stage = 'open';
         addMessage('Start '+project.name+' project', {timeOut: 5000, extendedTimeOut: 2000}, 'info');
-        this.setState({data: data});
+        //this.setState({data: data});
     }
 
     closeProject(id) {
