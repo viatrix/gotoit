@@ -58,7 +58,7 @@ class Project extends Component {
             <div className="panel panel-success">
                 <ProjectName project={project} /> ({project.reward}$)
 
-                {project.deadline > 0 ?
+                {project.deadline_max > 0 ?
                     <div className="progress">
                         <div className={classNames('progress-bar', (project.deadline / project.deadline_max < 0.1 ? 'progress-bar-danger' : 'progress-bar-warning'))} role="progressbar"
                              style={{width: (100-(project.deadline / project.deadline_max * 100))+'%'}}>

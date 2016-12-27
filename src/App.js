@@ -14,7 +14,7 @@ import app_state from './AppData';
 
 export var tick = 0;
 
-const game_speed = 500;
+const game_speed = 50;
 
 //var agency_generation_counter = 0;
 var contract_generation_counter = 0;
@@ -282,16 +282,16 @@ class App extends Component {
 
     closeProject(id) {
         console.log('App Close Project');
-        let data = this.state.data;
+     //   let data = this.state.data;
         this.projectReporting(id, 'close');
-        this.setState({data: data});
+     //   this.setState({data: data});
     }
 
     failProject(id) {
-        let data = this.state.data;
+     //   let data = this.state.data;
         console.log('fail');
         this.projectReporting(id, 'fail');
-        this.setState({data: data});
+      //  this.setState({data: data});
     }
 
     fixProject(id) {
@@ -299,7 +299,7 @@ class App extends Component {
         let project = _.find(data.projects, (project) => { return (project.id === id); });
         project.fix();
         addMessage(project.name+' project go to '+project.iteration+' iteration for fixing bugs.', 'error');
-        this.setState({data: data});
+     //   this.setState({data: data});
     }
 
     finishProject(id) {
@@ -308,7 +308,7 @@ class App extends Component {
         data.workers.forEach((worker) => { worker.facts.project_finished++; });
         this.addMoney(_.find(data.projects, (project) => { return (project.id === id); }).reward);
         this.projectReporting(id, 'finish');
-        this.setState({data: data});
+     //   this.setState({data: data});
     }
 
     projectReporting(project_id, stage) {
@@ -328,7 +328,7 @@ class App extends Component {
         project.stage = stage;
         data.projects_end_reports.push(project);
         //data.projects_archive_reports.unshift(project);
-        this.setState({data: data});
+     //   this.setState({data: data});
     }
 
     projectArchiving() {
@@ -460,7 +460,7 @@ class App extends Component {
 
         if (tick < 24 * 7) return;
 
-        if (_.random(1, 24 * (25 - Math.min(10, Math.sqrt(projects_done*0.1)))) === 1 && data.candidates.resumes.length < 5) {
+        if (_.random(1, 24 * (20 - Math.min(10, Math.sqrt(projects_done*0.1)))) === 1 && data.candidates.resumes.length < 5) {
             let worker = WorkerModel.generate(_.random(2, 5));
             data.candidates.resumes.push(worker);
             addAction('New resume: ' + worker.name);
@@ -595,29 +595,13 @@ class App extends Component {
 
             if (!worker.is_player && (data.money - worker.getSalary()) < 0) return false;
 
-            let skip_work = false;
-/*
-            //let worker_roles = this.getRelation(worker.id, pr); //[];
-            let worker_roles = [];
-            skills_names.forEach((role) => {
-                if (this.getRole(worker.id, role)) {
-                    worker_roles.push(role);
-                } });
-
-            // looking worker projects
-            let worker_projects = data.projects.filter((project) => {
-                return (this.getRelation(worker.id, project.id) &&
-                    project.isNeed(worker_roles) &&
-                    project.stage === 'open');
-            });
-            */
-
             let worker_projects = data.projects.filter((project) => {
                 return (project.isNeed(this.getRelation(worker.id, project.id)) && project.stage === 'open');
             });
        //     console.log(worker_projects);
             // work on one of projects
             if (worker_projects.length > 0) {
+                let skip_work = false;
                 let project = _.sample(worker_projects);
                 let worker_roles = this.getRelation(worker.id, project.id);
 

@@ -65,6 +65,64 @@ class ProjectModel {
                     return 'supporter';
                 }
 
+
+                let all_work = _.random(1, work[stat]) + this.stored_wisdom[stat];
+                let complexity_penalty = Math.max(0, Math.floor(Math.sqrt(this.complexity)) - this.iteration + 1);
+                let bugs = 0;
+                let tasks = 0;
+                if (complexity_penalty > all_work) {
+                    bugs = all_work;
+                }
+                else {
+                    tasks = all_work - complexity_penalty;
+                    bugs = complexity_penalty;
+                }
+
+
+
+
+                if (tasks > 0) {
+                    tasks = Math.min(this.needs[stat], tasks);
+                    if (this.type === 'training') {
+                        worker.facts.training_tasks_done += tasks;
+                    }
+                    worker.facts.tasks_done += tasks;
+                    this.facts.tasks_done += tasks;
+                    this.needs[stat] -= tasks;
+                    this.stored_wisdom[stat] = 0;
+                    addMessage(worker.name+' solve '+tasks+' '+stat+' tasks', {}, 'info');
+                }
+
+                if (bugs > 0) {
+                    this.stored_wisdom[stat] += work[stat];
+                    let prevented = this.runTests(bugs);
+                    if (prevented) {
+                        addMessage(worker.name+' do '+bugs+' errors in '+stat+', but test prevent'+prevented, {}, 'info');
+                        //console.log('Test prevent errors');
+                        worker.facts.bugs_passed += bugs-prevented;
+                        this.facts.bugs_passed += bugs-prevented;
+                        this.errors[stat] += bugs-prevented;
+                    }
+                    else {
+                        addMessage(worker.name+' do '+bugs+' errors in '+stat, {}, 'warning');
+                        //console.log('Do errors');
+                        worker.facts.bugs_passed += bugs;
+                        this.facts.bugs_passed += bugs;
+                        this.errors[stat] += bugs;
+                    }
+                }
+
+                this.complexity += (rad ? 4 : 1);
+                let learn = tasks + (bugs * 2);
+
+
+                /*
+                ///
+                let pro = all_work;
+                let cont = this.complexity;
+                let ratio = 10 / this.complexity;
+                ///
+
                 let resource = work[stat] - Math.floor(_.random(0, Math.sqrt(this.complexity)-this.iteration));
                 let potential = this.stored_wisdom[stat] + resource;
 
@@ -100,7 +158,11 @@ class ProjectModel {
                         this.errors[stat]++;
                     }
                 }
+
+
                 let learn = (real_work ? real_work : work[stat]);
+                */
+
                 learned[stat] += (learn) * (creativity ? 1.5 : 1) * (this.type === 'training' ? 2 : 1);
                 if (isNaN(learned[stat])) {
                     console.log([learn, creativity, this.type].map((e) => e));
@@ -118,9 +180,22 @@ class ProjectModel {
     /***
      * Take a chance to not to add error
      */
-    runTests() {
-        let chance = this.tests / this.planedTasksQuantity() * 100;
-        return _.random(1, 100) < chance;
+    runTests(bugs = null) {
+        const roll = () => {
+            let chance = this.tests / this.planedTasksQuantity() * 100;
+            return _.random(1, 100) < chance;
+        };
+
+        if (bugs === null) {
+            return roll();
+        }
+        else {
+            let prevent = 0;
+            for (let i=0; i<bugs; i++) {
+                if (roll()) prevent++;
+            }
+            return prevent;
+        }
     }
 
     tasksQuantity() {

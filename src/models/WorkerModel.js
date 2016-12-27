@@ -104,7 +104,7 @@ class WorkerModel {
     }
 
     difficultyPenalty() {
-        const tasks_difficulty = Math.min(20, 20 * (1-((200+(this.facts.bugs_passed * 6.66)) / ((200+(this.facts.tasks_done))))));
+        const tasks_difficulty = Math.min(20, 20 * (1-((200+(this.facts.bugs_passed * Math.PI)) / ((200+(this.facts.tasks_done))))));
         return Math.max(Math.min(Math.floor(tasks_difficulty), 20), -20);
     }
 
