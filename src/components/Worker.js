@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Portal from 'react-portal';
 import _ from 'lodash';
-import classNames from 'classnames';
 
 import TeamDialog from './TeamDialog';
 import StatsBar from './StatsBar';
@@ -68,6 +67,16 @@ class Worker extends Component {
             collective: {name: 'Collective', val: worker.collectivePenalty()}
         };
 
+        const efficiency_bar_style = (() => {
+            let ratio = worker.getEfficiency() / 100;
+            switch (true) {
+                case ratio <= 0.5: return 'progress-bar-danger';
+                case ratio <= 0.75: return 'progress-bar-warning';
+                case ratio <= 1: return 'progress-bar-success';
+                default: alert('broken ratio: '+ratio);
+            }
+        }) ();
+
         return (
             <div className="panel panel-success">
                 {worker.name} {worker.is_player ? 'Player' : <span>{worker.getSalary()}$</span>}
@@ -119,7 +128,7 @@ class Worker extends Component {
                             <div key="efficiency" className="row">
                                 <div className="col-md-2">Efficiency</div>
                                 <div className="col-md-9 progress">
-                                    <div className={classNames('progress-bar', (100 / worker.getEfficiency() < 0.5 ? 'progress-bar-danger' : 'progress-bar-warning'))} role="progressbar"
+                                    <div className={efficiency_bar_style} role="progressbar"
                                          style={{width: worker.getEfficiency()+'%'}}>
                                         <label>{worker.getEfficiency()}%</label>
                                     </div>
@@ -212,7 +221,8 @@ class Worker extends Component {
                 </Portal>
 
                 <div className="progress slim">
-                    <div className={classNames('progress-bar', (100 / worker.getEfficiency() < 0.5 ? 'progress-bar-danger' : 'progress-bar-warning'))} role="progressbar"
+                    {/* <div classNames('progress-bar', (100 / worker.getEfficiency() < 0.5 ? 'progress-bar-danger' : 'progress-bar-warning')) role="progressbar"  */}
+                    <div className={efficiency_bar_style} role="progressbar"
                          style={{width: worker.getEfficiency()+'%'}}>
                         <label>{worker.getEfficiency()}%</label>
                     </div>
