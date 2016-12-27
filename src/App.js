@@ -8,7 +8,7 @@ import WorkerModel from './models/WorkerModel';
 import ProjectModel from './models/ProjectModel';
 import OfficeModel from './models/OfficeModel';
 
-import {skills_names} from './data/knowledge';
+import {skills_names, technologies} from './data/knowledge';
 
 import app_state from './AppData';
 
@@ -51,6 +51,7 @@ class App extends Component {
         this.closeProject = this.closeProject.bind(this);
         this.trainingProject = this.trainingProject.bind(this);
         this.draftProject = this.draftProject.bind(this);
+        this.unlockTechnology = this.unlockTechnology.bind(this);
         this.getTechnology = this.getTechnology.bind(this);
         this.changeTechnology = this.changeTechnology.bind(this);
         this.upOffice = this.upOffice.bind(this);
@@ -83,6 +84,7 @@ class App extends Component {
         app_state.data.helpers['closeProject'] = this.closeProject;
         app_state.data.helpers['trainingProject'] = this.trainingProject;
         app_state.data.helpers['draftProject'] = this.draftProject;
+        app_state.data.helpers['unlockTechnology'] = this.unlockTechnology;
         app_state.data.helpers['getTechnology'] = this.getTechnology;
         app_state.data.helpers['changeTechnology'] = this.changeTechnology;
         app_state.data.helpers['upOffice'] = this.upOffice;
@@ -268,6 +270,7 @@ class App extends Component {
     }
 
     startProject(id) {
+        console.log('App Start Project');
         let data = this.state.data;
         let project = _.find(data.projects, (project) => { return (project.id === id); });
         project.stage = 'open';
@@ -276,6 +279,7 @@ class App extends Component {
     }
 
     closeProject(id) {
+        console.log('App Close Project');
         let data = this.state.data;
         this.projectReporting(id, 'close');
         this.setState({data: data});
@@ -335,6 +339,13 @@ class App extends Component {
         //data.projects_end_reports.unshift(project);
         data.projects_archive_reports.unshift(project);
         console.log('archiving', data.projects_end_reports, data.projects_archive_reports, projects, project);
+        this.setState({data: data});
+    }
+
+    unlockTechnology(technology) {
+        let data = this.state.data;
+        data.money -= technologies[technology].price;
+        data.projects_known_technologies.push(technology);
         this.setState({data: data});
     }
 
@@ -709,18 +720,6 @@ class App extends Component {
                 //worker.goRest();
             }
         });
-
-        /*
-        data.projects.forEach((project) => {
-            if (project.tasksQuantity() === 0 && project.bugsQuantity() === 0)
-                this.finishProject(project.id);
-            project.deadline--;
-            if (project.deadline <= 0)
-                this.failProject(project.id);
-            if (project.tasksQuantity() === 0 && project.bugsQuantity() !== 0)
-                this.fixProject(project.id);
-        });
-        */
     }
 
     render() {

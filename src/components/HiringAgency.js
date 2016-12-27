@@ -127,7 +127,7 @@ class HiringAgency extends Component {
                             step={1}
                             max={100}
                             min={0}/>)}
-                        <button className={this.calcCost() < data.money ? "btn btn-success" : "btn btn-success disabled"} onClick={() => { if (this.calcCost() < data.money) { this.search() } }}>Search {this.calcCost()}</button>
+                        <button className={this.calcCost() <= data.money ? "btn btn-success" : "btn btn-success disabled"} onClick={() => { if (this.calcCost() <= data.money) { this.search() } }}>Search {this.calcCost()}</button>
                     </div>
                 </TeamDialog>
             </Portal>

@@ -49,8 +49,9 @@ class Project extends Component {
     }
 
     open() {
+        console.log('Project open');
         this.props.data.helpers.startProject(this.props.project.id);
-        this.forceUpdate();
+        //this.forceUpdate();
     }
 
     close() {
@@ -110,24 +111,28 @@ class Project extends Component {
         }
         const tech_label = tech.map((tech_name) => { return label(tech_name, technologies[tech_name].acronym); });
 
-        let stage_button = '';
-        if (project.stage === 'ready') {
-            stage_button = <button className="btn btn-success btn-lg" onClick={this.open}>Start Project</button>;
-        }
-        else {
-            if (project.isFinished()) {
-                if (project.isFixed()) {
-                    stage_button = <button className="btn btn-default" onClick={this.finish}>Finish Project</button>;
-                }
-                else {
-                    stage_button = <button className="btn btn-default" onClick={this.fix}>Fix Bugs</button>;
-                }
-            }
-            else {
-                stage_button = <button className="btn btn-danger btn-sm" onClick={this.close}>Reject Project!</button>;
-            }
-        }
+        const start_pause_button =
+            <span>
+                {project.stage}
+                {(project.stage === 'paused')
+                    ? <button className="btn btn-success" onClick={() => {
+                        project.stage = 'open';
+                }}>Start</button> : ''}
+                {(project.stage === 'ready')
+                    ? <button className="btn btn-success" onClick={() => {
+                        this.open();
+                }}>Start</button> : ''}
+                {project.stage === 'open'
+                    ? <button className="btn btn-warning" onClick={() => {
+                        console.log('paused!!!');
+                        project.stage = 'paused';
+                }}>Pause</button> : ''}
+            </span>;
 
+        const reject_button = <button className="btn btn-danger btn-sm" onClick={() => {
+            if (confirm("Reject project "+project.name+'? (penalty: '+project.penalty+')')) {
+                this.close();
+            } }}>Reject</button>;
 
         return (
             <div className="panel panel-success">
@@ -136,17 +141,16 @@ class Project extends Component {
                     <label className="flex-element"> Reward: {project.reward}$ </label>
                     {(project.penalty > 0 ? <label className="flex-element"> Penalty: {project.penalty}$ </label> : ' ')}
                     <div>
-                        {(project.stage === 'paused' || project.stage === 'ready')
-                            ? <button className="btn btn-success" onClick={() => { project.stage = 'open'; }}>Start</button> : ''}
-                        {project.stage === 'open'
-                            ? <button className="btn btn-warning" onClick={() => { project.stage = 'paused'; }}>Pause</button> : ''}
+                        {start_pause_button} {reject_button}
                         <Portal ref="manage" closeOnEsc openByClickOn={manage_button}>
                             <TeamDialog>
                                 <h4 className="flex-container-row">
                                     <label className="flex-element"> <ProjectName project={project} /> </label>
-                                    <label className="flex-element"> Reward: {project.reward}$ </label>
-                                    {(project.penalty > 0 ? <label className="flex-element"> Penalty: {project.penalty}$ </label> : ' ')}
-                                    <div className="flex-element"> <labe>{stage_button}</labe> </div>
+                                    <label className="flex-element">
+                                        Reward: {project.reward}$
+                                        {(project.penalty > 0 ? <label className="flex-element"> Penalty: {project.penalty}$ </label> : ' ')}
+                                    </label>
+                                    <div className="flex-element"> <label> {start_pause_button} {reject_button} </label> </div>
                                 </h4>
                                 <div className="row">
                                     <div className="col-md-8">
@@ -288,8 +292,8 @@ class Project extends Component {
                                     <div className="col-md-4">
                                         <div className="panel panel-success slim-left">
                                             <div className="col slim-left">
-                                                {Object.keys(technologies).map((technology, i) =>
-                                                    <div key={technology} className="row-md-1">
+                                                {data.projects_known_technologies.map(
+                                                    (technology, i) => <div key={technology} className="row-md-1">
                                                         <div className="checkbox slim-margin">
                                                             <label>
                                                                 <h5 className="text-center slim">
@@ -305,6 +309,25 @@ class Project extends Component {
                                                         </div>
                                                     </div>
                                                 )}
+                                                {Object.keys(technologies).map(
+                                                    (technology, i) => <div key={technology} className="row-md-1">
+                                                        <div className="checkbox slim-margin small">
+                                                            {!data.projects_known_technologies.includes(technology)
+                                                                ? <label>
+                                                                <h5 className="text-center slim">
+                                                                    <button
+                                                                        className={technologies[technology].price <= data.money ? "btn btn-success btn-xs" : "btn btn-success btn-xs disabled"}
+                                                                        onClick={() => { if (technologies[technology].price <= data.money) data.helpers.unlockTechnology(technology); }}
+                                                                    >
+                                                                        Unlock {technologies[technology].price}$
+                                                                    </button>
+                                                                    {technologies[technology].name}
+                                                                </h5>
+                                                                <p className="small">{technologies[technology].description}</p>
+                                                            </label> : ''}
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -315,7 +338,7 @@ class Project extends Component {
                 </div>
 
                 {project.deadline > 0 ?
-                    <div className="progress">
+                    <div className="progress slim">
                         <div className={classNames('progress-bar', (project.deadline / project.deadline_max < 0.1 ? 'progress-bar-danger' : 'progress-bar-warning'))} role="progressbar"
                              style={{width: (100-(project.deadline / project.deadline_max * 100))+'%'}}>
                             <label>{project.deadline_max - project.deadline} gone</label>
@@ -338,7 +361,7 @@ class Project extends Component {
                     let bugs = errors / sum * 100;
                     let done = (diff / sum * 100)-0.1;
 
-                    return <div className="progress">
+                    return <div className="progress slim">
                         <div className="progress-bar progress-bar-warning" role="progressbar"
                              style={{width: tasks+'%'}}>
                             {need ? <label>{need} tasks</label> : ''}
@@ -356,14 +379,14 @@ class Project extends Component {
 
                 <StatsBar stats={stats_data} data={this.props.data} />
 
-                <div className="flex-container-row">
+                <div className="flex-container-row slim">
                     <div className="flex-element"> Tasks: {project.tasksQuantity()}/{project.planedTasksQuantity()} </div>
                     <div className="flex-element"> Bugs: <label className="text-danger">{project.bugsQuantity()}</label> </div>
                     <div className="flex-element"> Complexity: {project.complexity} </div>
                     <div className="flex-element"> Iteration: {project.iteration} </div>
                 </div>
 
-                <div className="small">
+                <div className="small slim">
                     <p className="small">Team: {team_label}</p>
                     {tech.length ? <p className="small">Tech: {tech_label}</p> : ''}
                 </div>

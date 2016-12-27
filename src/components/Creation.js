@@ -37,6 +37,8 @@ class Creation extends Component {
         data.workers[0].stats = stats;
         data.workers[0].name = this.state.suggest_name;
         data.stage = 'game';
+        data.projects_known_technologies = data.projects_known_technologies.concat(player_backgrounds[this.state.selected_background].start_tech);
+        data.projects_known_technologies = data.projects_known_technologies.concat(player_education[this.state.selected_education].start_tech);
         this.refs.creation.closePortal();
 
         if (this.state.selected_background === 'coworker') {
@@ -93,6 +95,7 @@ class Creation extends Component {
                                                             {player_backgrounds[background].name}
                                                         </h3>
                                                         <p>{player_backgrounds[background].text}</p>
+                                                        <p>Start tech: {player_backgrounds[background].start_tech}</p>
                                                     </label>
                                                 </div>
                                             </div>
@@ -114,6 +117,7 @@ class Creation extends Component {
                                                             {player_education[institute].name}
                                                         </h3>
                                                         <p>{player_education[institute].text}</p>
+                                                        <p>Start tech: {player_education[institute].start_tech}</p>
                                                     </label>
                                                 </div>
                                             </div>
