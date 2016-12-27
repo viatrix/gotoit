@@ -210,7 +210,7 @@ class App extends Component {
         contract_generation_counter++;
         let data = this.state.data;
         data.money -= 1000;
-        data.offered_projects.contract.push(ProjectModel.generate(_.random(1, 5 + contract_generation_counter), 3));
+        data.offered_projects.contract.push(ProjectModel.generate(_.random(3, 6 + contract_generation_counter), 3));
         this.setState({data: data});
     }
 
@@ -458,9 +458,10 @@ class App extends Component {
         }
 
 
-        if (tick < 24 * 7) return;
+        if (tick < (24 * 7)) return;
 
-        if (_.random(1, 24 * (20 - Math.min(10, Math.sqrt(projects_done*0.1)))) === 1 && data.candidates.resumes.length < 5) {
+
+        if (Math.floor(_.random(1, 24 * (20 - Math.min(10, Math.sqrt(projects_done*0.1))))) === 1 && data.candidates.resumes.length < 5) {
             let worker = WorkerModel.generate(_.random(2, 5));
             data.candidates.resumes.push(worker);
             addAction('New resume: ' + worker.name);
@@ -469,7 +470,7 @@ class App extends Component {
             _.remove(data.candidates.resumes, (candidate) => { return (candidate.id === data.candidates.resumes[0].id); });
         }
 
-        if (( _.random(1, (24*7*4*12)/(1+(projects_done*0.1))) === 1 && data.candidates.resumes.length < 5)) {
+        if (Math.floor(_.random(1, (24*7*4*12)/(1+(projects_done*0.1)))) === 1 && data.candidates.resumes.length < 5) {
             let experience = _.random(10, 20);
             let worker = WorkerModel.generate(experience);
             worker.standing += experience * 12 * _.random(5, 10+experience);
@@ -479,7 +480,7 @@ class App extends Component {
         }
 
 
-        if (_.random(1, 24*2) === 1 && data.offered_projects.freelance.length < 5) {
+        if (Math.floor(_.random(1, (24*2) + (projects_done*0.1))) === 1 && data.offered_projects.freelance.length < 5) {
             data.offered_projects.freelance.push(ProjectModel.generate(_.random(1, 3), _.random(1, 2)));
             addAction('New freelance job!', {timeOut: 3000, extendedTimeOut: 1000});
         }
@@ -487,13 +488,13 @@ class App extends Component {
             _.remove(data.offered_projects.freelance, (candidate) => { return (candidate.id === data.offered_projects.freelance[0].id); });
         }
 
-        if (_.random(1, 24*((7*4*8)/(1+projects_done*0.1))) === 1 && data.offered_projects.freelance.length < 5) {
+        if (Math.floor(_.random(1, 24*((7*8)/(1+projects_done*0.1)))) === 1 && data.offered_projects.freelance.length < 5) {
             data.offered_projects.freelance.push(ProjectModel.generate(_.random(15, 30 + Math.sqrt(projects_done)), 4));
             addAction('New big deal!', {timeOut: 5000, extendedTimeOut: 3000});
         }
 
 
-        this.setState({data: data});
+        //this.setState({data: data});
     }
 
     nextDay() {

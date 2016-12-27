@@ -158,9 +158,9 @@ class Worker extends Component {
                                     Auto join new projects
                                 </label>
                             </div>
-                            <div className="row slim">
+                            <div className="flex-container-row slim">
                                 {skills_names.map((role, i) =>
-                                    <div key={role} className="checkbox col-md-3 slim">
+                                    <div key={role} className="checkbox flex-element slim">
                                         <label>
                                             <input
                                                 type="checkbox"

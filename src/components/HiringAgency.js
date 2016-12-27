@@ -14,11 +14,11 @@ class HiringAgency extends Component {
     constructor(props) {
         super(props);
 
-        let max = JSON.parse(JSON.stringify(skills));
-        _.keys(max).forEach((skill) => {
-            max[skill] = 1;
-        });
         let min = JSON.parse(JSON.stringify(skills));
+        _.keys(min).forEach((skill) => {
+            min[skill] = 1;
+        });
+        let max = JSON.parse(JSON.stringify(skills));
         _.keys(max).forEach((skill) => {
             max[skill] = 10;
         });
@@ -38,34 +38,34 @@ class HiringAgency extends Component {
         let s = this.state;
 
 
-        let min_sum = _.sum(_.values(s.min_stats));
-        let max_sum = _.sum(_.values(s.max_stats));
+        //let min_sum = _.sum(_.values(s.min_stats));
+        //let max_sum = _.sum(_.values(s.max_stats));
         //let min_sum_factor = Math.pow(min_sum, 2.8);
         //let max_sum_factor = Math.pow(max_sum, 3);
 
-        let min_sum_factor = _.values(s.min_stats).reduce((sum, val) => {
-            return _.sum(sum, Math.pow(val, 8));
-        }, '');
-        let max_sum_factor = _.values(s.max_stats).reduce((sum, val) => {
-            return _.sum(sum, Math.pow(val, 6));
-        }, '');
+        let min_sum_factor = Math.floor(_.values(s.min_stats).reduce((sum, val) => {
+            return _.sum([sum, Math.pow(val, 2.8)]);
+        }, 0));
+        let max_sum_factor = Math.floor(_.values(s.max_stats).reduce((sum, val) => {
+            return _.sum([sum, Math.pow(val, 2.5)]);
+        }, 0));
 
-        let pike_factor1 = Math.pow((_.max(_.values(s.min_stats)) + _.max(_.values(s.max_stats))), 2.5);
-        let pike_factor2 = Math.pow(_.max(_.values(s.max_stats)) - (_.min(_.values(s.max_stats))), 2);
+        let pike_factor1 = Math.floor(Math.pow((_.max(_.values(s.min_stats)) + _.max(_.values(s.max_stats))), 2.5));
+        let pike_factor2 = Math.floor(Math.pow(_.max(_.values(s.max_stats)) - (_.min(_.values(s.max_stats))), 2));
         //let salary_factor = s.min_salary + (s.max_salary * 2);
         //let salary_factor = Math.pow(s.max_salary, 2);
-        let min_salary_factor = Math.pow(s.min_salary, 1.8);
-        let max_salary_factor = Math.pow(s.max_salary, 1.6);
-        let sum_control_factor = Math.pow(max_sum - min_sum, 2)
-            / (1+(max_sum - min_sum));
+        let min_salary_factor = Math.floor(Math.pow(s.min_salary, 1.9));
+        let max_salary_factor = Math.floor(Math.pow(s.max_salary, 1.7));
 
-        sum_control_factor = 0;
+        let sum_control_factor = 0;
         skills_names.forEach((skill) => {
             sum_control_factor += Math.pow(s.max_stats[skill] - s.min_stats[skill], 2);
         });
+        sum_control_factor = Math.floor(sum_control_factor);
 
-        let salary_control_factor = Math.pow(s.max_salary - s.min_salary, 2)
+        let salary_control_factor = Math.pow(s.max_salary - s.min_salary, 2.5)
             / (201 - s.min_salary - s.max_salary);
+        salary_control_factor = Math.floor(salary_control_factor);
 
         console.log(min_sum_factor, max_sum_factor, pike_factor1);
         console.log(min_salary_factor, max_salary_factor, sum_control_factor, salary_control_factor, pike_factor2);
@@ -126,7 +126,7 @@ class HiringAgency extends Component {
                             tooltip='always'
                             step={1}
                             max={100}
-                            min={0}/>)}
+                            min={1}/>)}
                         <button className={this.calcCost() <= data.money ? "btn btn-success" : "btn btn-success disabled"} onClick={() => { if (this.calcCost() <= data.money) { this.search() } }}>Search {this.calcCost()}</button>
                     </div>
                 </TeamDialog>

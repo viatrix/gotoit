@@ -28,7 +28,9 @@ class Office extends Component {
                             this.props.data.helpers.addMoney(100000);
                         }}>Money {this.props.data.money}</label>
 
-                        <span className="pull-right">
+                        <span className="pull-right" onClick={() => {
+                            console.log(this.props.data);
+                        }}>
                         {(date.is_working_time ?
                             <label className="label-success">Working</label> :
                             (date.day > 5) ?

@@ -21,7 +21,7 @@ class PopupsNest extends Component {
                 </div>
                 <div>
                     {end_screen_project !== null ?
-                        <ProjectEndScreen project={end_screen_project} data={this.props.data} />
+                        <ProjectEndScreen key={end_screen_project.id} project={end_screen_project} data={this.props.data} />
                         : ''}
                 </div>
             </div>

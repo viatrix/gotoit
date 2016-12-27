@@ -67,7 +67,7 @@ class ProjectModel {
 
 
                 let all_work = _.random(1, work[stat]) + this.stored_wisdom[stat];
-                let complexity_penalty = Math.max(0, Math.floor(Math.sqrt(this.complexity)) - this.iteration + 1);
+                let complexity_penalty = Math.max(0, Math.floor(Math.sqrt(Math.max(0, this.complexity - _.random(0, this.errors[stat])))) - this.iteration + 1);
                 let bugs = 0;
                 let tasks = 0;
                 if (complexity_penalty > all_work) {
@@ -97,7 +97,7 @@ class ProjectModel {
                     this.stored_wisdom[stat] += work[stat];
                     let prevented = this.runTests(bugs);
                     if (prevented) {
-                        addMessage(worker.name+' do '+bugs+' errors in '+stat+', but test prevent'+prevented, {}, 'info');
+                        addMessage(worker.name+' do '+bugs+' errors in '+stat+', but test prevent '+prevented+' of them', {}, 'warning');
                         //console.log('Test prevent errors');
                         worker.facts.bugs_passed += bugs-prevented;
                         this.facts.bugs_passed += bugs-prevented;
