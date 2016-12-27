@@ -47,7 +47,7 @@ class WorkerModel {
 
     drainStamina() {
         this.stamina--;
-        console.log(this.stamina);
+     //   console.log(this.stamina);
     }
 
     tellFeelings() {

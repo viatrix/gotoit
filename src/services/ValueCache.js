@@ -10,7 +10,7 @@ class ValueCache {
     }
 
     get() {
-        if (tick - this.last_refresh > this.expire) {
+        if (this.last_refresh === 0 || tick - this.last_refresh > this.expire) {
             this.stored_value = this.sourceFunction();
             this.last_refresh = tick;
         }

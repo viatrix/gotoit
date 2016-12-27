@@ -139,7 +139,7 @@ class Worker extends Component {
                                     </div>
                                 </div>
                             </div>
-                            {/*<StatsBar stats={efficiency_data} data={this.props.data} />*/}
+                            <StatsBar stats={efficiency_data} data={this.props.data} />
                             <h5>{worker.tellFeelings()}</h5>
                         </div>
 
