@@ -14,6 +14,8 @@ import app_state from './AppData';
 
 export var tick = 0;
 
+const game_speed = 500;
+
 //var agency_generation_counter = 0;
 var contract_generation_counter = 0;
 
@@ -400,7 +402,7 @@ class App extends Component {
     componentDidMount() {
         this.timerID = setInterval(
             () => this.tick(),
-            250
+            game_speed
         );
     }
 
