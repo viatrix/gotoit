@@ -33,15 +33,15 @@ export const project_kinds = {
 
 export const technologies = {
     overtime: {name: 'Overtime Work', acronym: 'Over', price: 1000, description: 'Overtime help to finish project on time, but exhausted team.'},
-    refactoring: {name: 'Non-stop refactoring', acronym: 'Ref', price: 10000, description: "The complexity of the code - it's just a task for refactoring."},
+    refactoring: {name: 'Non-stop refactoring', acronym: 'Ref', price: 5000, description: "The complexity of the code - it's just a task for refactoring."},
 
-    rad: {name: 'Rapid Development', acronym: 'RAD', price: 100000, description: 'Faster Development at the cost of increasing complexity.'},
-    agile: {name: 'Agile Development', acronym: 'Agile', price: 100000, description: 'Focus on priority, cut out unnecessary, lighter the project.'},
-    pair: {name: 'Pair Programming', acronym: 'Pair', price: 100000, description: 'Working in tandem allows us to solve complex problems.'},
+    rad: {name: 'Rapid Development', acronym: 'RAD', price: 25000, description: 'Faster Development at the cost of increasing complexity.'},
+    agile: {name: 'Agile Development', acronym: 'Agile', price: 25000, description: 'Focus on priority, cut out unnecessary, lighter the project.'},
+    pair: {name: 'Pair Programming', acronym: 'Pair', price: 25000, description: 'Working in tandem allows us to solve complex problems.'},
 
-    creativity: {name: 'Four Day Work Week', acronym: 'Free', price: 100000, description: "Fridays devoted to pet projects which boosting experience and lead to insight."},
-    tdd: {name: 'Test Driven Development', acronym: 'TDD', price: 100000, description: 'Developing tests that reduce the probability of errors.'},
-    micromanagement: {name: 'Micromanagement', acronym: 'Micro', price: 100000, description: 'Solid control over the objectives is averaging performance.'}
+    creativity: {name: 'Four Day Work Week', acronym: 'Free', price: 25000, description: "Fridays devoted to pet projects which boosting experience and lead to insight."},
+    tdd: {name: 'Test Driven Development', acronym: 'TDD', price: 25000, description: 'Developing tests that reduce the probability of errors.'},
+    micromanagement: {name: 'Micromanagement', acronym: 'Micro', price: 25000, description: 'Solid control over the objectives is averaging performance.'}
 };
 
 

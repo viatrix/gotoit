@@ -21,7 +21,7 @@ class Worker extends Component {
 
     componentDidMount() {
         if (this.props.worker.is_player) {
-            addAction('This is the management screen of your character. Here you can select its roles in the company. Carefully review information on this screen.', {timeOut: 15000, extendedTimeOut: 5000}, 'success');
+            addAction('This is the management screen of your character. Here you can select its roles in the company. Carefully review information on this screen. Then try Training Project.', {timeOut: 15000, extendedTimeOut: 5000}, 'success');
         }
         this.refs.manage.openPortal();
     }

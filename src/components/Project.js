@@ -316,7 +316,7 @@ class Project extends Component {
                                                                 ? <label>
                                                                 <h5 className="text-center slim">
                                                                     <button
-                                                                        className={technologies[technology].price <= data.money ? "btn btn-success btn-xs" : "btn btn-success btn-xs disabled"}
+                                                                        className={technologies[technology].price <= data.money ? "btn btn-success btn-xs" : "btn btn-default btn-xs disabled"}
                                                                         onClick={() => { if (technologies[technology].price <= data.money) data.helpers.unlockTechnology(technology); }}
                                                                     >
                                                                         Unlock {technologies[technology].price}$

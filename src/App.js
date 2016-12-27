@@ -445,10 +445,10 @@ class App extends Component {
         let tick = data.date.tick;
         switch (tick) {
             case 5:
-                addAction('Hi there! In this corner of the screen will appear the important messages.', {timeOut: 15000, extendedTimeOut: 5000}, 'success');
+                addAction('Hi there! In this corner of the screen will appear the important messages.', {timeOut: 15000, extendedTimeOut: 5000, closeButton: false}, 'success');
                 break;
             case 24:
-                addAction('But first of all choose the origin and formation of your character.', {timeOut: 15000, extendedTimeOut: 5000}, 'success');
+                addAction('But first of all choose the origin and formation of your character.', {timeOut: 15000, extendedTimeOut: 5000, closeButton: false}, 'success');
                 break;
             case 10:
              //   addAction('Then find your first project.', {timeOut: 15000, extendedTimeOut: 5000}, 'success');
