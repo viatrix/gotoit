@@ -339,7 +339,7 @@ class App extends Component {
         //data.projects_end_reports.unshift(project);
         data.projects_archive_reports.unshift(project);
         console.log('archiving', data.projects_end_reports, data.projects_archive_reports, projects, project);
-        this.setState({data: data});
+     //   this.setState({data: data});
     }
 
     unlockTechnology(technology) {

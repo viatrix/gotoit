@@ -24,7 +24,7 @@ var app_state =
         office: new OfficeModel(1),
         candidates: {
             resumes: [
-            //    WorkerModel.generate(3)
+                WorkerModel.generate(3)
             ],
             agency: [],
             stars: [

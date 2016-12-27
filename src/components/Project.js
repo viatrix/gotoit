@@ -113,7 +113,7 @@ class Project extends Component {
 
         const start_pause_button =
             <span>
-                {project.stage}
+                {/*{project.stage}*/}
                 {(project.stage === 'paused')
                     ? <button className="btn btn-success" onClick={() => {
                         project.stage = 'open';

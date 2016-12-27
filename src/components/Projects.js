@@ -49,7 +49,7 @@ class Projects extends Component {
                 <StatsBar stats={stats_data} data={this.props.data} />
                 <button className="btn btn-success" id={candidate.id} onClick={(e) => this.acceptOffered(e, type)}>Accept</button>
                 <button className="btn btn-warning" id={candidate.id} onClick={(e) => this.startOffered(e, type)}>Start</button>
-                <button className="btn btn-danger" id={candidate.id} onClick={(e) => this.reject(e, type)}>Reject</button>
+                <button className="btn btn-danger" id={candidate.id} onClick={(e) => this.reject(e, type)}>Hide</button>
                 <label>Reward: {candidate.reward}$</label>
                 {(candidate.penalty > 0 ? <label>Penalty: {candidate.penalty}$</label> : '')}
             </div>
