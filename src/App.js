@@ -14,7 +14,7 @@ import app_state from './AppData';
 
 export var tick = 0;
 
-const game_speed = 50;
+const game_speed = 300;
 
 //var agency_generation_counter = 0;
 var contract_generation_counter = 0;
