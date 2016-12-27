@@ -7,6 +7,7 @@ import '../../node_modules/bootstrap-slider/dist/css/bootstrap-slider.min.css';
 import _ from 'lodash';
 import classNames from 'classnames';
 
+import {tick} from '../App';
 import TeamDialog from './TeamDialog';
 import StatsBar from './StatsBar';
 import ProjectName from './ProjectName';
@@ -309,7 +310,7 @@ class Project extends Component {
                                                         </div>
                                                     </div>
                                                 )}
-                                                {Object.keys(technologies).map(
+                                                {(tick > (24*30*3)) ? Object.keys(technologies).map(
                                                     (technology, i) => <div key={technology} className="row-md-1">
                                                         <div className="checkbox slim-margin small">
                                                             {!data.projects_known_technologies.includes(technology)
@@ -327,7 +328,7 @@ class Project extends Component {
                                                             </label> : ''}
                                                         </div>
                                                     </div>
-                                                )}
+                                                ) : ''}
                                             </div>
                                         </div>
                                     </div>
