@@ -71,7 +71,7 @@ class HiringAgency extends Component {
         console.log(min_salary_factor, max_salary_factor, sum_control_factor, salary_control_factor, pike_factor2);
 
         return Math.floor((1000 + min_sum_factor + max_sum_factor + pike_factor1)
-            / (0.0001 * (1000 + min_salary_factor + max_salary_factor + sum_control_factor + salary_control_factor + pike_factor2)));
+            / (0.0003 * (1000 + min_salary_factor + max_salary_factor + sum_control_factor + salary_control_factor + pike_factor2)));
     }
 
     search() {

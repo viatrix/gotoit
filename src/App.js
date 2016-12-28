@@ -461,22 +461,22 @@ class App extends Component {
             return false; // no generation first week
         }
 
-        let probability = Math.min(100, (23 + (projects_done))) / 24;
+        let probability = Math.min(50, (10 + (projects_done*0.2))) / 24;
         console.log('probability: ' + probability.toFixed(2));
 
-        if (data.offered_projects.freelance.length < 5 && _.random(1.0, 100.0) < probability) {
-            let quality = Math.ceil((tick / (24*30)) + (projects_done*0.1));
+        if (data.offered_projects.freelance.length < 5 && _.random(0.0, 100.0) < probability) {
+            let quality = Math.ceil((tick / (24*30)) + (projects_done*0.2));
             let size =
-                (quality < 5) ? 1 : (
+                (quality < 3) ? 1 : (
                     (quality < 5) ? _.random(1, _.random(1, 2)) : (
                         (quality < 10) ? _.random(1, 2) : (
-                            (quality < 15) ? _.random(_.random(1, 2), _.random(1, 3)) : (
+                            (quality < 15) ? (_.random(0, 1) ? _.random(1, 2) : _.random(1, 3)) : (
                                 (quality < 20) ? _.random(1, 3) : (
-                                    (quality < 25) ? _.random(_.random(1, 3), _.random(1, 4)) : (
-                                        (quality < 30) ? _.random(_.random(1, 4)) : (
-                                            (quality < 35) ? _.random(_.random(1, 4), _.random(2, 4)) : (
-                                                (quality < 40) ? _.random(_.random(_.random(1, 3), 4), _.random(2, 4)) : (
-                                                    (quality < 45) ? _.random(2, 4) : (
+                                    (quality < 25) ? (_.random(0, 1) ? _.random(1, 3) : _.random(1, 4)) : (
+                                        (quality < 30) ? _.random(1, 4) : (
+                                            (quality < 35) ? (_.random(0, 1) ? _.random(1, 4) : _.random(2, 4)) : (
+                                                (quality < 40) ? _.random(2, 4) : (
+                                                    (quality < 45) ? _.random(_.random(2, 4), 4) : (
                                                         (quality < 50) ? _.random(3, 4) : 4
                                                     )
                                                 )
@@ -503,7 +503,7 @@ class App extends Component {
 
 
 
-        if (Math.floor(_.random(1, 24 * (20 - Math.min(10, Math.sqrt(projects_done*0.1))))) === 1 && data.candidates.resumes.length < 5) {
+        if (Math.floor(_.random(1, 24 * (30 - Math.min(15, projects_done*0.2)))) === 1 && data.candidates.resumes.length < 5) {
             let worker = WorkerModel.generate(_.random(2, 5));
             data.candidates.resumes.push(worker);
             addAction('New resume: ' + worker.name);
