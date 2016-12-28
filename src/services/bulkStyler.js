@@ -31,46 +31,25 @@ class bulkStyler {
         return _.mapValues(stats_bulk, function (stat) { return Math.ceil(stat); });
     }
 
-    static background(stats_bulk, background) {
-        let order = _.shuffle(Object.keys(stats_bulk)); //.sort(function(a,b){return stats_bulk[b]-stats_bulk[a]});
+    static playerBackground(stats_bulk, background) {
+        let order = Object.keys(stats_bulk).sort(function(a,b){return stats_bulk[b]-stats_bulk[a]});
+       // let order = _.shuffle(Object.keys(stats_bulk)); //.sort(function(a,b){return stats_bulk[b]-stats_bulk[a]});
 
         switch (background) {
-            case 'specialist': // med like 8
-                stats_bulk[order[0]] += 5;
-                stats_bulk[order[1]] += 1;
-                stats_bulk[order[2]] += 1;
-                stats_bulk[order[3]] += 1;
-                break;
             case 'comprehensive': // high like 12
                 stats_bulk[order[0]] += 3;
                 stats_bulk[order[1]] += 3;
                 stats_bulk[order[2]] += 3;
                 stats_bulk[order[3]] += 3;
                 break;
-            case 'coworker': // low like 6
-                stats_bulk[order[0]] += 2;
-                stats_bulk[order[1]] += 2;
+            case 'specialist': // med like 9
+                stats_bulk[order[0]] += 6;
+                stats_bulk[order[1]] += 1;
                 stats_bulk[order[2]] += 1;
                 stats_bulk[order[3]] += 1;
                 break;
-            default:
-                console.log('error case: ' + background);
-        }
-        return _.mapValues(stats_bulk, function (stat) { return Math.ceil(stat); });
-    }
-
-    static education(stats_bulk, education) {
-        let order = Object.keys(stats_bulk).sort(function(a,b){return stats_bulk[b]-stats_bulk[a]});
-
-        switch (education) {
-            case 'autodidact': // high like 10
-                stats_bulk[order[0]] += 3;
-                stats_bulk[order[1]] += 5;
-                stats_bulk[order[2]] += 0;
-                stats_bulk[order[3]] += 2;
-                break;
-            case 'university': // mid like 8
-                stats_bulk[order[0]] += 2;
+            case 'coworker': // low like 7
+                stats_bulk[order[0]] += 1;
                 stats_bulk[order[1]] += 2;
                 stats_bulk[order[2]] += 2;
                 stats_bulk[order[3]] += 2;
@@ -82,9 +61,41 @@ class bulkStyler {
                 stats_bulk[order[3]] += 1;
                 break;
             default:
-                console.log('error case: ' + education);
+                console.log('error case: ' + background);
         }
         return _.mapValues(stats_bulk, function (stat) { return Math.ceil(stat); });
+    }
+
+    static playerSpeciality(stats_bulk, speciality) {
+        switch (speciality) {
+            case 'design':
+                stats_bulk['design'] += 4;
+                stats_bulk['manage'] += 1;
+                stats_bulk['program'] += 1;
+                stats_bulk['admin'] += 1;
+                break;
+            case 'manage':
+                stats_bulk['design'] += 1;
+                stats_bulk['manage'] += 4;
+                stats_bulk['program'] += 1;
+                stats_bulk['admin'] += 1;
+                break;
+            case 'program':
+                stats_bulk['design'] += 1;
+                stats_bulk['manage'] += 1;
+                stats_bulk['program'] += 4;
+                stats_bulk['admin'] += 1;
+                break;
+            case 'admin':
+                stats_bulk['design'] += 1;
+                stats_bulk['manage'] += 1;
+                stats_bulk['program'] += 1;
+                stats_bulk['admin'] += 4;
+                break;
+            default:
+                console.log('error case: ' + speciality);
+        }
+        return stats_bulk; //_.mapValues(stats_bulk, function (stat) { return Math.ceil(stat); });
     }
 
     static projectKind(stats_bulk, kind) {

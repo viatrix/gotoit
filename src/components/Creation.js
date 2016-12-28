@@ -8,7 +8,7 @@ import bulkStyler from '../services/bulkStyler';
 
 import WorkerModel from '../models/WorkerModel';
 
-import {player_backgrounds, player_education, technologies, skills_1} from '../data/knowledge';
+import {player_backgrounds, player_specialities, technologies, skills_1} from '../data/knowledge';
 
 class Creation extends Component {
     constructor(props) {
@@ -16,8 +16,8 @@ class Creation extends Component {
 
         this.state = {
             suggest_name: WorkerModel.genName(),
-            selected_background: 'comprehensive',
-            selected_education: 'university',
+            selected_background: _.sample(_.keys(player_backgrounds)), //'comprehensive',
+            selected_speciality: _.sample(_.keys(player_specialities)), //'university',
         };
 
         this.embark = this.embark.bind(this);
@@ -28,12 +28,10 @@ class Creation extends Component {
 
 
         let data = this.props.data;
-        data.money +=
-            player_backgrounds[this.state.selected_background].money +
-            player_education[this.state.selected_education].money;
+        data.money += player_backgrounds[this.state.selected_background].money
         let stats = JSON.parse(JSON.stringify(skills_1));
-        stats = bulkStyler.background(stats, this.state.selected_background);
-        stats = bulkStyler.education(stats, this.state.selected_education);
+        stats = bulkStyler.playerSpeciality(stats, this.state.selected_speciality);
+        stats = bulkStyler.playerBackground(stats, this.state.selected_background);
 
         let worker = WorkerModel.generatePlayer();
 
@@ -44,7 +42,7 @@ class Creation extends Component {
 
         data.stage = 'game';
         data.projects_known_technologies = data.projects_known_technologies.concat(player_backgrounds[this.state.selected_background].start_tech);
-        data.projects_known_technologies = data.projects_known_technologies.concat(player_education[this.state.selected_education].start_tech);
+       // data.projects_known_technologies = data.projects_known_technologies.concat(player_specialities[this.state.selected_speciality].start_tech);
         this.refs.creation.closePortal();
 
         if (this.state.selected_background === 'coworker') {
@@ -61,10 +59,10 @@ class Creation extends Component {
         const data = this.props.data;
         //const worker = data.workers[0];
 
-        let stats = bulkStyler.education(
-                    bulkStyler.background(JSON.parse(JSON.stringify(skills_1)),
-                        this.state.selected_background),
-                        this.state.selected_education);
+        let stats = bulkStyler.playerBackground(
+                    bulkStyler.playerSpeciality(JSON.parse(JSON.stringify(skills_1)),
+                        this.state.selected_speciality),
+                        this.state.selected_background);
 
         const stats_data = _.mapValues(stats, (val, key) => {
             return {name: key, val: stats[key]};
@@ -91,7 +89,7 @@ class Creation extends Component {
                                         {Object.keys(player_backgrounds).map((background) => {
                                             return <div key={background} className="flex-element">
                                                 <div className="radio">
-                                                    <label>
+                                                    <label className="slim">
                                                         <h3 className="text-center">
                                                             <input type="radio" name="background" value={background}
                                                                    checked={this.state.selected_background === background}
@@ -110,20 +108,18 @@ class Creation extends Component {
                                 </div>
                                 <div className="panel panel-success">
                                     <div className="flex-container-row">
-                                        {Object.keys(player_education).map((institute) => {
-                                            return <div key={institute} className="flex-element">
+                                        {Object.keys(player_specialities).map((speciality) => {
+                                            return <div key={speciality} className="flex-element">
                                                 <div className="radio">
-                                                    <label>
+                                                    <label className="slim">
                                                         <h3 className="text-center">
-                                                            <input type="radio" name="education" value={institute}
-                                                                   checked={this.state.selected_education === institute}
+                                                            <input type="radio" name="speciality" value={speciality}
+                                                                   checked={this.state.selected_speciality === speciality}
                                                                    onChange={(event) => {
-                                                                       this.setState({selected_education: event.target.value})
+                                                                       this.setState({selected_speciality: event.target.value})
                                                                    }}/>
-                                                            {player_education[institute].name}
+                                                            {player_specialities[speciality].name}
                                                         </h3>
-                                                        <p>{player_education[institute].text}</p>
-                                                        <p>Start tech: {technologies[player_education[institute].start_tech].name}</p>
                                                     </label>
                                                 </div>
                                             </div>
@@ -132,8 +128,7 @@ class Creation extends Component {
                                 </div>
                                 <div className="panel panel-warning">
                                     <h4 className="text-center fat">
-                                        <p className="fat">Your start money: {player_backgrounds[this.state.selected_background].money +
-                                    player_education[this.state.selected_education].money}
+                                        <p className="fat">Your start money: {player_backgrounds[this.state.selected_background].money}
                                         $. Your start skills:</p>
                                         <StatsBar stats={stats_data} data={this.props.data}/>
                                     </h4>
