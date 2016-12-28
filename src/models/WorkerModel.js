@@ -60,8 +60,12 @@ class WorkerModel {
         }
         else {
         //    console.log("standing " + this.standing + " means " + (1 + (this.standing/(12*4*7*8*Math.PI))));
-            return Math.floor((this.statsSum() + _.max(_.values(this.stats))) * (1 + (this.standing/(12*4*7*8*Math.PI))));
+            return Math.floor((this.statsSum() + _.max(_.values(this.stats))) * (1+(this.getOverrate()/100)));
         }
+    }
+
+    getOverrate() {
+        return (((1 + (this.standing/(12*4*7*8)))*100)-100).toFixed(2);
     }
 
     isWorkingTime(time) {
@@ -214,7 +218,7 @@ class WorkerModel {
         });
         console.log(stats);
         let worker =  new WorkerModel(this.genName(), stats);
-        worker.standing = _.random(agency_state.min_salary, agency_state.max_salary) * 80;
+        worker.standing = Math.floor(_.random(agency_state.min_salary, agency_state.max_salary) * 26.888);
         console.log(worker);
         return worker;
     }
