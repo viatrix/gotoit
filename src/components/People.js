@@ -47,7 +47,7 @@ class People extends Component {
 
         return (
             <div>
-                <h4 className="text-center slim-top"><label> Team </label>
+                <h4 className="text-center slim-top"><label> Your Team </label>
                 </h4>
                 {this.props.data.workers.map((x, i) =>
                     <Worker key={x.id} worker={x} data={this.props.data} />
