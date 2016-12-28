@@ -7,7 +7,7 @@ import '../../node_modules/bootstrap-slider/dist/css/bootstrap-slider.min.css';
 
 import TeamDialog from './TeamDialog';
 
-import {skills_names, skills} from '../data/knowledge';
+import {skills_names, roles, skills} from '../data/knowledge';
 
 
 class HiringAgency extends Component {
@@ -100,8 +100,11 @@ class HiringAgency extends Component {
                 <TeamDialog>
                     <div className="text-center">
                         <h3 className="text-center">Hiring Agency</h3>
+                        <p>
+                            Choose search criteria. Leave our personnel officers leeway to reduce the cost of the search.
+                        </p>
                         {skills_names.map((skill) => {
-                            return draw_row(skill, <ReactBootstrapSlider
+                            return draw_row(roles[skill].name, <ReactBootstrapSlider
                                         value={[this.state.min_stats[skill], this.state.max_stats[skill]]}
                                         change={(e) => {
                                             let state = this.state;
