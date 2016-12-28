@@ -77,3 +77,16 @@ div {
 .panel {
     margin-bottom: 4px;
 }
+
+.chat-window{
+    bottom:0;
+    position:fixed;
+    float:left;
+    margin-right:10px;
+
+    overflow: auto;
+    max-height: 100vh;
+
+   /* overflow-y: scroll;
+    overflow-x:hidden; */
+}

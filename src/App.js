@@ -3,6 +3,7 @@ import _ from 'lodash';
 
 import Layout from './components/Layout';
 import {addMessage, addAction} from './components/ToastNest';
+import {chatMessage} from "./components/Chat";
 import './App.css';
 import WorkerModel from './models/WorkerModel';
 import ProjectModel from './models/ProjectModel';
@@ -667,7 +668,7 @@ class App extends Component {
                     if (overtime) {
                         if (worker.morale > 0) {
                             if (_.random(1, 4) === 1) {
-                                addMessage(worker.name+' overtime!');
+                                chatMessage(worker.name, 'I overtime today');
                             //    console.log('overtime on '+worker.morale);
                                 worker.morale--;
                             }
@@ -720,7 +721,7 @@ class App extends Component {
                     worker.facts.tests_wrote += tests;
                     project.facts.tests_wrote += tests;
                     project.tests += tests;
-                    addMessage(worker.name+' wrote '+tests+' test!', {}, 'success');
+                    chatMessage(worker.name, ' wrote '+tests+' test!', 'success');
                     skip_work = true;
                 }
 
@@ -737,7 +738,7 @@ class App extends Component {
                     worker.facts.refactored += refactoring;
                     project.facts.refactored += refactoring;
                     project.complexity -= refactoring;
-                    addMessage(worker.name+' refactored '+refactoring+' complexity!', {}, 'success');
+                    chatMessage(worker.name, ' refactored '+refactoring+' complexity!', 'success');
                     skip_work = true;
                 }
 

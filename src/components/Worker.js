@@ -58,8 +58,7 @@ class Worker extends Component {
         const data = this.props.data;
         const worker = this.props.worker;
 
-        const manage_button = <button className="btn btn-success btn-sm">Manage Work</button>;
-        const educate_button = <button className="btn btn-default invisible">Educate</button>;
+        const manage_button = <button className="btn btn-success btn-sm">Manage</button>;
 
         const stats_data = _.mapValues(worker.stats, (val, key) => {
             return {name: key, val: (worker.stats[key] + worker.expirience[key]/100).toFixed(2)};
@@ -86,32 +85,6 @@ class Worker extends Component {
             <div className="well well-sm fat">
                 {worker.name} {worker.is_player ? 'Player' : <span>{worker.getSalary()}$</span>}
                 {worker.in_vacation ? ' in vacation! ' : ''}
-                <Portal closeOnEsc closeOnOutsideClick openByClickOn={educate_button}>
-                    <TeamDialog>
-                        <h2>Worker Education</h2>
-                        <div>
-                            Which source of education {worker.name} has to use?
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th> </th>
-                                        {skills_names.map((skill) => { return <th key={skill}>{skill}</th>; })}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {Object.keys(education).map((source) =>
-                                    <tr key={source}>
-                                        <td>{education[source].name}</td>
-                                        {skills_names.map((skill) => {
-                                            return <td key={skill}><button title={education[source].description} id={source} onClick={() => this.teach(skill, source)}>{education[source].name}</button></td>;
-                                        })}
-                                    </tr>
-                                )}
-                                </tbody>
-                            </table>
-                        </div>
-                    </TeamDialog>
-                </Portal>
 
                 <Portal ref="manage" closeOnEsc closeOnOutsideClick openByClickOn={manage_button}>
                     <TeamDialog>

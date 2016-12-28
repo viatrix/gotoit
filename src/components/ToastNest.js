@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 
 import {ToastContainer, ToastMessage} from "react-toastr";
+
+import { chatMessage } from "./Chat";
+
 const ToastMessageFactory = React.createFactory(ToastMessage.animation);
 
-export var addMessage;
-addMessage = (text) => { console.log(text);};
-export var addAction;
-addAction = (text) => { console.log(text);};
+export var addMessage = (text) => { console.log(text) };
+export var addAction = (text) => { console.log(text) };
 
 /***
  * Short info:
@@ -30,6 +31,8 @@ class ToastNest extends Component {
     }
 
     addMessage(text, options, type='info') {
+        chatMessage('', text, type);
+
         this.refs.messages[type](text, ``, Object.assign({
             closeButton: false,
             preventDuplicates: false,

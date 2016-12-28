@@ -4,7 +4,8 @@ import _ from 'lodash';
 
 import bulkStyler from '../services/bulkStyler';
 
-import {addMessage} from '../components/ToastNest';
+import {chatMessage} from "../components/Chat";
+
 
 import {skills, project_kinds, project_platforms, project_sizes} from '../data/knowledge';
 import {hired, projects_done} from '../App';
@@ -90,21 +91,21 @@ class ProjectModel {
                     this.facts.tasks_done += tasks;
                     this.needs[stat] -= tasks;
                     this.stored_wisdom[stat] = 0;
-                    addMessage(worker.name+' solve '+tasks+' '+stat+' tasks', {}, 'info');
+                    chatMessage(worker.name, ' solve '+tasks+' '+stat+' tasks', 'info');
                 }
 
                 if (bugs > 0) {
                     this.stored_wisdom[stat] += work[stat];
                     let prevented = this.runTests(bugs);
                     if (prevented) {
-                        addMessage(worker.name+' do '+bugs+' errors in '+stat+', but test prevent '+prevented+' of them', {}, 'warning');
+                        chatMessage(worker.name, ' do '+bugs+' errors in '+stat+', but test prevent '+prevented+' of them', 'warning');
                         //console.log('Test prevent errors');
                         worker.facts.bugs_passed += bugs-prevented;
                         this.facts.bugs_passed += bugs-prevented;
                         this.errors[stat] += bugs-prevented;
                     }
                     else {
-                        addMessage(worker.name+' do '+bugs+' errors in '+stat, {}, 'warning');
+                        chatMessage(worker.name, ' do '+bugs+' errors in '+stat, 'warning');
                         //console.log('Do errors');
                         worker.facts.bugs_passed += bugs;
                         this.facts.bugs_passed += bugs;

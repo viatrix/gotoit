@@ -130,7 +130,7 @@ class Project extends Component {
                 }}>Pause</button> : ''}
             </span>;
 
-        const reject_button = <button className="btn btn-danger btn-sm" onClick={() => {
+        const reject_button = <button className="btn btn-danger" onClick={() => {
             if (confirm("Reject project "+project.name+'? (penalty: '+project.penalty+')')) {
                 this.close();
             } }}>Reject</button>;
@@ -142,7 +142,8 @@ class Project extends Component {
                     <label className="flex-element"> Reward: {project.reward}$ </label>
                     {(project.penalty > 0 ? <label className="flex-element"> Penalty: {project.penalty}$ </label> : ' ')}
                     <div>
-                        {start_pause_button} {reject_button}
+                        {start_pause_button}
+                        {reject_button}
                         <Portal ref="manage" closeOnEsc openByClickOn={manage_button}>
                             <TeamDialog>
                                 <h4 className="flex-container-row">

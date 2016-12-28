@@ -1,7 +1,8 @@
 
 import _ from 'lodash';
 
-import {addMessage} from '../components/ToastNest';
+
+import {chatMessage} from "../components/Chat";
 
 import bulkStyler from '../services/bulkStyler';
 import {skills} from '../data/knowledge';
@@ -189,7 +190,7 @@ class WorkerModel {
                 this.expirience[stat] += Math.ceil((learned[stat] * 5) / (this.stats[stat]));
                 if (this.expirience[stat] >= 100) {
                     console.log('stat rise');
-                    addMessage(this.name+' rise '+stat+'!', {}, 'success');
+                    chatMessage(this.name, ' rise '+stat+' skill!', 'success');
                     this.expirience[stat] -= 100;
                     this.stats[stat]++;
                 }
