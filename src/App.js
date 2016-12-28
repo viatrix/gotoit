@@ -442,7 +442,6 @@ class App extends Component {
     rollTurn() {
         const data = this.state.data;
 
-        let tick = data.date.tick;
         switch (tick) {
             case 5:
                 addAction('Hi there! In this corner of the screen will appear the important messages.', {timeOut: 15000, extendedTimeOut: 5000, closeButton: false}, 'success');
@@ -458,7 +457,50 @@ class App extends Component {
         }
 
 
-        if (tick < (24 * 7)) return;
+        if (tick < (24 * 7)) {
+            return false; // no generation first week
+        }
+
+        let probability = Math.min(100, (23 + (projects_done))) / 24;
+        console.log('probability: ' + probability.toFixed(2));
+
+        if (data.offered_projects.freelance.length < 5 && _.random(1.0, 100.0) < probability) {
+            let quality = Math.ceil((tick / (24*30)) + (projects_done*0.1));
+            let size =
+                (quality < 5) ? 1 : (
+                    (quality < 5) ? _.random(1, _.random(1, 2)) : (
+                        (quality < 10) ? _.random(1, 2) : (
+                            (quality < 15) ? _.random(_.random(1, 2), _.random(1, 3)) : (
+                                (quality < 20) ? _.random(1, 3) : (
+                                    (quality < 25) ? _.random(_.random(1, 3), _.random(1, 4)) : (
+                                        (quality < 30) ? _.random(_.random(1, 4)) : (
+                                            (quality < 35) ? _.random(_.random(1, 4), _.random(2, 4)) : (
+                                                (quality < 40) ? _.random(_.random(_.random(1, 3), 4), _.random(2, 4)) : (
+                                                    (quality < 45) ? _.random(2, 4) : (
+                                                        (quality < 50) ? _.random(3, 4) : 4
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                );
+
+            console.log('probability: ' + probability.toFixed(2) + ' quality: ' + quality + ' size: ' + size);
+            data.offered_projects.freelance.push(ProjectModel.generate(quality, size));
+            addAction('New job!', {timeOut: 3000, extendedTimeOut: 1000});
+        }
+        if (_.random(1, 100) < Math.sqrt(probability)) {
+            _.remove(data.candidates.resumes, (candidate) => { return (candidate.id === data.candidates.resumes[0].id); });
+        }
+
+
+
+
+
 
 
         if (Math.floor(_.random(1, 24 * (20 - Math.min(10, Math.sqrt(projects_done*0.1))))) === 1 && data.candidates.resumes.length < 5) {
@@ -479,7 +521,7 @@ class App extends Component {
             addAction('Excellent '+max_skill+' ninja '+worker.name+' looking for a job');
         }
 
-
+/*
         if (Math.floor(_.random(1, (24*2) + (projects_done*0.1))) === 1 && data.offered_projects.freelance.length < 5) {
             data.offered_projects.freelance.push(ProjectModel.generate(_.random(1, 3), _.random(1, 2)));
             addAction('New freelance job!', {timeOut: 3000, extendedTimeOut: 1000});
@@ -492,6 +534,7 @@ class App extends Component {
             data.offered_projects.freelance.push(ProjectModel.generate(_.random(15, 30 + Math.sqrt(projects_done)), 4));
             addAction('New big deal!', {timeOut: 5000, extendedTimeOut: 3000});
         }
+        */
 
 
         //this.setState({data: data});

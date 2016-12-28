@@ -30,6 +30,15 @@ export const project_kinds = {
     database: {name: 'Database'}
 };
 
+export const project_sizes = {
+    0: {name: 'Training'},
+    1: {name: 'Parts for'},
+    2: {name: 'Module for'},
+    3: {name: 'The'},
+    4: {name: 'Big'},
+    5: {name: 'Custom'}
+};
+
 
 export const technologies = {
     overtime: {name: 'Overtime Work', acronym: 'Over', price: 1000, description: 'Overtime help to finish project on time, but exhausted team.'},

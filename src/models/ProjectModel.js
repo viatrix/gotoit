@@ -6,7 +6,7 @@ import bulkStyler from '../services/bulkStyler';
 
 import {addMessage} from '../components/ToastNest';
 
-import {skills, project_kinds, project_platforms} from '../data/knowledge';
+import {skills, project_kinds, project_platforms, project_sizes} from '../data/knowledge';
 import {hired, projects_done} from '../App';
 
 var projects_generated = 0;
@@ -266,9 +266,9 @@ class ProjectModel {
             manage: this.genStat(quality, size)
         };
 
+        stats_bulk = bulkStyler.speciality(stats_bulk);
         stats_bulk = bulkStyler.projectKind(stats_bulk, kind);
         stats_bulk = bulkStyler.projectPlatform(stats_bulk, platform);
-        stats_bulk = bulkStyler.speciality(stats_bulk);
 
         let stats = JSON.parse(JSON.stringify(skills));
 
@@ -296,13 +296,13 @@ class ProjectModel {
         let reward = 1000 + Math.ceil((_.max(s) + _.sum(s)) * 10 * size);
         let penalty = ([0, 0, 0, 0.5, 1][size] * reward).toFixed(0);
         let deadline = 100 +  // constant for anti-weekend effect on small projects
-            Math.floor((((_.max(s) + _.sum(s)) * 10) / (3 * size)));
+            Math.floor((((_.max(s) + _.sum(s)) * 5) / (1 * size)));
 
         return new ProjectModel(this.genName(), 'project', kind, platform, reward, penalty, stats, size, deadline);
     }
 
     static generateTraining(worker, skill=null) {
-        let level = Math.floor((worker.statsSum()/4*0.75) + (worker.stats[skill]*3));
+        let level = Math.floor((worker.statsSum()/4*0.5) + (worker.stats[skill]*3));
 
         let kind = _.sample(_.keys(project_kinds));
         let platform = _.sample(_.keys(project_platforms));
@@ -344,7 +344,7 @@ class ProjectModel {
     }
 
     getName() {
-        return this.size_name+' '+this.platform+' '+this.kind+' '+this.name;
+        return project_sizes[this.size].name+' '+this.platform+' '+this.kind+' '+this.name;
     }
 
     static genStat(quality, size=1) {

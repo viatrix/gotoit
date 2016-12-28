@@ -99,20 +99,27 @@ class WorkerModel {
 
     workloadPenalty() {
         const task_preferred = (Math.ceil((tick - this.facts.tick_hired)/24) * 3);
-        const tasks_stream = Math.min(20, 20 * (1-((200+task_preferred) / ((200+(this.facts.tasks_done - this.facts.training_tasks_done))))));
+        const tasks_stream = 20 * (1-((200+task_preferred) / ((200+(this.facts.tasks_done - this.facts.training_tasks_done)))));
         return Math.max(Math.min(Math.floor(tasks_stream), 20), -20);
     }
 
     difficultyPenalty() {
-        const tasks_difficulty = Math.min(20, 20 * (1-((200+(this.facts.bugs_passed * Math.PI)) / ((200+(this.facts.tasks_done))))));
-        return Math.max(Math.min(Math.floor(tasks_difficulty), 20), -20);
+        let difficulty_ratio = (200+(this.facts.bugs_passed*3)) / (200+this.facts.tasks_done);
+        let thirst_for_difficulty = (100+_.max(_.values(this.stats))) / (100+(this.statsSum()/4));
+        // console.log(difficulty_ratio, thirst_for_difficulty);
+        const difficulty_stream = 20 * (1-(difficulty_ratio/thirst_for_difficulty));
+        return Math.max(Math.min(Math.floor(difficulty_stream), 20), -20);
+        
+
+     //   const tasks_difficulty = Math.min(20, 20 * (1-((200+(this.facts.bugs_passed * Math.PI)) / ((200+(this.facts.tasks_done))))));
+     //   return Math.max(Math.min(Math.floor(tasks_difficulty), 20), -20);
     }
 
     educationPenalty() {
         let knowledge_ratio = (100+(this.facts.training_tasks_done*3)) / (100+this.facts.tasks_done);
         let thirst_for_knowledge = (100+(this.statsSum()/4)) / (100+_.max(_.values(this.stats)));
        // console.log(knowledge_ratio, thirst_for_knowledge);
-        const education_stream = Math.min(20, 20 * (1-(knowledge_ratio/thirst_for_knowledge)));
+        const education_stream = 20 * (1-(knowledge_ratio/thirst_for_knowledge));
         return Math.max(Math.min(Math.floor(education_stream), 20), -20);
     }
 
@@ -120,7 +127,7 @@ class WorkerModel {
         let collective_sum = 0;
         getData().workers.forEach((worker) => { collective_sum += worker.statsSum(); });
         const collective_avg = collective_sum/getData().workers.length;
-        const collective = Math.min(20, 20 * (1-((10 + collective_avg)/(10 + this.statsSum()))));
+        const collective = 20 * (1-((10 + collective_avg)/(10 + this.statsSum())));
         return Math.max(Math.min(Math.floor(collective), 20), -20);
     }
 
@@ -175,7 +182,7 @@ class WorkerModel {
     addExperience(learned) {
         Object.keys(learned).forEach((stat) => {
             if (learned[stat] !== 0) {
-                this.expirience[stat] += Math.ceil((learned[stat] * 7) / (this.stats[stat]));
+                this.expirience[stat] += Math.ceil((learned[stat] * 5) / (this.stats[stat]));
                 if (this.expirience[stat] >= 100) {
                     console.log('stat rise');
                     addMessage(this.name+' rise '+stat+'!', {}, 'success');
