@@ -12,6 +12,8 @@ import WorkerModel from './models/WorkerModel';
 import ProjectModel from './models/ProjectModel';
 import OfficeModel from './models/OfficeModel';
 
+import Lorer from './services/Lorer';
+
 import {skills_names, technologies} from './data/knowledge';
 
 import app_state from './AppData';
@@ -356,6 +358,36 @@ class App extends Component {
         data.projects_archive_reports.unshift(project);
         console.log('archiving', data.projects_end_reports, data.projects_archive_reports, projects, project);
      //   this.setState({data: data});
+
+        if (project.is_storyline ) return;
+
+        if (project.type === 'training' && !data.achievements.includes('FirstTraining')) {
+            data.offered_projects.hot.push(Lorer.afterFirstTraining(project));
+            data.achievements.push('FirstTraining')
+        }
+        if (project.size === 1 && !data.achievements.includes('FirstPart')) {
+            data.offered_projects.hot.push(Lorer.afterFirstPart(project));
+            data.achievements.push('FirstPart')
+        }
+        if (project.size === 2 && !data.achievements.includes('FirstModule')) {
+            data.offered_projects.hot.push(Lorer.afterFirstModule(project));
+            data.achievements.push('FirstModule')
+        }
+        if (project.size === 3 && !data.achievements.includes('FirstApplication')) {
+            data.offered_projects.hot.push(Lorer.afterFirstApplication(project));
+            data.achievements.push('FirstApplication')
+        }
+        if (project.size === 4 && !data.achievements.includes('BigDeal')) {
+            data.offered_projects.hot.push(Lorer.afterFirstBigDeal(project));
+            data.achievements.push('BigDeal')
+        }
+        /*
+        switch (project.type) {
+
+        }
+        data.achievements.includes('FirstTraining')
+        */
+
     }
 
     unlockTechnology(technology) {

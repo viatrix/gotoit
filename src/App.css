@@ -49,6 +49,11 @@ div {
     padding: 6px;
     margin: 6px;
 }
+
+.moat {
+    padding: 30px 100px;
+    margin: 30px 100px;
+}
 /*
 .checkbox label {
     padding-left: 0px;

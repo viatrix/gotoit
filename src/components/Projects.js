@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
 import Portal from 'react-portal';
-import _ from 'lodash';
 
 import TeamDialog from './TeamDialog';
-import StatsBar from './StatsBar';
 import MarketTop from './MarketTop';
-import ProjectName from './ProjectName';
+import ProjectOfferBlock from './ProjectOfferBlock';
 
 import SalesAgency from './SalesAgency';
 import Project from './Project';
 import ProjectReport from './ProjectReport';
 import ProjectModel from '../models/ProjectModel';
-import {skills} from '../data/knowledge';
 
 class Projects extends Component {
     constructor(props) {
@@ -24,40 +21,12 @@ class Projects extends Component {
         this.props.data.helpers.startProject(ProjectModel.generate());
     }
 
-    acceptOffered(event, type) {
-        this.props.data.helpers.acceptOffered(event.target.id, type);
-    }
-
-    startOffered(event, type) {
-        this.props.data.helpers.startOffered(event.target.id, type);
-    }
-
-    reject(event, type) {
-        this.props.data.helpers.rejectOffered(event.target.id, type);
-    }
 
     render() {
         const find_projects = <button className="btn btn-success">Find Projects</button>;
 
         let project_block_template = (candidate, type) => {
-            const stats_data = _.mapValues(skills, (stat, key) => {
-                return { name: key, val: <span>{candidate.needs[key]}</span> };
-            });
-
-            return <div key={candidate.id} className="panel panel-warning">
-                <ProjectName project={candidate} />
-                <div>
-                    <label>Deadline: {candidate.getDeadlineText()}</label>&nbsp;
-                    <label>Reward: {candidate.reward}$</label>&nbsp;
-                    {candidate.penalty > 0 ? <label>Penalty: {candidate.penalty}$</label> : ''}
-                </div>
-                <StatsBar stats={stats_data} data={this.props.data} />
-                <div className="btn-group">
-                    <button className="btn btn-success" id={candidate.id} onClick={(e) => this.acceptOffered(e, type)}>Accept</button>&nbsp;
-                    <button className="btn btn-warning" id={candidate.id} onClick={(e) => this.startOffered(e, type)}>Start</button>&nbsp;
-                    <button className="btn btn-danger" id={candidate.id} onClick={(e) => this.reject(e, type)}>Hide</button>
-                </div>
-            </div>
+            return <ProjectOfferBlock key={candidate.id} candidate={candidate} data={this.props.data} type={type} />;
         };
 
         let freelance_offered = (candidate) => { return project_block_template(candidate, 'freelance'); };

@@ -33,8 +33,8 @@ var app_state =
         },
         offered_projects: {
             freelance: [
-                ProjectModel.generate(2, 1),
-                ProjectModel.generate(2, 2)
+                ProjectModel.generate(1, 1),
+                ProjectModel.generate(2, 1)
              //   ProjectModel.generate(1, _.random(1, 2)),
              //   ProjectModel.generate(1, _.random(1, 2))
             ],
@@ -42,6 +42,7 @@ var app_state =
             bigdeal: [
             //    ProjectModel.generate(30, 4)
             ],
+            hot: []
         },
         hiring_agency_state: {},
         sales_agency_state: {},
@@ -55,7 +56,8 @@ var app_state =
         projects_technologies: [],
         projects_default_technologies: [],
         relations: [],
-        helpers: {}
+        helpers: {},
+        achievements: []
     }
 };
 

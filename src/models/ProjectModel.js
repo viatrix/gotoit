@@ -34,6 +34,8 @@ class ProjectModel {
         this.size = size;
         this.tests = 0;
 
+        this.is_storyline = false;
+        this.lore = null;
         this.briefing = false;
         this.accept_default = (this.type !== 'training') ? true : false;
 
@@ -45,7 +47,7 @@ class ProjectModel {
     
     generateReport(is_player = true) {
         return {
-            id: this.id, name: this.getName(), is_player: is_player,
+            id: this.id, name: this.getName(), is_player: is_player, type: this.type,
             platform: this.platform, kind: this.kind,
             design: this.needs_max.design, manage: this.needs_max.manage, program: this.needs_max.program, admin: this.needs_max.admin,
             total: this.totalScore()
@@ -306,7 +308,7 @@ class ProjectModel {
 
 
     static generateTraining(worker, skill=null) {
-        let level = Math.floor((worker.statsSum()/4*0.5) + (worker.stats[skill]*3));
+        let level = Math.floor((worker.statsSum()/4*0.5) + (worker.stats[skill]*2));
 
         let kind = _.sample(_.keys(project_kinds));
         let platform = _.sample(_.keys(project_platforms));
