@@ -31,12 +31,12 @@ export const project_kinds = {
 };
 
 export const project_sizes = {
-    0: {name: 'Training', alone_name: 'Training'},
-    1: {name: 'Parts for', alone_name: 'Parts'},
-    2: {name: 'Module for', alone_name: 'Module'},
-    3: {name: 'The', alone_name: 'Application'},
-    4: {name: 'Big', alone_name: 'Big Deal'},
-    5: {name: 'Custom', alone_name: 'Custom'}
+    0: {name: 'Training', alone_name: 'Training', agency_min: 0,  agency_max: 0},
+    1: {name: 'Parts for', alone_name: 'Parts', agency_min: 1,  agency_max: 500},
+    2: {name: 'Module for', alone_name: 'Module', agency_min: 50,  agency_max: 1000},
+    3: {name: 'The', alone_name: 'Application', agency_min: 100,  agency_max: 2500},
+    4: {name: 'Big', alone_name: 'Big Deal', agency_min: 1000,  agency_max: 10000},
+    5: {name: 'Custom', alone_name: 'Custom', agency_min: 0,  agency_max: 0}
 };
 
 

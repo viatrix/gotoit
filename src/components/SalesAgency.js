@@ -37,11 +37,11 @@ class SalesAgency extends Component {
 
         let min_sum_factor = Math.floor(_.values(s.min_stats).reduce((sum, val) => {
             //return _.sum([sum, val*3]);
-            return _.sum([sum, Math.pow(val, 1.5)]);
+            return _.sum([sum, Math.pow(val, 1.3)]);
         }, 0));
         let max_sum_factor = Math.floor(_.values(s.max_stats).reduce((sum, val) => {
             //return _.sum([sum, val*2]);
-            return _.sum([sum, Math.pow(val, 1.4)]);
+            return _.sum([sum, Math.pow(val, 1.2)]);
         }, 0));
 
         let pike_factor1 = Math.floor((_.max(_.values(s.min_stats)) + _.max(_.values(s.max_stats))) / 2 );
@@ -52,12 +52,12 @@ class SalesAgency extends Component {
         skills_names.forEach((skill) => {
             sum_control_factor += s.max_stats[skill] - s.min_stats[skill];
         });
-        sum_control_factor = Math.floor(sum_control_factor / 2);
+        sum_control_factor = Math.floor(sum_control_factor / 4);
 
        // console.log(min_sum_factor, max_sum_factor, pike_factor1, pike_factor2, '/', sum_control_factor);
 
         return 153 + Math.floor((Math.pow(s.size, 1.615) * (50 + min_sum_factor + max_sum_factor + pike_factor1 + pike_factor2))
-            / (0.01 * (50  + sum_control_factor)));
+            / (0.01 * (100  + sum_control_factor)));
     }
 
     search() {
@@ -91,7 +91,26 @@ class SalesAgency extends Component {
                         </p>
                         {draw_row('Project Size', <ReactBootstrapSlider
                             value={this.state.size}
-                            change={(e) => { this.setState({size: e.target.value}); }}
+                            change={(e) => {
+                                let size_data = project_sizes[e.target.value];
+                                let state = this.state;
+                                let new_state = {size: e.target.value, min_stats: {}, max_stats: {}};
+
+                                let corridor = (min, value, max) => {
+                                    return Math.max(min, Math.min(max, value));
+                                };
+
+                                _.keys(state.min_stats).forEach((skill) => {
+                                    new_state.min_stats[skill] = corridor(size_data.agency_min, state.min_stats[skill], size_data.agency_max);//Math.max(project_sizes[e.target.value].agency_min, state.min_stats[skill]);
+                                });
+                                _.keys(state.max_stats).forEach((skill) => {
+                                    new_state.max_stats[skill] = corridor(size_data.agency_min, state.max_stats[skill], size_data.agency_max);
+                                    //new_state.min_stats[skill] = Math.min(project_sizes[e.target.value].agency_max, state.max_stats[skill]);
+                                });
+
+                                console.log(e, new_state);
+                                this.setState(new_state);
+                            }}
                             tooltip='hide'
                             step={1}
                             min={1}
@@ -111,10 +130,13 @@ class SalesAgency extends Component {
                                         //scale='logarithmic'
                                         tooltip='always'
                                         step={1}
-                                        max={1000}
-                                        min={1}/>)
+                                        min={project_sizes[this.state.size].agency_min}
+                                        max={project_sizes[this.state.size].agency_max}/>)
                         })}
-                        <button className={this.calcCost() <= data.money ? "btn btn-success" : "btn btn-success disabled"} onClick={() => { if (this.calcCost() <= data.money) { this.search() } }}>Search {this.calcCost()}</button>
+                        <button className={this.calcCost() <= data.money ? "btn btn-success" : "btn btn-success disabled"}
+                                onClick={() => { if (this.calcCost() <= data.money) { this.search() } }}>
+                            Search {this.calcCost()}$
+                        </button>
                     </div>
                 </TeamDialog>
             </Portal>
