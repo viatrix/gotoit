@@ -18,7 +18,7 @@ class Office extends Component {
                             value={game_date}
                             weekday="short"
                             day="numeric"
-                            month="long"
+                            month="short"
                             year="numeric"
                             hour="numeric"
                             />

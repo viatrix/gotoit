@@ -44,6 +44,7 @@ var app_state =
             ],
         },
         hiring_agency_state: {},
+        sales_agency_state: {},
         workers: [],
         workers_roles: {player: {design: true, manage: true, program: true, admin: true}},
         projects: [],

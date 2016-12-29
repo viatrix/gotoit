@@ -32,7 +32,6 @@ class ProjectModel {
         this.complexity = complexity;
         this.iteration = 1;
         this.size = size;
-        this.size_name = ['Training', 'Tiny', 'Small', 'Medium', 'Big', 'Custom'][size];
         this.tests = 0;
 
         this.briefing = false;
@@ -66,7 +65,6 @@ class ProjectModel {
                     return 'supporter';
                 }
 
-
                 let all_work = _.random(1, work[stat]) + this.stored_wisdom[stat];
                 let complexity_penalty = Math.max(0, Math.floor(Math.sqrt(Math.max(0, this.complexity - _.random(0, this.errors[stat])))) - this.iteration + 1);
                 let bugs = 0;
@@ -78,9 +76,6 @@ class ProjectModel {
                     tasks = all_work - complexity_penalty;
                     bugs = complexity_penalty;
                 }
-
-
-
 
                 if (tasks > 0) {
                     tasks = Math.min(this.needs[stat], tasks);
@@ -274,33 +269,41 @@ class ProjectModel {
         let stats = JSON.parse(JSON.stringify(skills));
 
         if (size !== 4) {
-            //let sk = _.shuffle(Object.keys(stats));
-
             let pairs = _.toPairs(stats_bulk);
-
             let sk = pairs.sort(function(a, b) {
                 return b[1] - a[1];
             });
-
             sk = _.keys(_.fromPairs(sk));
-
             for (let i = 0; i < size; i++) {
                 stats[sk[i]] = stats_bulk[sk[i]];
             }
-           // console.log(stats_bulk, sk, stats);
         }
         else {
             stats = stats_bulk;
         }
 
         let s = _.values(stats);
-        let reward = 1000 + Math.ceil((_.max(s) + _.sum(s)) * 5 * size);
-        let penalty = ([0, 0, 0, 0.5, 1, 0][size] * reward).toFixed(0);
-        let deadline = 48 +  // constant for anti-weekend effect on small projects
-            Math.floor((((_.max(s) + _.sum(s)) * 5) / (2 * size)));
+        let reward = this.genReward(s, size);
+        let penalty = (this.genPenaltyDole(s, size) * reward).toFixed(0);
+        let deadline = this.genDeadline(s, size);
 
         return new ProjectModel(this.genName(), 'project', kind, platform, reward, penalty, stats, size, deadline);
     }
+
+    static genReward(s, size) {
+        return 1000 + Math.ceil((_.max(s) + _.sum(s)) * 5 * size);
+    }
+
+    static genPenaltyDole(s, size) {
+        return [0, 0, 0, 0.5, 1, 0][size];
+    }
+
+    static genDeadline(s, size) {
+        return 48 +  // constant for anti-weekend effect on small projects
+            Math.floor((((_.max(s) + _.sum(s)) * 5) / (2 * size)));
+    }
+
+
 
     static generateTraining(worker, skill=null) {
         let level = Math.floor((worker.statsSum()/4*0.5) + (worker.stats[skill]*3));
@@ -323,6 +326,27 @@ class ProjectModel {
         let penalty = 0;
         let deadline = 0;
         return new ProjectModel(this.genName(), 'draft', kind, platform, reward, penalty, stats, 0, deadline);
+    }
+
+    static generateAgency(agency_state) {
+        const size = agency_state.size;
+
+        //console.log(agency_state);
+        let stats = _.mapValues(skills, (value, skill) => {
+            let stat = _.random(agency_state.min_stats[skill], agency_state.max_stats[skill]);
+            console.log(skill, stat);
+            return stat;
+        });
+        //console.log(stats);
+
+        let kind = _.sample(_.keys(project_kinds));
+        let platform = _.sample(_.keys(project_platforms));
+        stats = JSON.parse(JSON.stringify(stats));
+        let s = _.values(stats);
+        let reward = this.genReward(s, size);
+        let penalty = (this.genPenaltyDole(s, size) * reward).toFixed(0);
+        let deadline = this.genDeadline(s, size);
+        return new ProjectModel(this.genName(), 'project', kind, platform, reward, penalty, stats, size, deadline);
     }
 
     static genName() {

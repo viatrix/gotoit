@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import _ from 'lodash';
 
+import '../node_modules/bootstrap-slider/dist/css/bootstrap-slider.min.css';
+import './App.css';
+
 import Layout from './components/Layout';
 import {addMessage, addAction} from './components/ToastNest';
 import {chatMessage} from "./components/Chat";
-import './App.css';
+
 import WorkerModel from './models/WorkerModel';
 import ProjectModel from './models/ProjectModel';
 import OfficeModel from './models/OfficeModel';
@@ -207,12 +210,22 @@ class App extends Component {
     }
 
 
-    contractSearch() {
+    contractSearchOld() {
         contract_generation_counter++;
         let data = this.state.data;
         data.money -= 1000;
         data.offered_projects.contract.push(ProjectModel.generate(_.random(3, 6 + contract_generation_counter), 3));
         this.setState({data: data});
+    }
+
+    contractSearch(agency_state, agency_reward) {
+        contract_generation_counter++;
+        let data = this.state.data;
+        this.chargeMoney(agency_reward);
+        let project = ProjectModel.generateAgency(agency_state);
+        data.sales_agency_state = agency_state;
+        data.offered_projects.contract.push(project);
+     //   this.setState({data: data});
     }
 
     rejectOffered(id, type) {
@@ -375,14 +388,14 @@ class App extends Component {
         this.setState({data: data});
     }
 
-    chargeMoney(quantity) {
+    chargeMoney(quantity, silent = false) {
         if (quantity <= 0) {
             console.log('fix chargeMoney(0)');
             return false;
         }
         let data = this.state.data;
         data.money -= quantity;
-        addAction('Charge from your wallet: '+quantity+'$', {timeOut: 1500, extendedTimeOut: 500}, 'warning');
+        if (!silent) addAction('Charge from your wallet: '+quantity+'$', {timeOut: 3000, extendedTimeOut: 2000}, 'warning');
         this.setState({data: data});
     }
 
@@ -463,7 +476,7 @@ class App extends Component {
         }
 
         let probability = Math.min(50, (10 + (projects_done*0.2))) / 24;
-        console.log('probability: ' + probability.toFixed(2));
+    //    console.log('probability: ' + probability.toFixed(2));
 
         if (data.offered_projects.freelance.length < 5 && _.random(0.0, 100.0) < probability) {
             let quality = Math.ceil((tick / (24*30)) + (projects_done*0.2));
@@ -691,7 +704,7 @@ class App extends Component {
                 // get Salary
                 if (!worker.is_player) {
                     let salary = worker.getSalary();
-                    this.chargeMoney(salary);
+                    this.chargeMoney(salary, true);
                     worker.facts.money_earned += salary;
                     project.facts.money_spent += salary;
                 }

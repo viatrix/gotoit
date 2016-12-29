@@ -31,12 +31,12 @@ export const project_kinds = {
 };
 
 export const project_sizes = {
-    0: {name: 'Training'},
-    1: {name: 'Parts for'},
-    2: {name: 'Module for'},
-    3: {name: 'The'},
-    4: {name: 'Big'},
-    5: {name: 'Custom'}
+    0: {name: 'Training', alone_name: 'Training'},
+    1: {name: 'Parts for', alone_name: 'Parts'},
+    2: {name: 'Module for', alone_name: 'Module'},
+    3: {name: 'The', alone_name: 'Application'},
+    4: {name: 'Big', alone_name: 'Big Deal'},
+    5: {name: 'Custom', alone_name: 'Custom'}
 };
 
 

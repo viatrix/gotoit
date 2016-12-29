@@ -7,6 +7,7 @@ import StatsBar from './StatsBar';
 import MarketTop from './MarketTop';
 import ProjectName from './ProjectName';
 
+import SalesAgency from './SalesAgency';
 import Project from './Project';
 import ProjectReport from './ProjectReport';
 import ProjectModel from '../models/ProjectModel';
@@ -45,13 +46,17 @@ class Projects extends Component {
 
             return <div key={candidate.id} className="panel panel-warning">
                 <ProjectName project={candidate} />
-                <div>deadline: {candidate.getDeadlineText()}</div>
+                <div>
+                    <label>Deadline: {candidate.getDeadlineText()}</label>&nbsp;
+                    <label>Reward: {candidate.reward}$</label>&nbsp;
+                    {candidate.penalty > 0 ? <label>Penalty: {candidate.penalty}$</label> : ''}
+                </div>
                 <StatsBar stats={stats_data} data={this.props.data} />
-                <button className="btn btn-success" id={candidate.id} onClick={(e) => this.acceptOffered(e, type)}>Accept</button>
-                <button className="btn btn-warning" id={candidate.id} onClick={(e) => this.startOffered(e, type)}>Start</button>
-                <button className="btn btn-danger" id={candidate.id} onClick={(e) => this.reject(e, type)}>Hide</button>
-                <label>Reward: {candidate.reward}$</label>
-                {(candidate.penalty > 0 ? <label>Penalty: {candidate.penalty}$</label> : '')}
+                <div className="btn-group">
+                    <button className="btn btn-success" id={candidate.id} onClick={(e) => this.acceptOffered(e, type)}>Accept</button>&nbsp;
+                    <button className="btn btn-warning" id={candidate.id} onClick={(e) => this.startOffered(e, type)}>Start</button>&nbsp;
+                    <button className="btn btn-danger" id={candidate.id} onClick={(e) => this.reject(e, type)}>Hide</button>
+                </div>
             </div>
         };
 
@@ -63,24 +68,26 @@ class Projects extends Component {
                 <div className="flex-container-row">
                     <h4 className="flex-element">Current Project</h4>
                     <span className="flex-element">
-                        <Portal closeOnEsc closeOnOutsideClick openByClickOn={find_projects}>
-                        <TeamDialog>
-                            <h3 className="text-center">
-                                Find Projects
-                            </h3>
-                            <div className="row">
-                                <div className="col-md-6">
-                                    <h4 className="text-center">Freelance</h4>
-                                    {this.props.data.offered_projects.freelance.map(freelance_offered)}
+                        <Portal closeOnEsc openByClickOn={find_projects}>
+                            <TeamDialog>
+                                <h3 className="text-center">
+                                    Find Projects
+                                </h3>
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <h4 className="text-center fat">Freelance</h4>
+                                        {this.props.data.offered_projects.freelance.map(freelance_offered)}
+                                    </div>
+                                    <div className="col-md-6">
+                                        <h4 className="text-center slim-top">
+                                            <button className="btn btn-info hidden" onClick={this.props.data.helpers.contractSearch}>Search 1000$</button>
+                                            <SalesAgency data={this.props.data} />
+                                        </h4>
+                                        {this.props.data.offered_projects.contract.map(contract_offered)}
+                                    </div>
                                 </div>
-                                <div className="col-md-6">
-                                    <h4 className="text-center">Contract
-                                    <button className="btn btn-info" onClick={this.props.data.helpers.contractSearch}>Search 1000$</button></h4>
-                                    {this.props.data.offered_projects.contract.map(contract_offered)}
-                                </div>
-                            </div>
-                        </TeamDialog>
-                    </Portal>
+                            </TeamDialog>
+                        </Portal>
                     </span>
                     <span className="flex-element hidden"> <label> or </label> <button className="btn btn-info" onClick={this.props.data.helpers.draftProject}>Invent Startup</button></span>
                 </div>
@@ -98,7 +105,11 @@ class Projects extends Component {
                         <div key='projects_archive_reports'>
                             <div className="flex-container-row">
                                 <h4 className="flex-element">Archived Projects</h4>
-                                <span className="flex-element"><button className="btn btn-warning" onClick={() => {this.setState({show_archive: !this.state.show_archive});}}>{this.state.show_archive ? 'Hide' : 'Show'} Archive</button></span>
+                                <span className="flex-element">
+                                    <button className="btn btn-warning" onClick={() => {this.setState({show_archive: !this.state.show_archive});}}>
+                                        {this.state.show_archive ? 'Hide' : 'Show'} Archive
+                                    </button>
+                                </span>
                                 <span className="flex-element"><MarketTop data={this.props.data} /></span>
                             </div>
                             {this.state.show_archive ?

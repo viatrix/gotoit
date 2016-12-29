@@ -60,13 +60,15 @@ class People extends Component {
                                 <h3 className="text-center">Hiring</h3>
                                 <div className="row">
                                     <div className="col-md-6">
-                                        <h4 className="text-center">Resume</h4>
+                                        <h4 className="text-center fat">Resume</h4>
                                         {this.props.data.candidates.resumes.map(resumes_candidate)}
                                     </div>
                                     <div className="col-md-6">
-                                        <h4 className="text-center">Agency
-                                        <button  className="btn btn-info hidden" onClick={this.props.data.helpers.agencySearch}>Search 1000$</button></h4>
-                                        <HiringAgency data={this.props.data} />
+                                        <h4 className="text-center slim-top">
+                                            <button  className="btn btn-info hidden" onClick={this.props.data.helpers.agencySearch}>Search 1000$</button>
+                                            <HiringAgency data={this.props.data} />
+                                        </h4>
+
                                         {this.props.data.candidates.agency.map(agency_candidate)}
                                     </div>
                                 </div>
