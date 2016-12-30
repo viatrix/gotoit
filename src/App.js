@@ -511,7 +511,7 @@ class App extends Component {
     //    console.log('probability: ' + probability.toFixed(2));
 
         if (data.offered_projects.freelance.length < 5 && _.random(0.0, 100.0) < probability) {
-            let quality = Math.ceil((tick / (24*30)) + (projects_done*0.2));
+            let quality = Math.ceil(_.random(1, (tick / (24*30)) + (projects_done*0.2)));
             let size =
                 (quality < 3) ? 1 : (
                     (quality < 5) ? _.random(1, _.random(1, 2)) : (

@@ -2,7 +2,7 @@
 import _ from 'lodash';
 
 import WorkerModel from './models/WorkerModel';
-import ProjectModel from './models/ProjectModel';
+import ProjectModel, {flush} from './models/ProjectModel';
 import OfficeModel from './models/OfficeModel';
 
 import {project_platforms, project_kinds} from './data/knowledge';
@@ -71,5 +71,6 @@ _.keys(project_platforms).forEach((platform) => {
         }
     });
 });
+flush();
 
 export default app_state;

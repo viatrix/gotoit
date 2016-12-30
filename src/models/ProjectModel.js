@@ -10,7 +10,8 @@ import {chatMessage} from "../components/Chat";
 import {skills, project_kinds, project_platforms, project_sizes} from '../data/knowledge';
 import {hired, projects_done} from '../App';
 
-var projects_generated = 0;
+export var projects_generated = 0;
+export function flush() { projects_generated = 0; };
 
 class ProjectModel {
     constructor(name, type, kind, platform, reward, penalty, start_needs, size, deadline, complexity = 0) {
@@ -79,6 +80,8 @@ class ProjectModel {
                 if (tasks > 0) {
                     tasks = Math.min(this.needs[stat], tasks);
                     this.stored_wisdom[stat] = 0;
+                    this.complexity += (rad ? 4 : 1);
+                    this.complexity_max += (rad ? 4 : 1);
                     if (this.is_supported) this.is_supported = false;
                 }
 
@@ -115,14 +118,8 @@ class ProjectModel {
                 this.facts.bugs_passed += bugs;
                 this.errors[stat] += bugs;
 
-
-                this.complexity += (rad ? 4 : 1);
-                this.complexity_max += (rad ? 4 : 1);
-
                 let learn = tasks + (bugs * 2);
-
                 learned[stat] += (learn) * (pair ? 2 : 1) * (creativity ? 1.5 : 1) * (this.type === 'training' ? 2 : 1);
-
                 if (isNaN(learned[stat])) {
                     console.log([learn, creativity, this.type].map((e) => e));
                 }
@@ -267,7 +264,7 @@ class ProjectModel {
 
     static genDeadline(s, size) {
         return 48 +  // constant for anti-weekend effect on small projects
-            Math.floor((((_.max(s) + _.sum(s)) * 2) / (size)));
+            Math.floor((((_.max(s) + _.sum(s)) * 3) / (size)));
     }
 
 
@@ -340,6 +337,7 @@ class ProjectModel {
     }
 
     static genStat(quality, size=1) {
+        //console.log(projects_generated);
         let q = Math.floor(quality * size * 0.1);
         let h = (_.random(0, quality) * (0 + _.random(1, Math.pow(hired, 2))));
         let d = (_.random(0, quality) * (0 + _.random(1, projects_done)));
