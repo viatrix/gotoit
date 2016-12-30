@@ -8,6 +8,7 @@ class Lorer { // Quest Project Generator
         return Object.assign(bulk, {
             lore: {name: 'Donald Purmt', text: 'Well ' + project.name + ' project. What about some complex for me?'},
             complexity: 10,
+            complexity_max: 10,
             is_storyline: true,
             reward: bulk.reward + 5000
         });
@@ -18,6 +19,7 @@ class Lorer { // Quest Project Generator
         return Object.assign(bulk, {
             lore: {name: 'Donald Purmt', text: 'Well ' + project.name + ' project. What about some complex for me?'},
             complexity: 20,
+            complexity_max: 20,
             is_storyline: true,
             reward: bulk.reward + 10000
         });
@@ -28,6 +30,7 @@ class Lorer { // Quest Project Generator
         return Object.assign(bulk, {
             lore: {name: 'Donald Purmt', text: 'Well ' + project.name + ' project. What about some complex for me?'},
             complexity: 30,
+            complexity_max: 30,
             is_storyline: true,
             reward: bulk.reward + 25000
         });
@@ -39,6 +42,7 @@ class Lorer { // Quest Project Generator
         return Object.assign(bulk, {
             lore: {name: 'Donald Purmt', text: 'Well ' + project.name + ' project. What about some complex for me?'},
             complexity: 40,
+            complexity_max: 40,
             is_storyline: true,
             reward: bulk.reward + 50000
         });
@@ -50,6 +54,7 @@ class Lorer { // Quest Project Generator
         return Object.assign(bulk, {
             lore: {name: 'Donald Purmt', text: 'Well ' + project.name + ' project. What about some complex for me?'},
             complexity: 50,
+            complexity_max: 50,
             is_storyline: true,
             reward: bulk.reward + 100000
         });

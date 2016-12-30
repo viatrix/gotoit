@@ -30,6 +30,7 @@ class ProjectModel {
         this.deadline = deadline;
         this.deadline_max = deadline;
         this.complexity = complexity;
+        this.complexity_max = complexity;
         this.iteration = 1;
         this.size = size;
         this.tests = 0;
@@ -81,39 +82,41 @@ class ProjectModel {
 
                 if (tasks > 0) {
                     tasks = Math.min(this.needs[stat], tasks);
-                    if (this.type === 'training') {
-                        worker.facts.training_tasks_done += tasks;
-                    }
-                    worker.facts.tasks_done += tasks;
-                    this.facts.tasks_done += tasks;
-                    this.needs[stat] -= tasks;
                     this.stored_wisdom[stat] = 0;
                 }
 
                 if (bugs > 0) {
-                    this.stored_wisdom[stat] += work[stat];
+                    this.stored_wisdom[stat] += bugs;
                     let prevented = this.runTests(bugs);
                     if (prevented) {
-                        chatMessage(worker.name, ' done '+tasks+' tasks and do '+bugs+' bugs in '+stat+', but test prevent '+prevented+' of them', 'warning');
-                        //console.log('Test prevent errors');
+                        chatMessage(worker.name, ' do '+tasks+' tasks and '+bugs+' bugs in '+stat+', but test prevent '+prevented+' of them', 'warning');
                         bugs -= prevented;
+                        tasks += prevented;
                     }
                     else {
-                        chatMessage(worker.name, ' done '+tasks+' tasks and do '+bugs+' bugs in '+stat, 'warning');
-                        //console.log('Do errors');
+                        chatMessage(worker.name, ' do '+tasks+' tasks and '+bugs+' bugs in '+stat, 'warning');
                     }
-
-                    worker.facts.bugs_passed += bugs;
-                    this.facts.bugs_passed += bugs;
-                    this.errors[stat] += bugs;
-
-                    this.stored_wisdom[stat] += bugs;
                 }
                 else {
-                    chatMessage(worker.name, ' done '+tasks+' '+stat+' tasks', 'info');
+                    chatMessage(worker.name, ' do '+tasks+' '+stat+' tasks', 'info');
                 }
 
+
+                if (this.type === 'training') {
+                    worker.facts.training_tasks_done += tasks;
+                }
+                worker.facts.tasks_done += tasks;
+                this.facts.tasks_done += tasks;
+                this.needs[stat] -= tasks;
+
+                worker.facts.bugs_passed += bugs;
+                this.facts.bugs_passed += bugs;
+                this.errors[stat] += bugs;
+
+
                 this.complexity += (rad ? 4 : 1);
+                this.complexity_max += (rad ? 4 : 1);
+
                 let learn = tasks + (bugs * 2);
 
 

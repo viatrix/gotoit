@@ -193,6 +193,10 @@ class WorkerModel {
         return Math.floor(_.random(1, s*2));
     }
 
+    getRareSideResource() {
+        return Math.ceil(Math.sqrt(this.getSideResource()));
+    }
+
     addExperience(learned) {
         Object.keys(learned).forEach((stat) => {
             if (learned[stat] !== 0) {

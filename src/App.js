@@ -782,8 +782,8 @@ class App extends Component {
                     ((project.tests / project.planedTasksQuantity()) < (project.tasksQuantity() / project.planedTasksQuantity()))  &&
                     _.random(1, 3) === 1)
                 {
-                    console.log('writing tests!');
-                    let tests = Math.min(project.planedTasksQuantity() - project.tests, worker.getSideResource());
+                    //console.log('writing tests!');
+                    let tests = Math.min(project.planedTasksQuantity() - project.tests, worker.getRareSideResource());
                     worker.facts.tests_wrote += tests;
                     project.facts.tests_wrote += tests;
                     project.tests += tests;
@@ -792,20 +792,20 @@ class App extends Component {
                 }
 
                 // Refactoring
-                if (!supporter && this.getTechnology(project.id, 'refactoring') && project.complexity > 0 &&
-                    project.complexity < (project.tasksQuantity() + project.bugsQuantity()) && ((
+                if (!supporter && project.complexity > 0 && this.getTechnology(project.id, 'refactoring')) {
+                    if (project.complexity < (project.tasksQuantity() + project.bugsQuantity()) && ((
                             _.random(1, project.complexity) >
-                            _.random((project.size-1.5) * Math.sqrt(project.complexity), project.planedTasksQuantity()))
+                            _.random(([0, 0.1, 1, 2, 3, 4][project.size]) * Math.sqrt(project.complexity), Math.sqrt(project.planedTasksQuantity())))
                         )
-                    )
-                {
-                    console.log('refactoring!');
-                    let refactoring = Math.min(project.complexity, worker.getSideResource());
-                    worker.facts.refactored += refactoring;
-                    project.facts.refactored += refactoring;
-                    project.complexity -= refactoring;
-                    chatMessage(worker.name, ' refactored '+refactoring+' complexity!', 'success');
-                    skip_work = true;
+                    ) {
+                        //console.log('refactoring!');
+                        let refactoring = Math.min(project.complexity, worker.getRareSideResource());
+                        worker.facts.refactored += refactoring;
+                        project.facts.refactored += refactoring;
+                        project.complexity -= refactoring;
+                        chatMessage(worker.name, ' refactored ' + refactoring + ' complexity!', 'success');
+                        skip_work = true;
+                    }
                 }
 
                 // Work

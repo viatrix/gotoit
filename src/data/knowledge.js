@@ -66,8 +66,8 @@ export const education = {
 export const player_backgrounds = {
   //  autodidact: {name: 'Autodidact', money: 1000, start_tech: ['creativity'], text: 'Inspired researcher, looking own way. Eclectic stats.'},
   //  university: {name: 'Student', money: 5000, start_tech: ['tdd'], text: 'Fundamental education according to verified program. Flat stats.'},
-    comprehensive: {name: 'Comprehensive', money: 1000, start_tech: ['agile'], text: 'Has no weaknesses. But is not the special and poor.'},
-    specialist: {name: 'Specialist', money: 3000, start_tech: ['rad'], text: 'Honed skills in the profession to heights.'},
+    comprehensive: {name: 'Comprehensive', money: 1000, start_tech: ['rad'], text: 'Has no weaknesses. But is not the special and poor.'},
+    specialist: {name: 'Specialist', money: 3000, start_tech: ['agile'], text: 'Honed skills in the profession to heights.'},
     coworker: {name: 'Coworker', money: 5000, start_tech: ['pair'], text: 'Works with the Partner, covering each other.'},
     businessman: {name: 'Businessman', money: 10000, start_tech: ['micromanagement'], text: 'Made a fortune doing business. Has a money.'}
 };

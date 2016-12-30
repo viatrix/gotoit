@@ -235,8 +235,23 @@ class Project extends Component {
                                                 }
                                             </div>
 
+                                            {data.helpers.getTechnology(project.id, 'refactoring') ? <div key="refactoring" className="row">
+                                                <div className="col-md-2">Refactoring</div>
+                                                <div className="col-md-10 progress">
+                                                    <div className="progress-bar progress-bar-warning" role="progressbar"
+                                                         style={{width: (project.complexity / project.complexity_max * 100)+'%'}}>
+                                                        <label>{project.complexity} complexity</label>
+                                                    </div>
+                                                    <div className="progress-bar progress-bar-success" role="progressbar"
+                                                         style={{width: (100-(project.complexity / project.complexity_max * 100))+'%'}}>
+                                                        {(project.complexity_max - project.complexity > 0) ?
+                                                            <label>{project.complexity_max - project.complexity} refactored</label> : ''}
+                                                    </div>
+                                                </div>
+                                            </div> : ''}
+
                                             {project.tests > 0 ? <div key="tests" className="row">
-                                                <div className="col-md-2">tests</div>
+                                                <div className="col-md-2">Tests</div>
                                                 <div className="col-md-10 progress">
                                                     <div className="progress-bar progress-bar-warning" role="progressbar"
                                                          style={{width: (100-(project.tests / project.planedTasksQuantity() * 100))+'%'}}>
@@ -244,31 +259,15 @@ class Project extends Component {
                                                     </div>
                                                     <div className="progress-bar progress-bar-success" role="progressbar"
                                                          style={{width: (project.tests / project.planedTasksQuantity() * 100)+'%'}}>
-                                                        <label>{project.tests} done</label>
+                                                        {(project.tests) ?<label>{project.tests} done</label> : ''}
                                                     </div>
                                                 </div>
                                             </div> : ''}
+
                                         </div>
-                                        <div className="panel panel-success">{/*
-                                            Who will work on <ProjectName project={project} /> project?
-                                            <div className="checkbox-inline">
-                                                <label>
-                                                    <input
-                                                        type="checkbox"
-                                                        id={project.id}
-                                                        checked={project.accept_default}
-                                                        onChange={(e) => { project.accept_default = e.target.checked; this.manageAll(e); console.log(project.accept_default);}}/>
-                                                    All
-                                                </label>
-                                            </div>*/}
+                                        <div className="panel panel-success">
                                             <div>
                                                 {this.props.data.workers.map((worker) => {
-                                                    /*
-                                                        const stats_data = _.mapValues(worker.stats, (val, key) => {
-                                                            return {name: key, val: (worker.stats[key] + worker.expirience[key]/100).toFixed(2)};
-                                                        });
-                                                        */
-
                                                     const stats_data = _.mapValues(worker.stats, (val, skill) => {
                                                         return {name: skill,
                                                             val: <div key={worker.id + project.id} className="checkbox-inline">
