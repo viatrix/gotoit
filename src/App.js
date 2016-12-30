@@ -359,7 +359,7 @@ class App extends Component {
         console.log('archiving', data.projects_end_reports, data.projects_archive_reports, projects, project);
      //   this.setState({data: data});
 
-        if (project.is_storyline ) return;
+        if (project.is_storyline || project.stage !== 'finish' ) return;
 
         if (project.type === 'training' && !data.achievements.includes('FirstTraining')) {
             data.offered_projects.hot.push(Lorer.afterFirstTraining(project));
@@ -507,7 +507,7 @@ class App extends Component {
             return false; // no generation first week
         }
 
-        let probability = Math.min(50, (10 + (projects_done*0.2))) / 24;
+        let probability = Math.min(50, (10 + (projects_done*0.1))) / 24;
     //    console.log('probability: ' + probability.toFixed(2));
 
         if (data.offered_projects.freelance.length < 5 && _.random(0.0, 100.0) < probability) {
@@ -549,7 +549,7 @@ class App extends Component {
 
 
 
-        if (Math.floor(_.random(1, 24 * (30 - Math.min(15, projects_done*0.2)))) === 1 && data.candidates.resumes.length < 5) {
+        if (Math.floor(_.random(1, 24 * (50 - Math.min(25, projects_done*0.2)))) === 1 && data.candidates.resumes.length < 5) {
             let worker = WorkerModel.generate(_.random(2, 5));
             data.candidates.resumes.push(worker);
             addAction('New resume: ' + worker.name);

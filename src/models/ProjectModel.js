@@ -48,7 +48,7 @@ class ProjectModel {
     generateReport(is_player = true) {
         return {
             id: this.id, name: this.getName(), is_player: is_player, type: this.type,
-            platform: this.platform, kind: this.kind,
+            platform: this.platform, kind: this.kind, stage: this.stage,
             design: this.needs_max.design, manage: this.needs_max.manage, program: this.needs_max.program, admin: this.needs_max.admin,
             total: this.totalScore()
         }
@@ -88,26 +88,29 @@ class ProjectModel {
                     this.facts.tasks_done += tasks;
                     this.needs[stat] -= tasks;
                     this.stored_wisdom[stat] = 0;
-                    chatMessage(worker.name, ' solve '+tasks+' '+stat+' tasks', 'info');
                 }
 
                 if (bugs > 0) {
                     this.stored_wisdom[stat] += work[stat];
                     let prevented = this.runTests(bugs);
                     if (prevented) {
-                        chatMessage(worker.name, ' do '+bugs+' errors in '+stat+', but test prevent '+prevented+' of them', 'warning');
+                        chatMessage(worker.name, ' done '+tasks+' tasks and do '+bugs+' bugs in '+stat+', but test prevent '+prevented+' of them', 'warning');
                         //console.log('Test prevent errors');
-                        worker.facts.bugs_passed += bugs-prevented;
-                        this.facts.bugs_passed += bugs-prevented;
-                        this.errors[stat] += bugs-prevented;
+                        bugs -= prevented;
                     }
                     else {
-                        chatMessage(worker.name, ' do '+bugs+' errors in '+stat, 'warning');
+                        chatMessage(worker.name, ' done '+tasks+' tasks and do '+bugs+' bugs in '+stat, 'warning');
                         //console.log('Do errors');
-                        worker.facts.bugs_passed += bugs;
-                        this.facts.bugs_passed += bugs;
-                        this.errors[stat] += bugs;
                     }
+
+                    worker.facts.bugs_passed += bugs;
+                    this.facts.bugs_passed += bugs;
+                    this.errors[stat] += bugs;
+
+                    this.stored_wisdom[stat] += bugs;
+                }
+                else {
+                    chatMessage(worker.name, ' done '+tasks+' '+stat+' tasks', 'info');
                 }
 
                 this.complexity += (rad ? 4 : 1);
@@ -302,7 +305,7 @@ class ProjectModel {
 
     static genDeadline(s, size) {
         return 48 +  // constant for anti-weekend effect on small projects
-            Math.floor((((_.max(s) + _.sum(s)) * 5) / (2 * size)));
+            Math.floor((((_.max(s) + _.sum(s)) * 2) / (size)));
     }
 
 
