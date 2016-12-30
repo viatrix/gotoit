@@ -51,7 +51,7 @@ export const technologies = {
     micromanagement: {name: 'Micromanagement', acronym: 'Micro', price: 25000, description: 'Solid control averaging performance and work visiting.'},
 
     rad: {name: 'Rapid Development', acronym: 'RAD', price: 25000, description: 'Faster Development at the cost of increasing complexity.'},
-    agile: {name: 'Agile Development', acronym: 'Agile', price: 25000, description: 'Focus on priority, cut out unnecessary, lighter the project.'}
+    agile: {name: 'Agile Development', acronym: 'Agile', price: 25000, description: 'Focus on priority and lower the cost of the project by cut out unnecessary tasks.'}
 };
 
 
