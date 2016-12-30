@@ -25,7 +25,6 @@ class ProjectModel {
         this.penalty = penalty;
         this.needs = JSON.parse(JSON.stringify(start_needs));
         this.errors = JSON.parse(JSON.stringify(skills));
-        this.stored_wisdom = JSON.parse(JSON.stringify(skills));
         this.needs_max = JSON.parse(JSON.stringify(start_needs));
         this.deadline = deadline;
         this.deadline_max = deadline;
@@ -39,6 +38,9 @@ class ProjectModel {
         this.lore = null;
         this.briefing = false;
         this.accept_default = (this.type !== 'training') ? true : false;
+
+        this.stored_wisdom = JSON.parse(JSON.stringify(skills));
+        this.supporter = null;
 
         this.facts = {
             money_spent: 0,
@@ -55,20 +57,13 @@ class ProjectModel {
         }
     }
 
-    applyWork(work, worker, rad = false, creativity = false, supporter = false) {
+    applyWork(work, worker, rad = false, creativity = false, pair = false) {
         var learned = JSON.parse(JSON.stringify(skills));
 
         Object.keys(work).forEach((stat) => {
             if (this.needs[stat] > 0 && work[stat] > 0) {
-
-                if (supporter) {
-                    this.stored_wisdom[stat] += work[stat];
-                    console.log('support '+stat+' '+work[stat]);
-                    //console.log(this.stored_wisdom);
-                    return 'supporter';
-                }
-
-                let all_work = _.random(1, work[stat]) + this.stored_wisdom[stat];
+                var support = ((this.supporter && this.supporter.id !== worker.id) ? this.supporter.stats[stat] : 0);
+                let all_work = _.random(1, (work[stat] + support) + this.stored_wisdom[stat]);
                 let complexity_penalty = Math.max(0, Math.floor(Math.sqrt(Math.max(0, this.complexity - _.random(0, this.errors[stat])))) - this.iteration + 1);
                 let bugs = 0;
                 let tasks = 0;
@@ -83,24 +78,31 @@ class ProjectModel {
                 if (tasks > 0) {
                     tasks = Math.min(this.needs[stat], tasks);
                     this.stored_wisdom[stat] = 0;
+                    if (this.is_supported) this.is_supported = false;
                 }
+
+                const formName = () => {
+                    console.log(support);
+                    return worker.name + (support ? ' with support of ' + this.supporter.name : '');
+                };
 
                 if (bugs > 0) {
                     this.stored_wisdom[stat] += bugs;
                     let prevented = this.runTests(bugs);
                     if (prevented) {
-                        chatMessage(worker.name, ' do '+tasks+' tasks and '+bugs+' bugs in '+stat+', but test prevent '+prevented+' of them', 'warning');
+                        chatMessage(formName(), ' do '+tasks+' tasks and '+bugs+' bugs in '+stat+', but test prevent '+prevented+' of them', 'warning');
                         bugs -= prevented;
                         tasks += prevented;
                     }
                     else {
-                        chatMessage(worker.name, ' do '+tasks+' tasks and '+bugs+' bugs in '+stat, 'warning');
+                        chatMessage(formName(), ' do '+tasks+' tasks and '+bugs+' bugs in '+stat, 'warning');
                     }
                 }
                 else {
-                    chatMessage(worker.name, ' do '+tasks+' '+stat+' tasks', 'info');
+                    chatMessage(formName(), ' do '+tasks+' '+stat+' tasks', 'info');
                 }
 
+                if (support) this.supporter = null;
 
                 if (this.type === 'training') {
                     worker.facts.training_tasks_done += tasks;
@@ -119,55 +121,8 @@ class ProjectModel {
 
                 let learn = tasks + (bugs * 2);
 
+                learned[stat] += (learn) * (pair ? 2 : 1) * (creativity ? 1.5 : 1) * (this.type === 'training' ? 2 : 1);
 
-                /*
-                ///
-                let pro = all_work;
-                let cont = this.complexity;
-                let ratio = 10 / this.complexity;
-                ///
-
-                let resource = work[stat] - Math.floor(_.random(0, Math.sqrt(this.complexity)-this.iteration));
-                let potential = this.stored_wisdom[stat] + resource;
-
-                let cont = _.random(0, (this.complexity * this.size) / this.iteration);
-                let pro = Math.pow(this.iteration, 2) + _.random(1, potential) + _.random(1, this.errors[stat]);
-            //    console.log(cont, pro);
-                if (resource > 0 && cont < pro) {
-                    this.complexity += (rad ? 4 : 1);
-                    var real_work = Math.min(this.needs[stat], _.random(1, resource + (rad ? worker.getSideResource() : 0)));
-                    if (this.type === 'training') {
-                        worker.facts.training_tasks_done += real_work;
-                    }
-                    worker.facts.tasks_done += real_work;
-                    this.facts.tasks_done += real_work;
-                    this.needs[stat] -= real_work;
-                    addMessage(worker.name+' solve '+real_work+' '+stat+' tasks', {}, 'info');
-                    console.log(worker.name+' work '+real_work+' ['+resource+'/'+potential+'('+work[stat]+'+'+this.stored_wisdom[stat]+')] in '+stat, {}, 'info');
-                    //addMessage('Work '+stat+' '+work[stat]+' where wisdom is '+this.stored_wisdom[stat], {}, 'info');
-                 //   console.log('Work '+stat+' '+work[stat]+' where wisdom is '+this.stored_wisdom[stat]);
-                    this.stored_wisdom[stat] = 0;
-                }
-                else {
-                    this.stored_wisdom[stat] += work[stat];
-                    if (this.runTests()) {
-                        addMessage(worker.name+' do errors in '+stat+', but test prevent', {}, 'info');
-                        console.log('Test prevent errors');
-                    }
-                    else {
-                        console.log('Do errors');
-                        addMessage(worker.name+' do errors in '+stat, {}, 'warning');
-                        worker.facts.bugs_passed++;
-                        this.facts.bugs_passed++;
-                        this.errors[stat]++;
-                    }
-                }
-
-
-                let learn = (real_work ? real_work : work[stat]);
-                */
-
-                learned[stat] += (learn) * (creativity ? 1.5 : 1) * (this.type === 'training' ? 2 : 1);
                 if (isNaN(learned[stat])) {
                     console.log([learn, creativity, this.type].map((e) => e));
                 }

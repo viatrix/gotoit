@@ -42,13 +42,13 @@ export const project_sizes = {
 
 export const technologies = {
     overtime: {name: 'Overtime Work', acronym: 'Over', price: 5000, description: 'Overtime help to finish project on time, but exhausted team.'},
-    creativity: {name: 'Four Day Work Week', acronym: 'Free', price: 5000, description: "Fridays devoted to pet projects which boosting experience and lead to insight."},
+    creativity: {name: 'Creativity boost', acronym: 'Free', price: 5000, description: "Every fifth working hour given to pet projects which boosting experience."},
 
     tdd: {name: 'Test Driven Development', acronym: 'TDD', price: 10000, description: 'Developing tests that reduce the probability of errors.'},
     refactoring: {name: 'Non-stop refactoring', acronym: 'Ref', price: 10000, description: "The complexity of the code - it's just a task for refactoring."},
 
-    pair: {name: 'Pair Programming', acronym: 'Pair', price: 25000, description: 'Working in tandem allows us to solve complex problems.'},
-    micromanagement: {name: 'Micromanagement', acronym: 'Micro', price: 25000, description: 'Solid control over the objectives is averaging performance.'},
+    pair: {name: 'Pair Programming', acronym: 'Pair', price: 25000, description: 'Working in tandem allows us to solve complex problems and sharing experience.'},
+    micromanagement: {name: 'Micromanagement', acronym: 'Micro', price: 25000, description: 'Solid control averaging performance and work visiting.'},
 
     rad: {name: 'Rapid Development', acronym: 'RAD', price: 25000, description: 'Faster Development at the cost of increasing complexity.'},
     agile: {name: 'Agile Development', acronym: 'Agile', price: 25000, description: 'Focus on priority, cut out unnecessary, lighter the project.'}

@@ -18,7 +18,8 @@ class Chat extends Component {
         super(props);
 
         this.state = {
-            messages: []
+            messages: [],
+            new_message: false
         };
 
         this.chatMessage = this.chatMessage.bind(this);
@@ -26,6 +27,7 @@ class Chat extends Component {
 
     chatMessage(name='', text='', type='info') {
         this.state.messages.push({name: name, text: text, type: type});
+        this.setState({new_message: true});
     }
 
     componentDidMount() {
@@ -45,12 +47,13 @@ class Chat extends Component {
     */
 
     componentDidUpdate() {
-
-        const node = ReactDOM.findDOMNode(this.refs['msg'+(this.state.messages.length-1)]);
-        if (node) {
-            node.scrollIntoView();
+        if (this.state.new_message) {
+            const node = ReactDOM.findDOMNode(this.refs['msg' + (this.state.messages.length - 1)]);
+            if (node) {
+                node.scrollIntoView();
+                this.setState({new_message: false});
+            }
         }
-
         //this.refs['msg'+(this.state.messages.length-1)].scrollIntoView();
     }
 

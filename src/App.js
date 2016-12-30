@@ -657,8 +657,8 @@ class App extends Component {
             })
         });
        // console.log(team_sizes);  HERE PROBLEMS - maybe need another way store
-        
-        data.workers.forEach((worker) => {
+
+        _.shuffle(data.workers).forEach((worker) => {
             // worker quiting
             if (worker.to_leave) {
                 if (worker.to_leave_ticker <= 0) {
@@ -702,7 +702,6 @@ class App extends Component {
             }
 
 
-            let is_working_time = worker.isWorkingTime(data.date);
 
             if (!worker.is_player && (data.money - worker.getSalary()) < 0) return false;
 
@@ -722,14 +721,14 @@ class App extends Component {
 
             //    console.log('# '+focus_on);
 
-                let supporter = false;
-
                 let rad = this.getTechnology(project.id, 'rad');
                 let micromanagement = this.getTechnology(project.id, 'micromanagement');
                 let creativity = this.getTechnology(project.id, 'creativity');
                 let overtime = this.getTechnology(project.id, 'overtime');
+                let pair = this.getTechnology(project.id, 'pair');
 
                 // Overtime
+                let is_working_time = worker.isWorkingTime(data.date, micromanagement);
                 if (!is_working_time) {
                     if (overtime) {
                         if (worker.morale > 0) {
@@ -754,6 +753,7 @@ class App extends Component {
                     }
                 }
 
+
                 // get Salary
                 if (!worker.is_player) {
                     let salary = worker.getSalary();
@@ -763,22 +763,25 @@ class App extends Component {
                 }
                 worker.drainStamina();
 
-                // Pet Projects on Fridays
-                if (creativity && data.date.day === 5 && is_working_time) {
-                    console.log('creativity day');
-                    supporter = true;
+
+                // Creativity
+                if (creativity && is_working_time && (_.random(1, 5) === 1)) {
+                    skip_work = true;
+                    chatMessage(worker.name, 'I spent hour to my pet-project.', 'warning');
                 }
+
                 // Pair. 1 - worker, 2 - supporter
-                if (!supporter && this.getTechnology(project.id, 'pair') &&
-                    team_sizes[project.id] > 1 && _.random(1, 2) === 2) {
-                    supporter = true;
+                if (!skip_work && this.getTechnology(project.id, 'pair') && !project.supporter) {
+                    project.supporter = worker;
+                 //   chatMessage(worker.name, 'I support in pair.', 'warning');
+                    skip_work = true;
                     //worker.addExperience(project.applyWork(worker.getResources(worker_roles, focus_on), worker, rad, supporter));
-                    console.log('supporter');
+                    //console.log('supporter');
                     //return 'supporter';
                 }
 
                 // TDD
-                if (!supporter && this.getTechnology(project.id, 'tdd') && project.tests < project.planedTasksQuantity() &&
+                if (!skip_work && this.getTechnology(project.id, 'tdd') && project.tests < project.planedTasksQuantity() &&
                     ((project.tests / project.planedTasksQuantity()) < (project.tasksQuantity() / project.planedTasksQuantity()))  &&
                     _.random(1, 3) === 1)
                 {
@@ -792,7 +795,7 @@ class App extends Component {
                 }
 
                 // Refactoring
-                if (!supporter && project.complexity > 0 && this.getTechnology(project.id, 'refactoring')) {
+                if (!skip_work && project.complexity > 0 && this.getTechnology(project.id, 'refactoring')) {
                     if (project.complexity < (project.tasksQuantity() + project.bugsQuantity()) && ((
                             _.random(1, project.complexity) >
                             _.random(([0, 0.1, 1, 2, 3, 4][project.size]) * Math.sqrt(project.complexity), Math.sqrt(project.planedTasksQuantity())))
@@ -813,7 +816,7 @@ class App extends Component {
                     worker.addExperience(
                         project.applyWork(
                             worker.getResources(worker_roles, focus_on, micromanagement),
-                        worker, rad, creativity, supporter));
+                        worker, rad, creativity, pair));
                 }
             }
             else {

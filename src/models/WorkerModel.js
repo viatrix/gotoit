@@ -73,7 +73,7 @@ class WorkerModel {
         return (((1 + (this.standing/(12*4*7*8)))*100)-100).toFixed(2);
     }
 
-    isWorkingTime(time) {
+    isWorkingTime(time, micromanagement) {
         let variability = _.random(-this.temper.variability, this.temper.variability);
         let mod = variability + this.temper.earliness;
 
@@ -84,15 +84,15 @@ class WorkerModel {
             (_.random(1, 10 - this.temper.variability) !==1) // variability guys eblanyat more often
         ) ? true : false;
 
-     //   console.log('Worker '+this.name+' '+(is_working_time ? 'work' : 'rest')+' on hour '+time.hour+' with temper '+ this.temper.earliness+' '+this.temper.variability);
-
-
-        //return is_working_time;
-        return this.efficiencyCheck() ? is_working_time : false;
+        return this.efficiencyCheck(micromanagement) ? is_working_time : false;
     }
 
-    efficiencyCheck() {
-        return (_.random(1, 100) <= this.getEfficiency());
+    efficiencyCheck(micromanagement) {
+        return (
+            _.random(1, 100) <= (micromanagement
+                ? Math.floor((this.getEfficiency() + 90) / 2)
+                : this.getEfficiency())
+        );
     }
 
     getEfficiency() {
