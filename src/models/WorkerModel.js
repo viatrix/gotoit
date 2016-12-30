@@ -29,11 +29,15 @@ class WorkerModel {
 
         this.feelings = new ValueCache(24, () => { return Narrator.workerFeelings(this); }); //{tick: 0, value: ''};
 
+        this.efficiency = new ValueCache(24, () => { return this.calcEfficiencyReal() });
+
         this.stamina = 1000;
         this.to_vacation_ticker = 0;
         this.to_vacation = false;
         this.in_vacation_ticker = 0;
         this.in_vacation = false;
+        this.to_leave_ticker = 0;
+        this.to_leave = false;
 
         this.facts = {
             project_finished: 0,
@@ -136,7 +140,12 @@ class WorkerModel {
         return Math.max(Math.min(Math.floor(collective), 20), -20);
     }
 
-    calcEfficiency() {
+    calcEfficiency() { // happiness
+       // return this.calcEfficiencyReal();
+        return this.efficiency.get();
+    }
+
+    calcEfficiencyReal() { // happinessReal
         const tasks_stream = this.workloadPenalty();
         const tasks_difficulty = this.difficultyPenalty();
         const education_stream = this.educationPenalty();
@@ -189,7 +198,7 @@ class WorkerModel {
             if (learned[stat] !== 0) {
                 this.expirience[stat] += Math.ceil((learned[stat] * 5) / (this.stats[stat]));
                 if (this.expirience[stat] >= 100) {
-                    console.log('stat rise');
+                  //  console.log('stat rise');
                     chatMessage(this.name, ' rise '+stat+' skill!', 'success');
                     this.expirience[stat] -= 100;
                     this.stats[stat]++;
@@ -229,7 +238,7 @@ class WorkerModel {
 
         return new WorkerModel(
             name,
-            _.mapValues(skills, (value, key) => { return 1; }), // {design: 1, manage: 1, program: 1, admin: 1},
+            _.mapValues(skills, () => { return 1; }), // {design: 1, manage: 1, program: 1, admin: 1},
             true
         );
     }

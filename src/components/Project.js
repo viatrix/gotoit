@@ -200,11 +200,12 @@ class Project extends Component {
                                                     : skills_names.map((skill) => {
                                                         let need = project.needs[skill];
                                                         let errors = project.errors[skill];
-                                                        var needs_max = project.needs_max[skill];//+errors;
-                                                        var max_skill = _.maxBy(_.keys(project.needs_max), function (skill) {
-                                                            return project.needs_max[skill] + project.errors[skill];
+                                                        let needs_max = project.needs_max[skill];//+errors;
+                                                        let max_skill = _.maxBy(_.keys(project.needs_max), function (skill) {
+                                                            return Math.max(project.needs_max[skill], project.needs[skill]) + project.errors[skill];
                                                         });
-                                                        var max = project.needs_max[max_skill] + project.errors[max_skill];
+
+                                                        let max = Math.max(project.needs_max[max_skill], project.needs[max_skill]) + project.errors[max_skill];
                                                         let diff = needs_max - need;
                                                         let tasks = need / max * 100;
                                                         let bugs = errors / max * 100;
@@ -354,7 +355,7 @@ class Project extends Component {
                 {(() => {
                     let errors = project.bugsQuantity();
                     let need = project.tasksQuantity();
-                    var max = project.planedTasksQuantity();
+                    var max = Math.max(project.planedTasksQuantity(), project.tasksQuantity());
                     let diff = max - need;
 
                     let sum = max + errors;

@@ -606,6 +606,21 @@ class App extends Component {
             data.workers.forEach((worker) => {
                // console.log('worker '+worker.id+' morale '+worker.morale);
                 if (worker.morale < 100 && _.random(1, 7)) worker.morale++;
+
+                if (!worker.is_player) {
+                    let dissatisfaction = Math.floor((10000 - Math.pow(worker.calcEfficiency() + 25, 2)) / 30);
+                    let smoothing = 1 + (parseInt(worker.getOverrate(), 10) / 100);
+                    let breakpoint = _.random(1, 10000);
+                    //console.log(dissatisfaction, worker.calcEfficiency(), Math.floor(Math.pow(worker.calcEfficiency(), 2)), breakpoint);
+                    if ((dissatisfaction / smoothing) > breakpoint) {
+                        worker.to_leave = true;
+                        worker.to_leave_ticker = 24 * 7 * 2; // 2 weeks
+                        addAction(worker.name + ' quit from company in two weeks', {
+                            timeOut: 20000,
+                            extendedTimeOut: 10000
+                        }, 'error');
+                    }
+                }
             });
         }
 
@@ -618,17 +633,11 @@ class App extends Component {
         time.date = game_date.getDate();
         time.day = game_date.getUTCDay();
 
-        if (
+        time.is_working_time = !!(
             time.hour >= 10 &&
             time.hour <= 18 &&
             time.day !== 6 &&
-            time.day !== 0
-        ) {
-            time.is_working_time = true;
-        }
-        else {
-            time.is_working_time = false;
-        }
+            time.day !== 0);
 
         data.date = time;
         this.setState({data: data});
@@ -650,6 +659,18 @@ class App extends Component {
        // console.log(team_sizes);  HERE PROBLEMS - maybe need another way store
         
         data.workers.forEach((worker) => {
+            // worker quiting
+            if (worker.to_leave) {
+                if (worker.to_leave_ticker <= 0) {
+                    addAction(worker.name+' resigned from the company', {timeOut: 20000, extendedTimeOut: 10000}, 'error');
+                    this.dismissEmployer(worker.id);
+                }
+                else {
+                    worker.to_leave_ticker--;
+                }
+            }
+
+
             // vacation
             if (!worker.to_vacation && !worker.in_vacation && worker.stamina <= 0) {
                 worker.to_vacation = true;
