@@ -26,6 +26,7 @@ class ProjectModel {
         this.needs = JSON.parse(JSON.stringify(start_needs));
         this.errors = JSON.parse(JSON.stringify(skills));
         this.needs_max = JSON.parse(JSON.stringify(start_needs));
+        this.needs_original = JSON.parse(JSON.stringify(start_needs));
         this.deadline = deadline;
         this.deadline_max = deadline;
         this.complexity = complexity;
@@ -45,7 +46,7 @@ class ProjectModel {
         this.facts = {
             money_spent: 0,
             tasks_done: 0, bugs_passed: 0,
-            refactored: 0, tests_wrote: 0};
+            refactored: 0, tests_wrote: 0, cuted_cost: 0, retrospected: 0};
     }
     
     generateReport(is_player = true) {
@@ -82,7 +83,6 @@ class ProjectModel {
                 }
 
                 const formName = () => {
-                    console.log(support);
                     return worker.name + (support ? ' with support of ' + this.supporter.name : '');
                 };
 
@@ -163,6 +163,10 @@ class ProjectModel {
 
     planedTasksQuantity() {
         return _.sum(_.values(this.needs_max));
+    }
+
+    originalyTasksQuantity() {
+        return _.sum(_.values(this.needs_original));
     }
 
     isFinished() {

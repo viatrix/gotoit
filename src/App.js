@@ -712,9 +712,9 @@ class App extends Component {
             // work on one of projects
             if (worker_projects.length > 0) {
                 let skip_work = false;
+
                 let project = _.sample(worker_projects);
                 let worker_roles = this.getRelation(worker.id, project.id);
-
                 let focus_on = (this.getTechnology(project.id, 'agile'))
                     ? _.maxBy(Object.keys(project.getNeeds(worker_roles)), function (o) { return project.needs[o]; })
                     : _.sample(Object.keys(project.getNeeds(worker_roles)));
@@ -770,14 +770,26 @@ class App extends Component {
                     chatMessage(worker.name, 'I spent hour to my pet-project.', 'warning');
                 }
 
-                // Pair. 1 - worker, 2 - supporter
-                if (!skip_work && this.getTechnology(project.id, 'pair') && !project.supporter) {
-                    project.supporter = worker;
-                 //   chatMessage(worker.name, 'I support in pair.', 'warning');
-                    skip_work = true;
-                    //worker.addExperience(project.applyWork(worker.getResources(worker_roles, focus_on), worker, rad, supporter));
-                    //console.log('supporter');
-                    //return 'supporter';
+                // Agile
+                if (!skip_work && this.getTechnology(project.id, 'agile')
+                    && (_.min([project.planedTasksQuantity(), project.tasksQuantity()]) > _.random((Math.PI * Math.sqrt(project.originalyTasksQuantity())), project.originalyTasksQuantity()))
+                    && _.random(1, 3) === 1)
+                {
+                    let retrospected = worker.getSideResource();
+                    if (retrospected > 0) {
+                        var res = _.sample(Object.keys(project.getNeeds(worker_roles)));
+                        retrospected = Math.floor(_.min([project.needs[res], Math.sqrt(project.needs_max[res]), retrospected]));
+
+                        let cut = Math.floor(project.reward * (retrospected / (1+project.planedTasksQuantity())));
+                        worker.facts.retrospected += retrospected;
+                        project.facts.retrospected += retrospected;
+                        project.facts.cuted_cost += cut;
+                        project.needs[res] -= retrospected;
+                        project.needs_max[res] -= retrospected;
+                        project.reward -= cut;
+                        chatMessage(worker.name, 'cut ' + retrospected + ' ' + res + ' tasks and ' + cut + '$', 'success');
+                        skip_work = true;
+                    }
                 }
 
                 // TDD
@@ -809,6 +821,12 @@ class App extends Component {
                         chatMessage(worker.name, ' refactored ' + refactoring + ' complexity!', 'success');
                         skip_work = true;
                     }
+                }
+
+                // Pair.
+                if (!skip_work && this.getTechnology(project.id, 'pair') && !project.supporter) {
+                    project.supporter = worker;
+                    skip_work = true;
                 }
 
                 // Work

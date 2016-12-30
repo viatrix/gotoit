@@ -99,7 +99,7 @@ class Worker extends Component {
                                 Finished {worker.facts.project_finished} project.
                                 Done {worker.facts.tasks_done} of {worker.facts.tasks_done + worker.facts.bugs_passed} tasks.
                                 Passed {worker.facts.bugs_passed} bugs.
-                                Do {worker.facts.refactored} refactoring and wrote {worker.facts.tests_wrote} tests.
+                                Do {worker.facts.refactored} refactoring, wrote {worker.facts.tests_wrote} tests and retrospected {worker.facts.retrospected} tasks.
                             </p>
                         </ul>
 
