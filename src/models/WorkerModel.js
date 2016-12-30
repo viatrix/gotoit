@@ -113,7 +113,7 @@ class WorkerModel {
     }
 
     difficultyPenalty() {
-        let difficulty_ratio = (200+(this.facts.bugs_passed*3)) / (200+this.facts.tasks_done);
+        let difficulty_ratio = (200+(this.facts.bugs_passed*2.5)) / (200+this.facts.tasks_done);
         let thirst_for_difficulty = (100+_.max(_.values(this.stats))) / (100+(this.statsSum()/4));
         // console.log(difficulty_ratio, thirst_for_difficulty);
         const difficulty_stream = 20 * (1-(difficulty_ratio/thirst_for_difficulty));

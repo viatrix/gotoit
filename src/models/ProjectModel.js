@@ -66,7 +66,7 @@ class ProjectModel {
             if (this.needs[stat] > 0 && work[stat] > 0) {
                 var support = ((this.supporter && this.supporter.id !== worker.id) ? this.supporter.stats[stat] : 0);
                 let all_work = _.random(1, (work[stat] + support) + this.stored_wisdom[stat]);
-                let complexity_penalty = Math.max(0, Math.floor(Math.sqrt(Math.max(0, this.complexity - _.random(0, this.errors[stat])))) - this.iteration + 1);
+                let complexity_penalty = Math.max(0, Math.floor(Math.sqrt(Math.max(0, this.complexity - _.random(0, this.errors[stat])))) - Math.pow(this.iteration, 2) + 1);
                 let bugs = 0;
                 let tasks = 0;
                 if (complexity_penalty > all_work) {
