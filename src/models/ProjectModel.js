@@ -59,7 +59,7 @@ class ProjectModel {
         }
     }
 
-    applyWork(work, worker, rad = false, creativity = false, pair = false) {q
+    applyWork(work, worker, rad = false, creativity = false, pair = false) {
         var learned = JSON.parse(JSON.stringify(skills));
 
         Object.keys(work).forEach((stat) => {
