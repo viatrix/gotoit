@@ -25,9 +25,10 @@ class Office extends Component {
                         </span>
 
                         <span onClick={() => {
-                            let i = 0;
-                            while (i < 24) {
-                                this.props.data.helpers.tick();
+                            let i = 1;
+                            let n = 24;
+                            while (i <= n) {
+                                this.props.data.helpers.tick((i === n));
                                 i++;
                             }
                         }}>

@@ -8,7 +8,7 @@ import StatsBar from './StatsBar';
 import Worker from './Worker';
 import HiringAgency from './HiringAgency';
 
-import {skills} from '../data/knowledge';
+import {skills, offices} from '../data/knowledge';
 
 class People extends Component {
     constructor(props) {
@@ -27,6 +27,7 @@ class People extends Component {
     }
 
     render() {
+        const data = this.props.data;
         const hire_button = <button className="btn btn-success">Hire Worker</button>;
 
         let unit_block_template = (candidate, type) => {
@@ -35,7 +36,7 @@ class People extends Component {
             });
 
             return <div key={candidate.id} className="panel panel-info">{candidate.name} <span> {candidate.getSalary()}$</span>
-                <StatsBar stats={stats_data} data={this.props.data} />
+                <StatsBar stats={stats_data} data={data} />
                 <button className="btn btn-success" id={candidate.id} onClick={(e) => this.hire(e, type)}>Hire</button>
                 <button className="btn btn-danger" id={candidate.id} onClick={(e) => this.reject(e, type)}>Hide</button>
 
@@ -49,10 +50,10 @@ class People extends Component {
             <div>
                 <h4 className="text-center slim-top"><label> Your Team </label>
                 </h4>
-                {this.props.data.workers.map((x, i) =>
-                    <Worker key={x.id} worker={x} data={this.props.data} />
+                {data.workers.map((x, i) =>
+                    <Worker key={x.id} worker={x} data={data} />
                 )}
-                {(this.props.data.workers.length < this.props.data.office.space)
+                {(data.workers.length < data.office.space)
                     ?
                     <div className="panel panel-success">
                         <Portal closeOnEsc openByClickOn={hire_button}>
@@ -61,27 +62,40 @@ class People extends Component {
                                 <div className="row">
                                     <div className="col-md-6">
                                         <h4 className="text-center fat">Resume</h4>
-                                        {this.props.data.candidates.resumes.map(resumes_candidate)}
+                                        {data.candidates.resumes.map(resumes_candidate)}
                                     </div>
                                     <div className="col-md-6">
                                         <h4 className="text-center slim-top">
-                                            <button  className="btn btn-info hidden" onClick={this.props.data.helpers.agencySearch}>Search 1000$</button>
-                                            <HiringAgency data={this.props.data} />
+                                            <button  className="btn btn-info hidden" onClick={data.helpers.agencySearch}>Search 1000$</button>
+                                            <HiringAgency data={data} />
                                         </h4>
 
-                                        {this.props.data.candidates.agency.map(agency_candidate)}
+                                        {data.candidates.agency.map(agency_candidate)}
                                     </div>
                                 </div>
                             </TeamDialog>
                         </Portal>
+                        <div className="panel panel-warning">
+                        <span>
+                            {(() => { console.log(data.office, offices, data.workers.length) }) () }
+                            {(() => { if(data.office.size > 1) {console.log(offices[data.office.size-1].space, data.workers.length)} }) () }
+                            {(data.office.size > 1 && offices[data.office.size-1].space >= data.workers.length)
+                                ? ((data.office.size === 2)
+                                ? <button onClick={() => {data.helpers.downOffice();}} className="btn btn-warning">Cancel the Office</button>
+                                : <button onClick={() => {data.helpers.downOffice();}} className="btn btn-warning">Downgrade the Office</button>)
+                                : ''}
+                        </span>
+                        </div>
                     </div>
                     :
                     <div className="panel panel-warning">
-                        {(this.props.data.office.size === 1)
-                            ? <button onClick={() => {this.props.data.helpers.upOffice(2);}} className="btn btn-warning">Rent a Office</button>
-                            : ((this.props.data.office.size < 4)
-                                ? <button onClick={() => {this.props.data.helpers.upOffice(this.props.data.office.size+1);}} className="btn btn-warning">Extend the Office</button>
-                                : '')}
+                        <span>
+                            {(data.office.size === 1)
+                                ? <button onClick={() => {data.helpers.upOffice();}} className="btn btn-warning">Rent a Office</button>
+                                : ((data.office.size < 4)
+                                    ? <button onClick={() => {data.helpers.upOffice();}} className="btn btn-warning">Extend the Office</button>
+                                    : '')}
+                        </span>
                     </div>
                     }
             </div>
