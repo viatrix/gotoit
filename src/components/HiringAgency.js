@@ -59,8 +59,8 @@ class HiringAgency extends Component {
             / (201 - s.min_salary - s.max_salary);
         salary_control_factor = Math.floor(salary_control_factor);
 
-        console.log(min_sum_factor, max_sum_factor, pike_factor1);
-        console.log(min_salary_factor, max_salary_factor, sum_control_factor, salary_control_factor, pike_factor2);
+      //  console.log(min_sum_factor, max_sum_factor, pike_factor1);
+      //  console.log(min_salary_factor, max_salary_factor, sum_control_factor, salary_control_factor, pike_factor2);
 
         return Math.floor((1000 + min_sum_factor + max_sum_factor + pike_factor1)
             / (0.0003 * (1000 + min_salary_factor + max_salary_factor + sum_control_factor + salary_control_factor + pike_factor2)));
@@ -112,7 +112,6 @@ class HiringAgency extends Component {
                         {draw_row('Salary overrate', <ReactBootstrapSlider
                             value={[this.state.min_salary, this.state.max_salary]}
                             change={(e) => {
-                                console.log(e);
                                 let state = this.state;
                                 state.min_salary = e.target.value[0];
                                 state.max_salary = e.target.value[1];

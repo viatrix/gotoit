@@ -14,7 +14,7 @@ import OfficeModel from './models/OfficeModel';
 
 import Lorer from './services/Lorer';
 
-import {skills_names, technologies} from './data/knowledge';
+import {skills_names, technologies, skills_true} from './data/knowledge';
 
 import app_state from './AppData';
 
@@ -203,6 +203,7 @@ class App extends Component {
         let data = this.state.data;
         worker.facts.tick_hired = data.date.tick;
         data.workers.push(worker);
+        data.workers_roles[worker.id] = skills_true;
         this.modifyRelation(worker.id, null, true);
         skills_names.forEach((skill) => { this.changeRole(worker.id, skill, true); });
         //this.setState({data: data});
@@ -251,11 +252,15 @@ class App extends Component {
     startOffered(id, type) {
         let data = this.state.data;
         let project = (_.remove(data.offered_projects[type], (candidate) => { return (candidate.id === id); }))[0];
+
+        if (!project) {
+            console.log('Broker offered project '+id+' '+type);
+            return false;
+        }
+
         project.briefing = true;
         this.acceptAndMoveProject(project);
-        //addMessage('Accept '+project.name+' project', {timeOut: 5000, extendedTimeOut: 2000}, 'info');
         this.startProject(id);
-        //this.setState({data: data});
     }
 
     acceptAndMoveProject(project) {
@@ -284,34 +289,23 @@ class App extends Component {
     }
 
     draftProject() {
-        let data = this.state.data;
         let project = ProjectModel.generateDraft();
-        data.projects.push(project);
-        //this.setState({data: data});
+        this.state.data.projects.push(project);
         this.modifyRelation(null, project.id, true);
     }
 
     startProject(id) {
-        console.log('App Start Project');
-        let data = this.state.data;
-        let project = _.find(data.projects, (project) => { return (project.id === id); });
+        let project = _.find(this.state.data.projects, (project) => { return (project.id === id); });
         project.stage = 'open';
         addMessage('Start '+project.name+' project', {timeOut: 5000, extendedTimeOut: 2000}, 'info');
-        //this.setState({data: data});
     }
 
     closeProject(id) {
-        console.log('App Close Project');
-     //   let data = this.state.data;
         this.projectReporting(id, 'close');
-        //this.setState({data: data});
     }
 
     failProject(id) {
-     //   let data = this.state.data;
-        console.log('fail');
         this.projectReporting(id, 'fail');
-        //this.setState({data: data});
     }
 
     fixProject(id) {
@@ -360,7 +354,7 @@ class App extends Component {
 
         //data.projects_end_reports.unshift(project);
         data.projects_archive_reports.unshift(project);
-        console.log('archiving', data.projects_end_reports, data.projects_archive_reports, projects, project);
+        //console.log('archiving', data.projects_end_reports, data.projects_archive_reports, projects, project);
      //  //this.setState({data: data});
 
         if (project.is_storyline || project.stage !== 'finish' ) return;
@@ -420,7 +414,9 @@ class App extends Component {
 
     chargeMoney(quantity, silent = false) {
         if (quantity <= 0) {
-            console.log('fix chargeMoney(0)');
+            /***
+             * @todo fix chargeMoney(0)
+             */
             return false;
         }
         let data = this.state.data;
@@ -516,7 +512,6 @@ class App extends Component {
         }
 
         let probability = Math.min(50, (10 + (projects_done*0.1))) / 24;
-    //    console.log('probability: ' + probability.toFixed(2));
 
         if (data.offered_projects.freelance.length < 5 && _.random(0.0, 100.0) < probability) {
             let quality = Math.ceil(_.random(1, (tick / (24*30)) + (projects_done*0.2)));
@@ -543,7 +538,7 @@ class App extends Component {
                     )
                 );
 
-            console.log('probability: ' + probability.toFixed(2) + ' quality: ' + quality + ' size: ' + size);
+            //console.log('probability: ' + probability.toFixed(2) + ' quality: ' + quality + ' size: ' + size);
             data.offered_projects.freelance.push(ProjectModel.generate(quality, size));
             addAction('New job!', {timeOut: 3000, extendedTimeOut: 1000});
         }

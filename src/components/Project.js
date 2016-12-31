@@ -50,7 +50,6 @@ class Project extends Component {
     }
 
     open() {
-        console.log('Project open');
         this.props.data.helpers.startProject(this.props.project.id);
         //this.forceUpdate();
     }
@@ -125,7 +124,6 @@ class Project extends Component {
                 }}>Start</button> : ''}
                 {project.stage === 'open'
                     ? <button className="btn btn-warning" onClick={() => {
-                        console.log('paused!!!');
                         project.stage = 'paused';
                 }}>Pause</button> : ''}
             </span>;

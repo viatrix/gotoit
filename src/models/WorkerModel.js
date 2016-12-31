@@ -224,16 +224,16 @@ class WorkerModel {
     }
 
     static generateAgency(agency_state) {
-        console.log(agency_state);
+        //console.log(agency_state);
         let stats = _.mapValues(skills, (value, skill) => {
             let stat = _.random(agency_state.min_stats[skill], agency_state.max_stats[skill]);
-            console.log(skill, stat);
+            //console.log(skill, stat);
             return stat;
         });
-        console.log(stats);
+        //console.log(stats);
         let worker =  new WorkerModel(this.genName(), stats);
         worker.standing = Math.floor(_.random(agency_state.min_salary, agency_state.max_salary) * 26.888);
-        console.log(worker);
+        //console.log(worker);
         return worker;
     }
 

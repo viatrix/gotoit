@@ -216,7 +216,7 @@ class ProjectModel {
     }
 
     static generate(quality=1, size=4, kind=_.sample(_.keys(project_kinds)), platform = _.sample(_.keys(project_platforms))) {
-        //    console.log("gen quality="+quality+", size="+size);
+        //console.log("gen quality="+quality+", size="+size);
         projects_generated++;
 
         let stats_bulk = {
@@ -298,7 +298,7 @@ class ProjectModel {
         //console.log(agency_state);
         let stats = _.mapValues(skills, (value, skill) => {
             let stat = _.random(agency_state.min_stats[skill], agency_state.max_stats[skill]);
-            console.log(skill, stat);
+            //console.log(skill, stat);
             return stat;
         });
         //console.log(stats);

@@ -77,12 +77,10 @@ class People extends Component {
                         </Portal>
                         <div className="panel panel-warning">
                         <span>
-                            {(() => { console.log(data.office, offices, data.workers.length) }) () }
-                            {(() => { if(data.office.size > 1) {console.log(offices[data.office.size-1].space, data.workers.length)} }) () }
                             {(data.office.size > 1 && offices[data.office.size-1].space >= data.workers.length)
                                 ? ((data.office.size === 2)
-                                ? <button onClick={() => {data.helpers.downOffice();}} className="btn btn-warning">Cancel the Office</button>
-                                : <button onClick={() => {data.helpers.downOffice();}} className="btn btn-warning">Downgrade the Office</button>)
+                                    ? <button onClick={() => {data.helpers.downOffice();}} className="btn btn-warning">Cancel the Office</button>
+                                    : <button onClick={() => {data.helpers.downOffice();}} className="btn btn-warning">Downgrade the Office</button>)
                                 : ''}
                         </span>
                         </div>

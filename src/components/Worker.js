@@ -43,7 +43,7 @@ class Worker extends Component {
     }
 
     teach(skill, source) {
-        console.log(skill, source);
+      //  console.log(skill, source);
 
         switch (source) {
             case 'training':
@@ -127,7 +127,6 @@ class Worker extends Component {
                                         onChange={(e) => {
                                             worker.accept_default = e.target.checked;
                                             this.manageAll(e);
-                                            console.log(worker.accept_default);
                                         }}/>
                                     Auto join new projects
                                 </label>

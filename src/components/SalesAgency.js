@@ -108,7 +108,7 @@ class SalesAgency extends Component {
                                     //new_state.min_stats[skill] = Math.min(project_sizes[e.target.value].agency_max, state.max_stats[skill]);
                                 });
 
-                                console.log(e, new_state);
+                            //    console.log(e, new_state);
                                 this.setState(new_state);
                             }}
                             tooltip='hide'
