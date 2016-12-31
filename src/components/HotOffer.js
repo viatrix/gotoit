@@ -34,7 +34,7 @@ class HotOffer extends Component {
                                     {project.lore.text}
                                 </p>
                             </div>
-                            <div className="moat">
+                            <div className="moat slim_top">
                                 <ProjectOfferBlock candidate={project} data={data} type='hot' />
                             </div>
                         </div>

@@ -10,6 +10,8 @@ import WorkerModel from '../models/WorkerModel';
 
 import {player_backgrounds, player_specialities, technologies, skills_1} from '../data/knowledge';
 
+export var player = null;
+
 class Creation extends Component {
     constructor(props) {
         super(props);
@@ -39,6 +41,7 @@ class Creation extends Component {
         worker.name = this.state.suggest_name;
 
         data.workers[0] = worker; //: [WorkerModel.generatePlayer()]
+        player = worker;
 
         data.stage = 'game';
         data.projects_known_technologies = data.projects_known_technologies.concat(player_backgrounds[this.state.selected_background].start_tech);

@@ -24,6 +24,17 @@ class Office extends Component {
                             />
                         </span>
 
+                        <span onClick={() => {
+                            let i = 0;
+                            while (i < 24) {
+                                this.props.data.helpers.tick();
+                                i++;
+                            }
+                        }}>
+                            <img src={"24-hours-icon.png"} alt={"Next Day"} title={"Next Day"}
+                                 className="img" style={{width: 16, height: 16}}/>
+                        </span>
+
                         <label className="flex-element" onClick={() => {
                             this.props.data.helpers.addMoney(100000);
                         }}>Money {this.props.data.money}$</label>

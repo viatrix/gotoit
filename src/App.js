@@ -36,6 +36,7 @@ class App extends Component {
 
         this.brutalSet = this.brutalSet.bind(this);
         this.brutalGet = this.brutalGet.bind(this);
+        this.tick = this.tick.bind(this);
         this.addMoney = this.addMoney.bind(this);
 
         this.getRelation = this.getRelation.bind(this);
@@ -69,6 +70,7 @@ class App extends Component {
 
         app_state.data.helpers['brutalSet'] = this.brutalSet;
         app_state.data.helpers['brutalGet'] = this.brutalGet;
+        app_state.data.helpers['tick'] = this.tick;
         app_state.data.helpers['addMoney'] = this.addMoney;
 
         app_state.data.helpers['modifyRelation'] = this.modifyRelation;
