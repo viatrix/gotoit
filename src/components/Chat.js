@@ -65,7 +65,7 @@ class Chat extends Component {
         return (
             <div className="chat-window slim">
                     {this.state.messages.map((message, key) => {
-                        return <div key={key} ref={'msg'+key} className={classNames('alert', 'slim', 'text-left', 'alert-'+[message.type])}>
+                        return <div key={key} ref={'msg'+key} className={classNames('alert', 'small', 'slim', 'text-left', 'alert-'+[message.type])}>
                             <strong>{message.name}</strong> {message.text}
                         </div>
                     })}
