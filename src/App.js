@@ -171,7 +171,7 @@ class App extends Component {
 
     changeRole(worker_id, role, value) {
         let data = this.state.data;
-        if (!(worker_id in data.workers_roles))  data.workers_roles[worker_id] = {};
+        if (!(worker_id in data.workers_roles))  data.workers_roles[worker_id] = JSON.parse(JSON.stringify(skills_true));
         data.workers_roles[worker_id][role] = value;
         //this.setState({data: data});
     }
@@ -203,9 +203,9 @@ class App extends Component {
         let data = this.state.data;
         worker.facts.tick_hired = data.date.tick;
         data.workers.push(worker);
-        data.workers_roles[worker.id] = skills_true;
-        this.modifyRelation(worker.id, null, true);
+        //data.workers_roles[worker.id] = JSON.parse(JSON.stringify(skills_true));
         skills_names.forEach((skill) => { this.changeRole(worker.id, skill, true); });
+        this.modifyRelation(worker.id, null, true);
         //this.setState({data: data});
     }
 
