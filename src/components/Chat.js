@@ -27,7 +27,7 @@ class Chat extends Component {
 
     chatMessage(name='', text='', type='info') {
         this.state.messages.push({name: name, text: text, type: type});
-        //this.setState({new_message: true});
+        this.setState({new_message: true});
     }
 
     componentDidMount() {
