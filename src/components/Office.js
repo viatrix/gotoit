@@ -36,9 +36,12 @@ class Office extends Component {
                                  className="img" style={{width: 16, height: 16}}/>
                         </span>
 
-                        <label className="flex-element" onClick={() => {
-                            this.props.data.helpers.addMoney(100000);
-                        }}>Money {this.props.data.money}$</label>
+                        <label>
+                            Money {this.props.data.money}
+                            <label className="flex-element" onClick={() => {
+                                this.props.data.helpers.addMoney(100000);
+                            }}>$</label>
+                        </label>
 
                         <span className="pull-right" onClick={() => {
                             console.log(this.props.data);
