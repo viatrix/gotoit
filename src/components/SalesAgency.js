@@ -56,7 +56,7 @@ class SalesAgency extends Component {
 
        // console.log(min_sum_factor, max_sum_factor, pike_factor1, pike_factor2, '/', sum_control_factor);
 
-        return 153 + Math.floor((Math.pow(s.size, 1.615) * (50 + min_sum_factor + max_sum_factor + pike_factor1 + pike_factor2))
+        return 420 + Math.floor((Math.pow(s.size, 1.615) * (50 + min_sum_factor + max_sum_factor + pike_factor1 + pike_factor2))
             / (0.01 * (100  + sum_control_factor)));
     }
 
