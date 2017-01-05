@@ -11,6 +11,8 @@ var app_state =
 {
     data: {
         money: 0,
+        game_speed: 300,
+        game_paused: true,
         stage: 'start',
         date: {
             tick: 0,

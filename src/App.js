@@ -20,8 +20,6 @@ import app_state from './AppData';
 
 export var tick = 0;
 
-const game_speed = 300;
-
 //var agency_generation_counter = 0;
 var contract_generation_counter = 0;
 
@@ -33,6 +31,9 @@ export var getData = () => { return {}; };
 class App extends Component {
     constructor(props) {
         super(props);
+
+        this.playGame = this.playGame.bind(this);
+        this.pauseGame = this.pauseGame.bind(this);
 
         this.brutalSet = this.brutalSet.bind(this);
         this.brutalGet = this.brutalGet.bind(this);
@@ -68,6 +69,9 @@ class App extends Component {
 
         this.howManyEmployers = this.howManyEmployers.bind(this);
 
+
+        app_state.data.helpers['playGame'] = this.playGame;
+        app_state.data.helpers['pauseGame'] = this.pauseGame;
 
         app_state.data.helpers['brutalSet'] = this.brutalSet;
         app_state.data.helpers['brutalGet'] = this.brutalGet;
@@ -235,7 +239,7 @@ class App extends Component {
         //this.setState({data: data});
     }
 
-    rejectOffered(id, type) {
+    rejectOffered(id, type) { // rejectOffer
         let data = this.state.data;
         _.remove(data.offered_projects[type], (candidate) => { return (candidate.id === id); });
         //this.setState({data: data});
@@ -448,14 +452,28 @@ class App extends Component {
     }
 
     componentDidMount() {
-        this.timerID = setInterval(
-            () => this.tick(true),
-            game_speed
-        );
+        this.playGame();
     }
 
     componentWillUnmount() {
+        this.pauseGame();
+    }
+
+    playGame() {
+        const data = this.state.data;
+        data.game_paused = false;
+        this.timerID = setInterval(
+            () => this.tick(true),
+            this.state.data.game_speed
+        );
+        this.setState({data: data});
+    }
+
+    pauseGame() {
+        const data = this.state.data;
+        data.game_paused = true;
         clearInterval(this.timerID);
+        this.setState({data: data});
     }
 
 
@@ -672,7 +690,7 @@ class App extends Component {
                 if (worker.to_vacation_ticker <= 0) {
                     worker.to_vacation = false;
                     worker.in_vacation = true;
-                    let long =  _.random(1, 3);
+                    let long =  _.random(2, 3);
                     worker.in_vacation_ticker = 24 * 7 * long; // 1-3 weeks
                     addAction(worker.name+' leaves on vacation '+long+' weeks long', {timeOut: 15000, extendedTimeOut: 8000}, 'error');
                 }
@@ -711,7 +729,12 @@ class App extends Component {
                 let micromanagement = this.getTechnology(project.id, 'micromanagement');
                 let creativity = this.getTechnology(project.id, 'creativity');
                 let overtime = this.getTechnology(project.id, 'overtime');
+                let overtimed = false;
                 let pair = this.getTechnology(project.id, 'pair');
+
+                const formName = () => {
+                    return worker.name + (overtimed ? ' in overtime' : '');
+                };
 
                 // Overtime
                 let is_working_time = worker.isWorkingTime(data.date, micromanagement);
@@ -719,7 +742,8 @@ class App extends Component {
                     if (overtime) {
                         if (worker.morale > 0) {
                             if (_.random(1, 4) === 1) {
-                                chatMessage(worker.name, 'I overtime today');
+                                overtimed = true;
+                                //chatMessage(worker.name, 'I overtime today');
                             //    console.log('overtime on '+worker.morale);
                                 worker.morale--;
                             }
@@ -753,7 +777,7 @@ class App extends Component {
                 // Creativity
                 if (creativity && is_working_time && (_.random(1, 5) === 1)) {
                     skip_work = true;
-                    chatMessage(worker.name, 'I spent hour to my pet-project.', 'warning');
+                    chatMessage(formName(), 'I spent hour to my pet-project.', 'warning');
                 }
 
                 // Agile
@@ -773,7 +797,7 @@ class App extends Component {
                         project.needs[res] -= retrospected;
                         project.needs_max[res] -= retrospected;
                         project.reward -= cut;
-                        chatMessage(worker.name, 'cut ' + retrospected + ' ' + res + ' tasks and ' + cut + '$', 'success');
+                        chatMessage(formName(), 'cut ' + retrospected + ' ' + res + ' tasks and ' + cut + '$', 'success');
                         skip_work = true;
                     }
                 }
@@ -788,7 +812,7 @@ class App extends Component {
                     worker.facts.tests_wrote += tests;
                     project.facts.tests_wrote += tests;
                     project.tests += tests;
-                    chatMessage(worker.name, ' wrote '+tests+' test!', 'success');
+                    chatMessage(formName(), ' wrote '+tests+' test!', 'success');
                     skip_work = true;
                 }
 
@@ -804,7 +828,7 @@ class App extends Component {
                         worker.facts.refactored += refactoring;
                         project.facts.refactored += refactoring;
                         project.complexity -= refactoring;
-                        chatMessage(worker.name, ' refactored ' + refactoring + ' complexity!', 'success');
+                        chatMessage(formName(), ' refactored ' + refactoring + ' complexity!', 'success');
                         skip_work = true;
                     }
                 }
@@ -820,7 +844,7 @@ class App extends Component {
                     worker.addExperience(
                         project.applyWork(
                             worker.getResources(worker_roles, focus_on, micromanagement),
-                        worker, rad, creativity, pair));
+                        worker, rad, creativity, pair, overtimed));
                 }
             }
             else {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {FormattedDate} from 'react-intl';
+import classNames from 'classnames';
 
 class Office extends Component {
     render() {
@@ -24,26 +25,38 @@ class Office extends Component {
                             />
                         </span>
 
-                        <span onClick={() => {
-                            let i = 1;
-                            let n = 24;
-                            while (i <= n) {
-                                this.props.data.helpers.tick((i === n));
-                                i++;
-                            }
-                        }}>
-                            <img src={"24-hours-icon.png"} alt={"Next Day"} title={"Next Day"}
-                                 className="img" style={{width: 16, height: 16}}/>
+                        <span>
+                            <span onClick={() => {
+                                if (this.props.data.game_paused) {
+                                    this.props.data.helpers.playGame();
+                                } else {
+                                    this.props.data.helpers.pauseGame();
+                                }
+                            }}>
+                                <span className={classNames('glyphicon', (this.props.data.game_paused ? 'glyphicon-play' : 'glyphicon-pause'))} style={{width: 16, height: 16}}></span>
+                            </span>
+                            <span onClick={() => {
+                                let i = 1;
+                                let n = 24;
+                                while (i <= n) {
+                                    this.props.data.helpers.tick((i === n));
+                                    i++;
+                                }
+                            }}>
+                                <img src={"24-hours-icon.png"} alt={"Next Day"} title={"Next Day"}
+                                     className="img" style={{width: 16, height: 16}}/>
+                            </span>
                         </span>
 
-                        <label>
+                        <span className="flex-element">
                             Money {this.props.data.money}
                             <label className="flex-element" onClick={() => {
                                 this.props.data.helpers.addMoney(100000);
                             }}>$</label>
-                        </label>
 
-                        <span className="pull-right" onClick={() => {
+                        </span>
+
+                        <span className="flex-element pull-right" onClick={() => {
                             console.log(this.props.data);
                         }}>
                         {(date.is_working_time ?

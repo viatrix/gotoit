@@ -59,7 +59,7 @@ class ProjectModel {
         }
     }
 
-    applyWork(work, worker, rad = false, creativity = false, pair = false) {
+    applyWork(work, worker, rad = false, creativity = false, pair = false, overtimed = false) {
         var learned = JSON.parse(JSON.stringify(skills));
 
         Object.keys(work).forEach((stat) => {
@@ -86,7 +86,9 @@ class ProjectModel {
                 }
 
                 const formName = () => {
-                    return worker.name + (support ? ' with support of ' + this.supporter.name : '');
+                    return worker.name
+                        + (overtimed ? ' in overtime' : '')
+                        + (support ? ' with support of ' + this.supporter.name : '');
                 };
 
                 if (bugs > 0) {
