@@ -705,7 +705,7 @@ class App extends Component {
                 }
                 return false;
             }
-            if (_.random(1, 10) === 1) {
+            if (_.random(1, 1+worker.getOverrate().toFixed(0)) === 1) { // additional drain even worker do not work
                 worker.drainStamina();
             }
 
