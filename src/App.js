@@ -777,6 +777,7 @@ class App extends Component {
                 // Creativity
                 if (creativity && is_working_time && (_.random(1, 5) === 1)) {
                     skip_work = true;
+                    worker.facts.training_tasks_done += worker.getSideResource();
                     chatMessage(formName(), 'I spent hour to my pet-project.', 'warning');
                 }
 
