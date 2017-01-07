@@ -17,6 +17,7 @@ class Creation extends Component {
         super(props);
 
         this.state = {
+            step: 'welcome', // welcome, creation
             suggest_name: WorkerModel.genName(),
             selected_background: _.sample(_.keys(player_backgrounds)), //'comprehensive',
             selected_speciality: _.sample(_.keys(player_specialities)), //'university',
@@ -52,6 +53,8 @@ class Creation extends Component {
             this.props.data.helpers.hireEmployer(WorkerModel.generate(8));
             this.props.data.helpers.upOffice(2); // this.props.data.office = new OfficeModel(2);
         }
+
+        this.props.data.helpers.playGame();
     }
 
     componentDidMount() {
@@ -76,6 +79,21 @@ class Creation extends Component {
                     {(data.stage === 'start') ?
                         <Portal ref="creation">
                             <SimpleModal>
+                                {this.state.step === 'welcome' ?
+                                    <div>
+                                        <h3 className="text-center">Go To IT</h3>
+                                        <h4 className="text-center">Game About Software Development</h4>
+                                        <div className="panel panel-info">
+                                            <p>This game is about software development and the rise of your company to the heights.</p>
+                                            <p>Start with small contracts, save up some money, hire a couple of assistants and try to create something really cool!</p>
+                                        </div>
+                                        <div className="text-center">
+                                            <button className="big btn-success btn-lg" onClick={() => { this.setState({step: 'creation'}) }}>Create Your Company!</button>
+                                        </div>
+                                    </div>
+
+                                    :
+                                    <div>
                                 <h3 className="text-center">
                                     Choose <input type="text" name="background" className="form-inline"
                                                   value={this.state.suggest_name}
@@ -139,6 +157,8 @@ class Creation extends Component {
                                 <div className="text-center">
                                     <button className="big btn-success btn-lg" onClick={this.embark}>Embark</button>
                                 </div>
+                                </div>
+                                }
                             </SimpleModal>
                         </Portal>
                         : ''}

@@ -452,7 +452,7 @@ class App extends Component {
     }
 
     componentDidMount() {
-        this.playGame();
+        //this.playGame();
     }
 
     componentWillUnmount() {

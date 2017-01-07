@@ -36,14 +36,14 @@ class bulkStyler {
        // let order = _.shuffle(Object.keys(stats_bulk)); //.sort(function(a,b){return stats_bulk[b]-stats_bulk[a]});
 
         switch (background) {
-            case 'comprehensive': // high like 12
-                stats_bulk[order[0]] += 3;
-                stats_bulk[order[1]] += 3;
-                stats_bulk[order[2]] += 3;
-                stats_bulk[order[3]] += 3;
+            case 'comprehensive': // high like 15
+                stats_bulk[order[0]] += 4;
+                stats_bulk[order[1]] += 4;
+                stats_bulk[order[2]] += 4;
+                stats_bulk[order[3]] += 4;
                 break;
-            case 'specialist': // med like 9
-                stats_bulk[order[0]] += 6;
+            case 'specialist': // med like 10
+                stats_bulk[order[0]] += 7;
                 stats_bulk[order[1]] += 1;
                 stats_bulk[order[2]] += 1;
                 stats_bulk[order[3]] += 1;
@@ -70,26 +70,14 @@ class bulkStyler {
         switch (speciality) {
             case 'design':
                 stats_bulk['design'] += 4;
-                stats_bulk['manage'] += 1;
-                stats_bulk['program'] += 1;
-                stats_bulk['admin'] += 1;
                 break;
             case 'manage':
-                stats_bulk['design'] += 1;
                 stats_bulk['manage'] += 4;
-                stats_bulk['program'] += 1;
-                stats_bulk['admin'] += 1;
                 break;
             case 'program':
-                stats_bulk['design'] += 1;
-                stats_bulk['manage'] += 1;
                 stats_bulk['program'] += 4;
-                stats_bulk['admin'] += 1;
                 break;
             case 'admin':
-                stats_bulk['design'] += 1;
-                stats_bulk['manage'] += 1;
-                stats_bulk['program'] += 1;
                 stats_bulk['admin'] += 4;
                 break;
             default:
