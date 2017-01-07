@@ -15,7 +15,7 @@ class SalesAgency extends Component {
 
         let min = JSON.parse(JSON.stringify(skills));
         _.keys(min).forEach((skill) => {
-            min[skill] = 1;
+            min[skill] = 0;
         });
         let max = JSON.parse(JSON.stringify(skills));
         _.keys(max).forEach((skill) => {

@@ -26,8 +26,8 @@ class HiringAgency extends Component {
             deal_counter: 1,
             min_stats: JSON.parse(JSON.stringify(min)),
             max_stats: JSON.parse(JSON.stringify(max)),
-            min_salary: 25,
-            max_salary: 50,
+            min_salary: 1,
+            max_salary: 100,
         }, this.props.data.hiring_agency_state);
 
         this.calcCost = this.calcCost.bind(this);
@@ -63,8 +63,8 @@ class HiringAgency extends Component {
       //  console.log(min_sum_factor, max_sum_factor, pike_factor1);
       //  console.log(min_salary_factor, max_salary_factor, sum_control_factor, salary_control_factor, pike_factor2);
 
-        return Math.floor((1 + (s.deal_counter/10)) * (1000 + min_sum_factor + max_sum_factor + pike_factor1)
-            / (0.0003 * (1000 + min_salary_factor + max_salary_factor + sum_control_factor + salary_control_factor + pike_factor2)));
+        return 14 + Math.floor((1 + (s.deal_counter/10)) * (1000 + min_sum_factor + max_sum_factor + pike_factor1)
+            / (0.0006 * (500 + min_salary_factor + max_salary_factor + sum_control_factor + salary_control_factor + pike_factor2)));
     }
 
     search() {
