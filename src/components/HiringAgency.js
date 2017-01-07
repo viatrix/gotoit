@@ -23,6 +23,7 @@ class HiringAgency extends Component {
         });
 
         this.state = Object.assign({
+            deal_counter: 1,
             min_stats: JSON.parse(JSON.stringify(min)),
             max_stats: JSON.parse(JSON.stringify(max)),
             min_salary: 25,
@@ -46,8 +47,8 @@ class HiringAgency extends Component {
         let pike_factor1 = Math.floor(Math.pow((_.max(_.values(s.min_stats)) + _.max(_.values(s.max_stats))), 2.5));
         let pike_factor2 = Math.floor(Math.pow(_.max(_.values(s.max_stats)) - (_.min(_.values(s.max_stats))), 2));
 
-        let min_salary_factor = Math.floor(Math.pow(s.min_salary, 1.9));
-        let max_salary_factor = Math.floor(Math.pow(s.max_salary, 1.7));
+        let min_salary_factor = Math.floor(Math.pow(s.min_salary, 1.95));
+        let max_salary_factor = Math.floor(Math.pow(s.max_salary, 1.75));
 
         let sum_control_factor = 0;
         skills_names.forEach((skill) => {
@@ -62,12 +63,15 @@ class HiringAgency extends Component {
       //  console.log(min_sum_factor, max_sum_factor, pike_factor1);
       //  console.log(min_salary_factor, max_salary_factor, sum_control_factor, salary_control_factor, pike_factor2);
 
-        return Math.floor((1000 + min_sum_factor + max_sum_factor + pike_factor1)
+        return Math.floor((1 + (s.deal_counter/10)) * (1000 + min_sum_factor + max_sum_factor + pike_factor1)
             / (0.0003 * (1000 + min_salary_factor + max_salary_factor + sum_control_factor + salary_control_factor + pike_factor2)));
     }
 
     search() {
-        this.props.data.helpers.agencySearch(this.state, this.calcCost());
+        let state = this.state;
+        state.deal_counter++;
+        this.props.data.helpers.agencySearch(state, this.calcCost());
+
         this.refs.agency.closePortal();
     }
 

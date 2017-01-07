@@ -23,6 +23,7 @@ class SalesAgency extends Component {
         });
 
         this.state = Object.assign({
+            deal_counter: 1,
             min_stats: JSON.parse(JSON.stringify(min)),
             max_stats: JSON.parse(JSON.stringify(max)),
             size: 1
@@ -52,16 +53,18 @@ class SalesAgency extends Component {
         skills_names.forEach((skill) => {
             sum_control_factor += s.max_stats[skill] - s.min_stats[skill];
         });
-        sum_control_factor = Math.floor(sum_control_factor / 4);
+        sum_control_factor = Math.floor(sum_control_factor / 10);
 
        // console.log(min_sum_factor, max_sum_factor, pike_factor1, pike_factor2, '/', sum_control_factor);
 
-        return 420 + Math.floor((Math.pow(s.size, 1.615) * (50 + min_sum_factor + max_sum_factor + pike_factor1 + pike_factor2))
-            / (0.01 * (100  + sum_control_factor)));
+        return 420 + Math.floor((Math.pow(s.size, 1.615) * (1 + (s.deal_counter/10)) * (50 + min_sum_factor + max_sum_factor + pike_factor1 + pike_factor2))
+            / (0.03 * (100 + sum_control_factor)));
     }
 
     search() {
-        this.props.data.helpers.contractSearch(this.state, this.calcCost());
+        let state = this.state;
+        state.deal_counter++;
+        this.props.data.helpers.contractSearch(state, this.calcCost());
         this.refs.agency.closePortal();
     }
 
