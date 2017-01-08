@@ -52,6 +52,8 @@ class Creation extends Component {
         if (this.state.selected_background === 'coworker') {
             this.props.data.helpers.hireEmployer(WorkerModel.generate(8));
             this.props.data.helpers.upOffice(2); // this.props.data.office = new OfficeModel(2);
+        } else if (this.state.selected_background === 'businessman') {
+            this.props.data.early_payed_loans += 30;
         }
 
         this.props.data.helpers.playGame();
@@ -108,8 +110,8 @@ class Creation extends Component {
                                 <div className="panel panel-info">
                                     <div className="flex-container-row">
                                         {Object.keys(player_backgrounds).map((background) => {
-                                            return <div key={background} className="flex-element">
-                                                <div className="radio">
+                                            return <div key={background} className="flex-element slim">
+                                                <div className="radio slim">
                                                     <label className="slim">
                                                         <h3 className="text-center">
                                                             <input type="radio" name="background" value={background}
@@ -119,7 +121,7 @@ class Creation extends Component {
                                                                    }}/>
                                                             {player_backgrounds[background].name}
                                                         </h3>
-                                                        <p>{player_backgrounds[background].text}</p>
+                                                        <p className="slim">{player_backgrounds[background].text}</p>
                                                         <p>Start tech: {technologies[player_backgrounds[background].start_tech].name}</p>
                                                     </label>
                                                 </div>

@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import {FormattedDate} from 'react-intl';
 import classNames from 'classnames';
 
+import Loans from './Loans';
+
 class Office extends Component {
     render() {
+        const data = this.props.data;
         const date = this.props.data.date;
 
         var real_date = new Date();
@@ -27,19 +30,19 @@ class Office extends Component {
 
                         <span>
                             <span onClick={() => {
-                                if (this.props.data.game_paused) {
-                                    this.props.data.helpers.playGame();
+                                if (data.game_paused) {
+                                    data.helpers.playGame();
                                 } else {
-                                    this.props.data.helpers.pauseGame();
+                                    data.helpers.pauseGame();
                                 }
                             }}>
-                                <span className={classNames('glyphicon', (this.props.data.game_paused ? 'glyphicon-play' : 'glyphicon-pause'))} style={{width: 16, height: 16}}></span>
+                                <span className={classNames('glyphicon', (data.game_paused ? 'glyphicon-play' : 'glyphicon-pause'))} style={{width: 16, height: 16}}></span>
                             </span>
                             <span onClick={() => {
                                 let i = 1;
                                 let n = 24;
                                 while (i <= n) {
-                                    this.props.data.helpers.tick((i === n));
+                                    data.helpers.tick((i === n));
                                     i++;
                                 }
                             }}>
@@ -49,15 +52,15 @@ class Office extends Component {
                         </span>
 
                         <span className="flex-element">
-                            Money {this.props.data.money}
-                            <label className="flex-element" onClick={() => {
-                                this.props.data.helpers.addMoney(100000);
+                            Money {data.money}
+                            <label onClick={() => {
+                                data.helpers.addMoney(100000);
                             }}>$</label>
-
+                            <Loans data={data} />
                         </span>
 
                         <span className="flex-element pull-right" onClick={() => {
-                            console.log(this.props.data);
+                            console.log(data);
                         }}>
                         {(date.is_working_time ?
                             <label className="label-success">Working</label> :

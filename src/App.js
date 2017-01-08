@@ -16,7 +16,7 @@ import Lorer from './services/Lorer';
 
 import {skills_names, technologies, skills_true} from './data/knowledge';
 
-import app_state from './AppData';
+import app_state from './data/AppData';
 
 export var tick = 0;
 
@@ -39,6 +39,7 @@ class App extends Component {
         this.brutalGet = this.brutalGet.bind(this);
         this.tick = this.tick.bind(this);
         this.addMoney = this.addMoney.bind(this);
+        this.chargeMoney = this.chargeMoney.bind(this);
 
         this.getRelation = this.getRelation.bind(this);
         this.modifyRelation = this.modifyRelation.bind(this);
@@ -77,6 +78,7 @@ class App extends Component {
         app_state.data.helpers['brutalGet'] = this.brutalGet;
         app_state.data.helpers['tick'] = this.tick;
         app_state.data.helpers['addMoney'] = this.addMoney;
+        app_state.data.helpers['chargeMoney'] = this.chargeMoney;
 
         app_state.data.helpers['modifyRelation'] = this.modifyRelation;
         app_state.data.helpers['getRelation'] = this.getRelation;
@@ -604,6 +606,10 @@ class App extends Component {
         */
 
 
+
+
+
+
         //this.setState({data: data});
     }
 
@@ -650,6 +656,16 @@ class App extends Component {
             if (data.office.size > 1) {
                 this.chargeMoney(data.office.price);
             }
+
+            //loans
+            data.taken_loans.forEach((loan) => {
+                this.chargeMoney((loan.money * (1 + (loan.interest/100)))/loan.time);
+                loan.timer--;
+            });
+
+            (_.remove(data.taken_loans, (loan) => { return (loan.timer === 0); })).forEach((loan) => {
+                data.old_loans.push(loan);
+            });
         }
         time.date = game_date.getDate();
         time.day = game_date.getUTCDay();
