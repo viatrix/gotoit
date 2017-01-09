@@ -31,7 +31,7 @@ class Loans extends Component {
         let loan =  data.taken_loans[id];
         data.taken_loans.splice(id, 1);
         data.old_loans.push(loan);
-        data.early_payed_loans += loan.timer * loan.size;
+        data.early_payed_loans += 2 * loan.timer * loan.size;
 
         data.helpers.chargeMoney(this.getEarlyCost(loan));
     }
@@ -43,7 +43,7 @@ class Loans extends Component {
     calcCreditScore() {
         const data = this.props.data;
         const inertia = 300;
-        let good_factors = (Math.sqrt(data.old_loans.length) * 25) + (Math.sqrt(data.early_payed_loans) * 5);
+        let good_factors = (Math.sqrt(data.old_loans.length) * 20) + (Math.sqrt(data.early_payed_loans) * 4);
         let bad_factors = Math.sqrt(data.taken_loans.length*2) * 50;
 
         let score_rate = 420 * ((inertia + good_factors) / (inertia + bad_factors));

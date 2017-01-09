@@ -661,6 +661,7 @@ class App extends Component {
             data.taken_loans.forEach((loan) => {
                 this.chargeMoney((loan.money * (1 + (loan.interest/100)))/loan.time);
                 loan.timer--;
+                data.early_payed_loans++;
             });
 
             (_.remove(data.taken_loans, (loan) => { return (loan.timer === 0); })).forEach((loan) => {
