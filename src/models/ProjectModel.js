@@ -310,7 +310,7 @@ class ProjectModel {
         });
         stats = JSON.parse(JSON.stringify(stats));
 
-        let reward = hackathons_generated * 1000;
+        let reward = hackathons_generated * 10000;
         let penalty = 0;
         let deadline = 24 * 5;
         let complexity = hackathons_generated * 5;
