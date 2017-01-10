@@ -117,14 +117,17 @@ class Project extends Component {
                 {(project.stage === 'paused')
                     ? <button className="btn btn-success" onClick={() => {
                         project.stage = 'open';
+                        data.helpers.checkState();
                 }}>Start</button> : ''}
                 {(project.stage === 'ready')
                     ? <button className="btn btn-success" onClick={() => {
                         this.open();
+                        data.helpers.checkState();
                 }}>Start</button> : ''}
                 {project.stage === 'open'
                     ? <button className="btn btn-warning" onClick={() => {
                         project.stage = 'paused';
+                        data.helpers.checkState();
                 }}>Pause</button> : ''}
             </span>;
 

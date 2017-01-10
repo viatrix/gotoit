@@ -20,9 +20,6 @@ import app_state from './data/AppData';
 
 export var tick = 0;
 
-//var agency_generation_counter = 0;
-var contract_generation_counter = 0;
-
 export var hired = 1;
 export var projects_done = 0;
 
@@ -37,6 +34,8 @@ class App extends Component {
 
         this.brutalSet = this.brutalSet.bind(this);
         this.brutalGet = this.brutalGet.bind(this);
+        this.checkState = this.checkState.bind(this);
+
         this.tick = this.tick.bind(this);
         this.addMoney = this.addMoney.bind(this);
         this.chargeMoney = this.chargeMoney.bind(this);
@@ -76,6 +75,8 @@ class App extends Component {
 
         app_state.data.helpers['brutalSet'] = this.brutalSet;
         app_state.data.helpers['brutalGet'] = this.brutalGet;
+        app_state.data.helpers['checkState'] = this.checkState;
+
         app_state.data.helpers['tick'] = this.tick;
         app_state.data.helpers['addMoney'] = this.addMoney;
         app_state.data.helpers['chargeMoney'] = this.chargeMoney;
@@ -123,6 +124,10 @@ class App extends Component {
         this.setState(state);
     }
 
+    checkState() {
+        this.setState({data: this.state.data});
+    }
+
 
     getRelation(worker_id, project_id, role = null) {
         if (role !== null) {
@@ -167,7 +172,7 @@ class App extends Component {
             put(worker_id, project_id);
         }
 
-        //this.setState({data: data});
+        this.setState({data: data});
     }
 
     getRole(worker_id, role) {
@@ -179,7 +184,7 @@ class App extends Component {
         let data = this.state.data;
         if (!(worker_id in data.workers_roles))  data.workers_roles[worker_id] = JSON.parse(JSON.stringify(skills_true));
         data.workers_roles[worker_id][role] = value;
-        //this.setState({data: data});
+        this.setState({data: data});
     }
 
     agencySearch(agency_state, agency_reward) {
@@ -189,19 +194,19 @@ class App extends Component {
         let worker = WorkerModel.generateAgency(agency_state);
         data.hiring_agency_state = agency_state;
         data.candidates.agency.push(worker);
-        //this.setState({data: data});
+        this.setState({data: data});
     }
 
     hireCandidate(id, type) {
         let data = this.state.data;
         this.hireEmployer((_.remove(data.candidates[type], (candidate) => { return (candidate.id === id); }))[0]);
-        //this.setState({data: data});
+        this.setState({data: data});
     }
 
     rejectCandidate(id, type) {
         let data = this.state.data;
         _.remove(data.candidates[type], (candidate) => { return (candidate.id === id); });
-        //this.setState({data: data});
+        this.setState({data: data});
     }
 
     hireEmployer(worker) {
@@ -212,39 +217,29 @@ class App extends Component {
         //data.workers_roles[worker.id] = JSON.parse(JSON.stringify(skills_true));
         skills_names.forEach((skill) => { this.changeRole(worker.id, skill, true); });
         this.modifyRelation(worker.id, null, true);
-        //this.setState({data: data});
+        this.setState({data: data});
     }
 
     dismissEmployer(id) {
         hired--;
         let data = this.state.data;
         _.remove(data.workers, (worker) => { return (worker.id === id); });
-        //this.setState({data: data});
-    }
-
-
-    contractSearchOld() {
-        contract_generation_counter++;
-        let data = this.state.data;
-        data.money -= 1000;
-        data.offered_projects.contract.push(ProjectModel.generate(_.random(3, 6 + contract_generation_counter), 3));
-        //this.setState({data: data});
+        this.setState({data: data});
     }
 
     contractSearch(agency_state, agency_reward) {
-        contract_generation_counter++;
         let data = this.state.data;
         this.chargeMoney(agency_reward);
         let project = ProjectModel.generateAgency(agency_state);
         data.sales_agency_state = agency_state;
         data.offered_projects.contract.push(project);
-        //this.setState({data: data});
+        this.setState({data: data});
     }
 
     rejectOffered(id, type) { // rejectOffer
         let data = this.state.data;
         _.remove(data.offered_projects[type], (candidate) => { return (candidate.id === id); });
-        //this.setState({data: data});
+        this.setState({data: data});
     }
 
     acceptOffered(id, type) {
@@ -252,7 +247,7 @@ class App extends Component {
         let project = (_.remove(data.offered_projects[type], (candidate) => { return (candidate.id === id); }))[0];
         this.acceptAndMoveProject(project);
         addMessage('Accept '+project.name+' project', {timeOut: 5000, extendedTimeOut: 2000}, 'info');
-        //this.setState({data: data});
+        this.setState({data: data});
     }
 
     startOffered(id, type) {
@@ -277,7 +272,7 @@ class App extends Component {
                 this.changeTechnology(technology, project.id, true);
             }
         });
-        //this.setState({data: data});
+        this.setState({data: data});
         this.modifyRelation(null, project.id, true);
     }
 
@@ -290,7 +285,7 @@ class App extends Component {
                 this.changeTechnology(technology, project.id, true);
             }
         });
-        //this.setState({data: data});
+        this.setState({data: data});
         this.modifyRelation(worker.id, project.id, true);
     }
 
@@ -298,6 +293,7 @@ class App extends Component {
         let project = ProjectModel.generateDraft();
         this.state.data.projects.push(project);
         this.modifyRelation(null, project.id, true);
+        this.checkState();
     }
 
     startProject(id) {
@@ -308,10 +304,12 @@ class App extends Component {
 
     closeProject(id) {
         this.projectReporting(id, 'close');
+        this.checkState();
     }
 
     failProject(id) {
         this.projectReporting(id, 'fail');
+        this.checkState();
     }
 
     fixProject(id) {
@@ -319,7 +317,7 @@ class App extends Component {
         let project = _.find(data.projects, (project) => { return (project.id === id); });
         project.fix();
         addMessage(project.name+' project go to '+project.iteration+' iteration for fixing bugs.', 'error');
-        //this.setState({data: data});
+        this.setState({data: data});
     }
 
     finishProject(id) {
@@ -328,7 +326,7 @@ class App extends Component {
         data.workers.forEach((worker) => { worker.facts.project_finished++; });
         this.addMoney(_.find(data.projects, (project) => { return (project.id === id); }).reward);
         this.projectReporting(id, 'finish');
-        //this.setState({data: data});
+        this.setState({data: data});
     }
 
     projectReporting(project_id, stage) {
@@ -348,7 +346,7 @@ class App extends Component {
         project.stage = stage;
         data.projects_end_reports.push(project);
         //data.projects_archive_reports.unshift(project);
-        //this.setState({data: data});
+        this.setState({data: data});
     }
 
     projectArchiving() {
@@ -386,13 +384,14 @@ class App extends Component {
             data.achievements.push('BigDeal')
         }
 
+        this.checkState();
     }
 
     unlockTechnology(technology) {
         let data = this.state.data;
         data.money -= technologies[technology].price;
         data.projects_known_technologies.push(technology);
-       //this.setState({data: data});
+        this.setState({data: data});
     }
 
     getTechnology(project_id, technology) {
@@ -407,7 +406,7 @@ class App extends Component {
         if (!(project_id in data.projects_technologies)) data.projects_technologies[project_id] = {};
         data.projects_technologies[project_id][technology] = value;
         data.projects_default_technologies[technology] = value;
-       //this.setState({data: data});
+       this.setState({data: data});
     }
 
 
@@ -415,7 +414,7 @@ class App extends Component {
         let data = this.state.data;
         data.money += quantity;
         addAction('Income to your wallet: '+quantity+'$', {timeOut: 5000, extendedTimeOut: 1000}, 'success');
-        //this.setState({data: data});
+        this.setState({data: data});
     }
 
     chargeMoney(quantity, silent = false) {
@@ -428,14 +427,14 @@ class App extends Component {
         let data = this.state.data;
         data.money -= quantity;
         if (!silent) addAction('Charge from your wallet: '+quantity+'$', {timeOut: 3000, extendedTimeOut: 2000}, 'warning');
-        //this.setState({data: data});
+        this.setState({data: data});
     }
 
     changeOffice(new_size) {
         let data = this.state.data;
         data.office = new OfficeModel(new_size);
         addAction('You new apartments: '+data.office.name+'. Month price: '+data.office.price+'$', {timeOut: 10000, extendedTimeOut: 2000}, 'success');
-        //this.setState({data: data});
+        this.setState({data: data});
     }
 
     upOffice() {
