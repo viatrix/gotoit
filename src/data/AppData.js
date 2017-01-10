@@ -62,6 +62,8 @@ var app_state =
         projects_technologies: [],
         projects_default_technologies: [],
 
+        wasRecentlyHackathon: false,
+
         relations: [],
 
         helpers: {},

@@ -2,6 +2,8 @@
 import ProjectModel from '../models/ProjectModel';
 import player from '../components/Creation';
 
+var hackathons_generated = 0;
+
 class Lorer { // Quest Project Generator
 
     static afterFirstTraining(project) {
@@ -58,6 +60,21 @@ class Lorer { // Quest Project Generator
             complexity_max: 50,
             is_storyline: true,
             reward: bulk.reward + 100000
+        });
+    }
+
+
+    static hackathon() {
+        hackathons_generated++;
+        let bulk = ProjectModel.generateHackathon(hackathons_generated);
+
+        return Object.assign(bulk, {
+            lore: {
+                name: 'City Hackers Team',
+                text: `Hello, we heard you guys are developing software?
+                    Cool developers never miss Hackathon, the best way to gain new experience and be seen.
+                    Will take involved in this month?`},
+            is_storyline: true
         });
     }
 

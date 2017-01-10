@@ -8,19 +8,12 @@ import ProjectOfferBlock from './ProjectOfferBlock';
 import SalesAgency from './SalesAgency';
 import Project from './Project';
 import ProjectReport from './ProjectReport';
-import ProjectModel from '../models/ProjectModel';
 
 class Projects extends Component {
     constructor(props) {
         super(props);
         this.state = {show_archive: true};
-        this.findProjects = this.findProjects.bind(this);
     }
-
-    findProjects() {
-        this.props.data.helpers.startProject(ProjectModel.generate());
-    }
-
 
     render() {
         const find_projects = <button className="btn btn-success">Find Projects</button>;

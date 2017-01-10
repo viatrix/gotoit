@@ -106,6 +106,11 @@ class WorkerModel {
         return efficiency;
     }
 
+    staminaPenalty() {
+        const stamina_factor = this.stamina / (1000/10);
+        return Math.max(Math.min(Math.floor(stamina_factor), 10), -10);
+    }
+
     workloadPenalty() {
         const task_preferred = (Math.ceil((tick - this.facts.tick_hired)/24) * 3);
         const tasks_stream = 20 * (1-((200+task_preferred) / ((200+(this.facts.tasks_done - this.facts.training_tasks_done)))));
@@ -125,7 +130,7 @@ class WorkerModel {
     }
 
     educationPenalty() {
-        let knowledge_ratio = (100+(this.facts.training_tasks_done*3)) / (100+this.facts.tasks_done);
+        let knowledge_ratio = (200+(this.facts.training_tasks_done*3)) / (200+this.facts.tasks_done);
         let thirst_for_knowledge = (100+(this.statsSum()/4)) / (100+_.max(_.values(this.stats)));
        // console.log(knowledge_ratio, thirst_for_knowledge);
         const education_stream = 20 * (1-(knowledge_ratio/thirst_for_knowledge));
@@ -146,12 +151,14 @@ class WorkerModel {
     }
 
     calcEfficiencyReal() { // happinessReal
+        const stamina = this.staminaPenalty();
         const tasks_stream = this.workloadPenalty();
         const tasks_difficulty = this.difficultyPenalty();
         const education_stream = this.educationPenalty();
         const collective = this.collectivePenalty();
 
-        let efficiency = 20 +
+        let efficiency = 10 +
+            + (10 - Math.abs(stamina))
             + (20 - Math.abs(tasks_stream))
             + (20 - Math.abs(tasks_difficulty))
             + (20 - Math.abs(education_stream))

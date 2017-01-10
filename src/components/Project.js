@@ -19,14 +19,14 @@ class Project extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {test_value: 1000};
-
         this.manage = this.manage.bind(this);
         this.manageAll = this.manageAll.bind(this);
         this.changeTechnology = this.changeTechnology.bind(this);
         this.finish = this.finish.bind(this);
         this.fix = this.fix.bind(this);
         this.open = this.open.bind(this);
+        this.pause = this.pause.bind(this);
+        this.unpause = this.unpause.bind(this);
         this.close = this.close.bind(this);
     }
 
@@ -50,8 +50,13 @@ class Project extends Component {
     }
 
     open() {
-        this.props.data.helpers.startProject(this.props.project.id);
-        //this.forceUpdate();
+        this.props.data.helpers.openProject(this.props.project.id);
+    }
+    pause() {
+        this.props.data.helpers.pauseProject(this.props.project.id);
+    }
+    unpause() {
+        this.props.data.helpers.unpauseProject(this.props.project.id);
     }
 
     close() {
@@ -115,20 +120,11 @@ class Project extends Component {
             <span>
                 {/*{project.stage}*/}
                 {(project.stage === 'paused')
-                    ? <button className="btn btn-success" onClick={() => {
-                        project.stage = 'open';
-                        data.helpers.checkState();
-                }}>Start</button> : ''}
+                    ? <button className="btn btn-success" onClick={this.unpause}>Start</button> : ''}
                 {(project.stage === 'ready')
-                    ? <button className="btn btn-success" onClick={() => {
-                        this.open();
-                        data.helpers.checkState();
-                }}>Start</button> : ''}
+                    ? <button className="btn btn-success" onClick={this.open}>Start</button> : ''}
                 {project.stage === 'open'
-                    ? <button className="btn btn-warning" onClick={() => {
-                        project.stage = 'paused';
-                        data.helpers.checkState();
-                }}>Pause</button> : ''}
+                    ? <button className="btn btn-warning" onClick={this.pause}>Pause</button> : ''}
             </span>;
 
         const reject_button = <button className="btn btn-danger" onClick={() => {

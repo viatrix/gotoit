@@ -24,6 +24,8 @@ class Loans extends Component {
         data.money += loan.money;
         loan.timer = loan.time;
         data.taken_loans.push(loan);
+
+        data.helpers.checkState();
     }
 
     earlyRepayment(id) {

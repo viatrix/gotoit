@@ -19,7 +19,7 @@ class ProjectModel {
 
         this.id = _.uniqueId('project');
         this.name = name;
-        this.type = type; //  project, training, draft
+        this.type = type; //  project, training, hackathon, draft
         this.kind = kind;
         this.platform = platform;
         this.reward = reward;
@@ -111,6 +111,8 @@ class ProjectModel {
 
                 if (this.type === 'training') {
                     worker.facts.training_tasks_done += tasks;
+                } else if (this.type === 'hackathon') {
+                    worker.facts.training_tasks_done += (tasks * 2);
                 }
                 worker.facts.tasks_done += tasks;
                 this.facts.tasks_done += tasks;
@@ -121,7 +123,12 @@ class ProjectModel {
                 this.errors[stat] += bugs;
 
                 let learn = tasks + (bugs * 2);
-                learned[stat] += (learn) * (pair ? 2 : 1) * (creativity ? 1.5 : 1) * (this.type === 'training' ? 2 : 1);
+                learned[stat] +=
+                    (learn) *
+                    (pair ? 2 : 1) *
+                    (creativity ? 1.5 : 1) *
+                    (this.type === 'training' ? 2 : 1) *
+                    (this.type === 'hackathon' ? 4 : 1);
                 if (isNaN(learned[stat])) {
                     console.log([learn, creativity, this.type].map((e) => e));
                 }
@@ -292,6 +299,22 @@ class ProjectModel {
         let penalty = 0;
         let deadline = 0;
         return new ProjectModel(this.genName(), 'draft', kind, platform, reward, penalty, stats, 0, deadline);
+    }
+
+    static generateHackathon(hackathons_generated) {
+        let kind = _.sample(_.keys(project_kinds));
+        let platform = _.sample(_.keys(project_platforms));
+
+        let stats = _.mapValues(skills, () => {
+            return _.random(0, 100 * hackathons_generated);
+        });
+        stats = JSON.parse(JSON.stringify(stats));
+
+        let reward = hackathons_generated * 1000;
+        let penalty = 0;
+        let deadline = 24 * 5;
+        let complexity = hackathons_generated * 5;
+        return new ProjectModel(this.genName(), 'hackathon', kind, platform, reward, penalty, stats, 6, deadline, complexity);
     }
 
     static generateAgency(agency_state) {

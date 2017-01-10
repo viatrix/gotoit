@@ -57,7 +57,9 @@ class App extends Component {
         this.projectArchiving = this.projectArchiving.bind(this);
         this.finishProject = this.finishProject.bind(this);
         this.fixProject = this.fixProject.bind(this);
-        this.startProject = this.startProject.bind(this);
+        this.openProject = this.openProject.bind(this);
+        this.pauseProject = this.pauseProject.bind(this);
+        this.unpauseProject = this.unpauseProject.bind(this);
         this.closeProject = this.closeProject.bind(this);
         this.trainingProject = this.trainingProject.bind(this);
         this.draftProject = this.draftProject.bind(this);
@@ -98,7 +100,9 @@ class App extends Component {
         app_state.data.helpers['projectArchiving'] = this.projectArchiving;
         app_state.data.helpers['finishProject'] = this.finishProject;
         app_state.data.helpers['fixProject'] = this.fixProject;
-        app_state.data.helpers['startProject'] = this.startProject;
+        app_state.data.helpers['openProject'] = this.openProject;
+        app_state.data.helpers['pauseProject'] = this.pauseProject;
+        app_state.data.helpers['unpauseProject'] = this.unpauseProject;
         app_state.data.helpers['closeProject'] = this.closeProject;
         app_state.data.helpers['trainingProject'] = this.trainingProject;
         app_state.data.helpers['draftProject'] = this.draftProject;
@@ -261,7 +265,8 @@ class App extends Component {
 
         project.briefing = true;
         this.acceptAndMoveProject(project);
-        this.startProject(id);
+        this.openProject(id);
+        this.setState({data: data});
     }
 
     acceptAndMoveProject(project) {
@@ -296,10 +301,23 @@ class App extends Component {
         this.checkState();
     }
 
-    startProject(id) {
+    openProject(id) {
         let project = _.find(this.state.data.projects, (project) => { return (project.id === id); });
         project.stage = 'open';
         addMessage('Start '+project.name+' project', {timeOut: 5000, extendedTimeOut: 2000}, 'info');
+        //this.checkState();
+    }
+
+    pauseProject(id) {
+        let project = _.find(this.state.data.projects, (project) => { return (project.id === id); });
+        project.stage = 'paused';
+        //this.checkState();
+    }
+
+    unpauseProject(id) {
+        let project = _.find(this.state.data.projects, (project) => { return (project.id === id); });
+        project.stage = 'open';
+        //this.checkState();
     }
 
     closeProject(id) {
@@ -384,7 +402,7 @@ class App extends Component {
             data.achievements.push('BigDeal')
         }
 
-        this.checkState();
+        //this.checkState();
     }
 
     unlockTechnology(technology) {
@@ -566,11 +584,6 @@ class App extends Component {
         }
 
 
-
-
-
-
-
         if (Math.floor(_.random(1, 24 * (50 - Math.min(25, projects_done*0.2)))) === 1 && data.candidates.resumes.length < 5) {
             let worker = WorkerModel.generate(_.random(2, 5));
             data.candidates.resumes.push(worker);
@@ -605,7 +618,14 @@ class App extends Component {
         */
 
 
+        if (tick < (24 * 30 * 5)) {
+            return false; // no additional generation first 5 month
+        }
 
+        if (!data.wasRecentlyHackathon && _.random(1, 24*60)) {
+            data.wasRecentlyHackathon = true;
+            data.offered_projects.hot.push(Lorer.hackathon());
+        }
 
 
 
@@ -655,6 +675,9 @@ class App extends Component {
             if (data.office.size > 1) {
                 this.chargeMoney(data.office.price);
             }
+
+            // allow hackathon this month
+            data.wasRecentlyHackathon = false;
 
             //loans
             data.taken_loans.forEach((loan) => {
@@ -788,6 +811,10 @@ class App extends Component {
                     project.facts.money_spent += salary;
                 }
                 worker.drainStamina();
+                if (project.type === 'hackathon') { // additional drain on Hackathons
+                    worker.drainStamina();
+                    worker.drainStamina();
+                }
 
 
                 // Creativity

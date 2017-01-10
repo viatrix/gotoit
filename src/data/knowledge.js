@@ -38,7 +38,8 @@ export const project_sizes = {
     2: {name: 'Module for', alone_name: 'Module', agency_min: 50,  agency_max: 1000},
     3: {name: 'The', alone_name: 'Application', agency_min: 100,  agency_max: 2500},
     4: {name: 'Big', alone_name: 'Big Deal', agency_min: 1000,  agency_max: 10000},
-    5: {name: 'Custom', alone_name: 'Custom', agency_min: 0,  agency_max: 0}
+    5: {name: 'Custom', alone_name: 'Custom', agency_min: 0,  agency_max: 0},
+    6: {name: 'Hackathon', alone_name: 'Hackathon', agency_min: 0,  agency_max: 0},
 };
 
 
