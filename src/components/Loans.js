@@ -44,9 +44,9 @@ class Loans extends Component {
 
     calcCreditScore() {
         const data = this.props.data;
-        const inertia = 300;
+        const inertia = 500;
         let good_factors = (Math.sqrt(data.old_loans.length) * 20) + (Math.sqrt(data.early_payed_loans) * 4);
-        let bad_factors = Math.sqrt(data.taken_loans.length*2) * 50;
+        let bad_factors = Math.pow(data.taken_loans.length, 1.5) * 75;
 
         let score_rate = 420 * ((inertia + good_factors) / (inertia + bad_factors));
         return Math.floor(score_rate);
@@ -76,6 +76,7 @@ class Loans extends Component {
                                     </h4>
                                     <label className="flex-element"> Money: {loan.money}$ </label>
                                     <label className="flex-element"> Time: {loan.time} month </label>
+                                    <label className="flex-element"> Interest: {loan.interest}% </label>
                                 </div>
                             })}
 
@@ -89,6 +90,7 @@ class Loans extends Component {
                                         <h4 className="flex-element"> {loan.name} </h4>
                                         <label className="flex-element"> Money: {loan.money}$ </label>
                                         <label className="flex-element"> Time: {loan.time} month </label>
+                                        <label className="flex-element"> Interest: {loan.interest}% </label>
                                         <label className="flex-element">
                                             <button
                                                 className={this.getEarlyCost(loan) <= data.money ? "btn btn-success btn-sm" : "btn btn-success btn-sm disabled"}

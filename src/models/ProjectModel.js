@@ -98,6 +98,7 @@ class ProjectModel {
                         chatMessage(formName(), ' do '+tasks+' tasks and '+bugs+' bugs in '+stat+', but test prevent '+prevented+' of them', 'warning');
                         bugs -= prevented;
                         tasks += prevented;
+                        tasks = Math.min(this.needs[stat], tasks);
                     }
                     else {
                         chatMessage(formName(), ' do '+tasks+' tasks and '+bugs+' bugs in '+stat, 'warning');
@@ -257,17 +258,17 @@ class ProjectModel {
 
         let s = _.values(stats);
         let reward = this.genReward(s, size);
-        let penalty = (this.genPenaltyDole(s, size) * reward).toFixed(0);
+        let penalty = (this.genPenaltyDole(size) * reward).toFixed(0);
         let deadline = this.genDeadline(s, size);
 
         return new ProjectModel(this.genName(), 'project', kind, platform, reward, penalty, stats, size, deadline);
     }
 
     static genReward(s, size) {
-        return 1000 + Math.ceil((_.max(s) + _.sum(s)) * 5 * size);
+        return 2000 + Math.ceil((_.max(s) + _.sum(s)) * 5 * size);
     }
 
-    static genPenaltyDole(s, size) {
+    static genPenaltyDole(size) {
         return [0, 0, 0, 0.5, 1, 0][size];
     }
 
@@ -333,7 +334,7 @@ class ProjectModel {
         stats = JSON.parse(JSON.stringify(stats));
         let s = _.values(stats);
         let reward = this.genReward(s, size);
-        let penalty = (this.genPenaltyDole(s, size) * reward).toFixed(0);
+        let penalty = (this.genPenaltyDole(size) * reward).toFixed(0);
         let deadline = this.genDeadline(s, size);
         return new ProjectModel(this.genName(), 'project', kind, platform, reward, penalty, stats, size, deadline);
     }
