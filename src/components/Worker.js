@@ -21,7 +21,7 @@ class Worker extends Component {
 
     componentDidMount() {
         if (this.props.worker.is_player) {
-            addAction('This is the management screen of your character. Here you can select its roles in the company. Carefully review information on this screen. Then try Training Project.', {timeOut: 15000, extendedTimeOut: 5000}, 'success');
+            addAction('This is the management screen of your character. Here you can select their roles in the company. Review carefully information on this screen, then try a Training Project.', {timeOut: 15000, extendedTimeOut: 5000}, 'success');
         }
         this.refs.manage.openPortal();
     }
@@ -84,22 +84,22 @@ class Worker extends Component {
         return (
             <div className="well well-sm fat">
                 {worker.name} {worker.is_player ? 'Player' : <span>{worker.getSalary()}$</span>}
-                {worker.in_vacation ? ' in vacation! ' : ''}
+                {worker.in_vacation ? ' on vacation! ' : ''}
 
                 <Portal ref="manage" closeOnEsc closeOnOutsideClick openByClickOn={manage_button}>
                     <TeamDialog>
                         <h2>
                             {worker.name}
-                            {worker.in_vacation ? ' in vacation! ' : ''}
+                            {worker.in_vacation ? ' on vacation! ' : ''}
                         </h2>
                         <ul>
                             <p>Hired {Math.ceil((this.props.data.date.tick - worker.facts.tick_hired)/24)} days ago.
                                 {!worker.is_player ? <span>Got {worker.facts.money_earned}$ of salary
                                     . Overrate: {worker.getOverrate()}% </span> : ' '}
                                 Finished {worker.facts.project_finished} project.
-                                Done {worker.facts.tasks_done} of {worker.facts.tasks_done + worker.facts.bugs_passed} tasks.
+                                Did {worker.facts.tasks_done} of {worker.facts.tasks_done + worker.facts.bugs_passed} tasks.
                                 Passed {worker.facts.bugs_passed} bugs.
-                                Do {worker.facts.refactored} refactoring, wrote {worker.facts.tests_wrote} tests and retrospected {worker.facts.retrospected} tasks.
+                                Did {worker.facts.refactored} refactoring, wrote {worker.facts.tests_wrote} tests and retrospected {worker.facts.retrospected} tasks.
                             </p>
                         </ul>
 

@@ -250,7 +250,7 @@ class App extends Component {
         let data = this.state.data;
         let project = (_.remove(data.offered_projects[type], (candidate) => { return (candidate.id === id); }))[0];
         this.acceptAndMoveProject(project);
-        addMessage('Accept '+project.name+' project', {timeOut: 5000, extendedTimeOut: 2000}, 'info');
+        addMessage('Accepted '+project.name+' project', {timeOut: 5000, extendedTimeOut: 2000}, 'info');
         this.setState({data: data});
     }
 
@@ -304,7 +304,7 @@ class App extends Component {
     openProject(id) {
         let project = _.find(this.state.data.projects, (project) => { return (project.id === id); });
         project.stage = 'open';
-        addMessage('Start '+project.name+' project', {timeOut: 5000, extendedTimeOut: 2000}, 'info');
+        addMessage('Started '+project.name+' project', {timeOut: 5000, extendedTimeOut: 2000}, 'info');
         //this.checkState();
     }
 
@@ -334,7 +334,7 @@ class App extends Component {
         let data = this.state.data;
         let project = _.find(data.projects, (project) => { return (project.id === id); });
         project.fix();
-        addMessage(project.name+' project go to '+project.iteration+' iteration for fixing bugs.', 'error');
+        addMessage(project.name+' project enters '+project.iteration+' iteration for fixing bugs.', 'error');
         this.setState({data: data});
     }
 
@@ -451,7 +451,7 @@ class App extends Component {
     changeOffice(new_size) {
         let data = this.state.data;
         data.office = new OfficeModel(new_size);
-        addAction('You new apartments: '+data.office.name+'. Month price: '+data.office.price+'$', {timeOut: 10000, extendedTimeOut: 2000}, 'success');
+        addAction('You new apartments: '+data.office.name+'. Monthly price: '+data.office.price+'$', {timeOut: 10000, extendedTimeOut: 2000}, 'success');
         this.setState({data: data});
     }
 
@@ -531,10 +531,10 @@ class App extends Component {
 
         switch (tick) {
             case 5:
-                addAction('Hi there! In this corner of the screen will appear the important messages.', {timeOut: 15000, extendedTimeOut: 5000, closeButton: false}, 'success');
+                addAction('Hi there! Important messages will appear in this corner of the screen.', {timeOut: 15000, extendedTimeOut: 5000, closeButton: false}, 'success');
                 break;
             case 24:
-                addAction('But first of all choose the origin and formation of your character.', {timeOut: 15000, extendedTimeOut: 5000, closeButton: false}, 'success');
+                addAction('First of all, choose the origin and formation of your character.', {timeOut: 15000, extendedTimeOut: 5000, closeButton: false}, 'success');
                 break;
             case 10:
              //   addAction('Then find your first project.', {timeOut: 15000, extendedTimeOut: 5000}, 'success');
@@ -661,7 +661,7 @@ class App extends Component {
                     if ((dissatisfaction / smoothing) > breakpoint) {
                         worker.to_leave = true;
                         worker.to_leave_ticker = 24 * 7 * 2; // 2 weeks
-                        addAction(worker.name + ' quit from company in two weeks', {
+                        addAction(worker.name + ' leaves your company in two weeks', {
                             timeOut: 20000,
                             extendedTimeOut: 10000
                         }, 'error');
@@ -710,7 +710,7 @@ class App extends Component {
             // worker quiting
             if (worker.to_leave) {
                 if (worker.to_leave_ticker <= 0) {
-                    addAction(worker.name+' resigned from the company', {timeOut: 20000, extendedTimeOut: 10000}, 'error');
+                    addAction(worker.name+' resigned from your company', {timeOut: 20000, extendedTimeOut: 10000}, 'error');
                     this.dismissEmployer(worker.id);
                 }
                 else {
@@ -731,7 +731,7 @@ class App extends Component {
                     worker.in_vacation = true;
                     let long =  _.random(2, 3);
                     worker.in_vacation_ticker = 24 * 7 * long; // 1-3 weeks
-                    addAction(worker.name+' leaves on vacation '+long+' weeks long', {timeOut: 15000, extendedTimeOut: 8000}, 'error');
+                    addAction(worker.name+' leaves on a '+long+' week vacation now', {timeOut: 15000, extendedTimeOut: 8000}, 'error');
                 }
             }
             if (worker.in_vacation) {
@@ -740,7 +740,7 @@ class App extends Component {
                 if (worker.in_vacation_ticker === 0) {
                     worker.in_vacation = false;
                     worker.stamina = 1000;
-                    addAction(worker.name+' come back from vacation', {timeOut: 5000, extendedTimeOut: 3000}, 'success');
+                    addAction(worker.name+' comes back from vacation', {timeOut: 5000, extendedTimeOut: 3000}, 'success');
                 }
                 return false;
             }
@@ -821,7 +821,7 @@ class App extends Component {
                 if (creativity && is_working_time && (_.random(1, 5) === 1)) {
                     skip_work = true;
                     worker.facts.training_tasks_done += worker.getSideResource();
-                    chatMessage(formName(), 'I spent hour to my pet-project.', 'warning');
+                    chatMessage(formName(), 'I spent an hour to my pet-project.', 'warning');
                 }
 
                 // Agile
@@ -856,7 +856,7 @@ class App extends Component {
                     worker.facts.tests_wrote += tests;
                     project.facts.tests_wrote += tests;
                     project.tests += tests;
-                    chatMessage(formName(), ' wrote '+tests+' test!', 'success');
+                    chatMessage(formName(), ' wrote '+tests+' tests!', 'success');
                     skip_work = true;
                 }
 

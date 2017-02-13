@@ -60,7 +60,7 @@ class Projects extends Component {
                                 <Project key={x.id} project={x} data={this.props.data} />
                             )}
                         </div>
-                    : <div className="text-center fat">You have not projects in work.</div> }
+                    : <div className="text-center fat">You have no projects in progress.</div> }
                 </div>
                 <div>
                     {this.props.data.projects_archive_reports.length > 0 ?

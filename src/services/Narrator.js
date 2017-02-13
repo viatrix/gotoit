@@ -6,7 +6,7 @@ class Narrator {
     static workerFeelings(worker, widthNumbers = false) {
         // quantum {level: '', value: '', text: ''}
         // level in ['very low', 'lower', 'low', 'normal', 'high', 'higher', 'very high']
-        
+
         let penalties_names = ['workloadPenalty', 'difficultyPenalty', 'educationPenalty', 'collectivePenalty'];
         let penalties = {};
 
@@ -52,16 +52,16 @@ class Narrator {
         const aboutHappiness = () => {
             let num = worker.calcEfficiency();
             switch (true) {
-                case num < 20: return 'Worker '+worker.name+' hate'+drawNum(num)+' job.';
-                case num < 30: return 'Worker '+worker.name+' almost hate'+drawNum(num)+' job.';
-                case num < 40: return 'Worker '+worker.name+' very dissatisfied'+drawNum(num)+' with work.';
-                case num < 50: return 'Worker '+worker.name+' dissatisfied'+drawNum(num)+' with work.';
-                case num < 60: return 'Worker '+worker.name+' is indifferent'+drawNum(num)+' to work.';
-                case num < 70: return 'Worker '+worker.name+' almost satisfied'+drawNum(num)+' with work.';
-                case num < 80: return 'Worker '+worker.name+' satisfied'+drawNum(num)+' with work.';
-                case num < 90: return 'Worker '+worker.name+' very satisfied'+drawNum(num)+' with work.';
-                case num < 100: return 'Worker '+worker.name+' almost loves'+drawNum(num)+' work.';
-                case num === 100: return 'Worker '+worker.name+' loves'+drawNum(num)+' work.';
+                case num < 20: return 'Worker '+worker.name+' hates'+drawNum(num)+' their job.';
+                case num < 30: return 'Worker '+worker.name+' almost hates'+drawNum(num)+' their job.';
+                case num < 40: return 'Worker '+worker.name+' is very dissatisfied'+drawNum(num)+' with their job.';
+                case num < 50: return 'Worker '+worker.name+' is dissatisfied'+drawNum(num)+' with their job.';
+                case num < 60: return 'Worker '+worker.name+' is indifferent'+drawNum(num)+' to their job.';
+                case num < 70: return 'Worker '+worker.name+' is almost satisfied'+drawNum(num)+' with their job.';
+                case num < 80: return 'Worker '+worker.name+' is satisfied'+drawNum(num)+' with their job.';
+                case num < 90: return 'Worker '+worker.name+' is very satisfied'+drawNum(num)+' with their job.';
+                case num < 100: return 'Worker '+worker.name+' almost loves'+drawNum(num)+' their job.';
+                case num === 100: return 'Worker '+worker.name+' loves'+drawNum(num)+' their job.';
                 default:
                     console.log('error case: ' + num);
             }
@@ -70,13 +70,13 @@ class Narrator {
         const tellers = {
             workloadPenalty: (penalty) => {
                 switch (penalty.level) {
-                    case'very low': return 'Grow lazy from a lack'+drawNum(penalty.value)+' of goals, ';
+                    case'very low': return 'Grows lazy due to lack'+drawNum(penalty.value)+' of goals, ';
                     case 'lower': return 'Dissatisfied by the lack'+drawNum(penalty.value)+' of tasks, ';
-                    case 'low': return 'Relaxing by the lack'+drawNum(penalty.value)+' of tasks, ';
-                    case 'normal': return 'Pleased'+drawNum(penalty.value)+' quantity of tasks, ';
-                    case 'high': return 'Tense by excess'+drawNum(penalty.value)+' of tasks, ';
+                    case 'low': return 'Relaxed by the lack'+drawNum(penalty.value)+' of tasks, ';
+                    case 'normal': return 'Pleased by'+drawNum(penalty.value)+' quantity of tasks, ';
+                    case 'high': return 'Stressed by excess'+drawNum(penalty.value)+' of tasks, ';
                     case 'higher': return 'Was exhausted from flow'+drawNum(penalty.value)+' of tasks, ';
-                    case 'very high': return 'Stunned by a enormous overflow'+drawNum(penalty.value)+' of tasks, ';
+                    case 'very high': return 'Stunned by enormous overflow'+drawNum(penalty.value)+' of tasks, ';
                     default: console.log('error case: ' + penalty.level); return ' # Error! # ';
                 }
             },
@@ -94,11 +94,11 @@ class Narrator {
             },
             educationPenalty: (penalty) => {
                 switch (penalty.level) {
-                    case'very low': return 'Hate the monotonous'+drawNum(penalty.value)+' learning and ';
+                    case'very low': return 'Hates the monotonous'+drawNum(penalty.value)+' learning and ';
                     case 'lower': return 'Tired of constant'+drawNum(penalty.value)+' learning and';
-                    case 'low': return 'Wants to work more'+drawNum(penalty.value)+' than learning and';
+                    case 'low': return 'Wants to work more'+drawNum(penalty.value)+' than learn and';
                     case 'normal': return 'Happy with the balance'+drawNum(penalty.value)+' between work and study, and';
-                    case 'high': return 'Wants to learn more'+drawNum(penalty.value)+' than working and';
+                    case 'high': return 'Wants to learn more'+drawNum(penalty.value)+' than work and';
                     case 'higher': return 'Dreams of additional'+drawNum(penalty.value)+' education and ';
                     case 'very high': return 'Hates the monotonous'+drawNum(penalty.value)+' work and';
                     default: console.log('error case: ' + penalty.level); return ' # Error! # ';
@@ -107,12 +107,12 @@ class Narrator {
             collectivePenalty: (penalty) => {
                 let realCollectivePenalty = () => {
                     switch (penalty.level) {
-                        case'very low': return ' feels depressed by colleagues'+drawNum(penalty.value)+' experience.';
-                        case 'lower': return ' feels upset by their low skills compared'+drawNum(penalty.value)+' to colleagues skills.';
-                        case 'low': return ' feels himself like follower'+drawNum(penalty.value)+' in a team.';
-                        case 'normal': return ' fells comfort'+drawNum(penalty.value)+' in collective.';
-                        case 'high': return ' feels himself like leader'+drawNum(penalty.value)+' in a team.';
-                        case 'higher': return ' sadly in the team of weaklings'+drawNum(penalty.value)+'.';
+                        case'very low': return ' feels depressed by '+drawNum(penalty.value)+' the level of experience of the colleagues.';
+                        case 'lower': return ' feels upset by their low skills compared'+drawNum(penalty.value)+' to the skills of colleagues.';
+                        case 'low': return ' feels like a follower'+drawNum(penalty.value)+' in the team.';
+                        case 'normal': return ' feels comfortably'+drawNum(penalty.value)+' in the team.';
+                        case 'high': return ' feels like a leader'+drawNum(penalty.value)+' in the team.';
+                        case 'higher': return ' sad in the team of weaklings'+drawNum(penalty.value)+'.';
                         case 'very high': return ' bored in the team of idiots'+drawNum(penalty.value)+'.';
                         default: console.log('error case: ' + penalty.level); return ' # Error! # ';
                     }
@@ -125,14 +125,14 @@ class Narrator {
         const aboutStamina = () => {
             let num = worker.stamina;
             switch (true) {
-                case num < 24: return ' Packed'+drawNum(num)+' up suitcase.';
+                case num < 24: return ' Packed'+drawNum(num)+' up their suitcase.';
                 case num < 100: return ' Thoughts'+drawNum(num)+' are already on vacation.';
                 case num < 200: return ' Bought'+drawNum(num)+' plane tickets.';
                 case num < 300: return ' Selects'+drawNum(num)+' the travel route.';
                 case num < 400: return ' Planning'+drawNum(num)+' a trip.';
                 case num < 500: return ' Thinking'+drawNum(num)+' about vacation.';
                 case num < 600: return ' Dreaming'+drawNum(num)+' about vacation.';
-                case num < 700: return ' Encouraged'+drawNum(num)+' and ready for a work.';
+                case num < 700: return ' Encouraged'+drawNum(num)+' and ready to work.';
                 case num < 800: return ' Full'+drawNum(num)+' of energy.';
                 case num < 900: return ' Rested and full'+drawNum(num)+' of energy.';
                 case num <= 1000: return ' Fresh'+drawNum(num)+' from holidays';
