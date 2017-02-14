@@ -9,6 +9,7 @@ const ToastMessageFactory = React.createFactory(ToastMessage.animation);
 
 export var addMessage = (text) => { console.log(text) };
 export var addAction = (text) => { console.log(text) };
+export var addNotification = (text) => { console.log(text) };
 
 /***
  * Short info:
@@ -24,6 +25,7 @@ class ToastNest extends Component {
         this.clearMessages = this.clearMessages.bind(this);
         this.addAction = this.addAction.bind(this);
         this.clearActions = this.clearActions.bind(this);
+        this.addNotification = this.addNotification.bind(this);
     }
 
     clearMessages() {
@@ -54,11 +56,18 @@ class ToastNest extends Component {
         }, options));
     }
 
+    addNotification(text, options, type='info') {
+       addAction(text, options, type);
+       chatMessage('', text, type);
+    }
+
     componentDidMount() {
         addMessage = this.addMessage;
         this.props.data.helpers.addMessage = this.addMessage;
         addAction = this.addAction;
         this.props.data.helpers.addAction = this.addAction;
+        addNotification = this.addNotification;
+        this.props.data.helpers.addNotification = this.addNotification;
     }
 
     render() {

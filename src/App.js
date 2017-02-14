@@ -5,7 +5,7 @@ import '../node_modules/bootstrap-slider/dist/css/bootstrap-slider.min.css';
 import './App.css';
 
 import Layout from './components/Layout';
-import {addMessage, addAction} from './components/ToastNest';
+import {addMessage, addAction, addNotification} from './components/ToastNest';
 import {chatMessage} from "./components/Chat";
 
 import WorkerModel from './models/WorkerModel';
@@ -431,7 +431,7 @@ class App extends Component {
     addMoney(quantity) {
         let data = this.state.data;
         data.money += quantity;
-        addAction('Income to your wallet: '+quantity+'$', {timeOut: 5000, extendedTimeOut: 1000}, 'success');
+        addNotification('Income to your wallet: '+quantity+'$', {timeOut: 5000, extendedTimeOut: 1000}, 'success');
         this.setState({data: data});
     }
 
@@ -444,14 +444,14 @@ class App extends Component {
         }
         let data = this.state.data;
         data.money -= quantity;
-        if (!silent) addAction('Charge from your wallet: '+quantity+'$', {timeOut: 3000, extendedTimeOut: 2000}, 'warning');
+        if (!silent) addNotification('Charge from your wallet: '+quantity+'$', {timeOut: 3000, extendedTimeOut: 2000}, 'warning');
         this.setState({data: data});
     }
 
     changeOffice(new_size) {
         let data = this.state.data;
         data.office = new OfficeModel(new_size);
-        addAction('You new apartments: '+data.office.name+'. Monthly price: '+data.office.price+'$', {timeOut: 10000, extendedTimeOut: 2000}, 'success');
+        addNotification('You new apartments: '+data.office.name+'. Monthly price: '+data.office.price+'$', {timeOut: 10000, extendedTimeOut: 2000}, 'success');
         this.setState({data: data});
     }
 
@@ -661,7 +661,7 @@ class App extends Component {
                     if ((dissatisfaction / smoothing) > breakpoint) {
                         worker.to_leave = true;
                         worker.to_leave_ticker = 24 * 7 * 2; // 2 weeks
-                        addAction(worker.name + ' leaves your company in two weeks', {
+                        addNotification(worker.name + ' leaves your company in two weeks', {
                             timeOut: 20000,
                             extendedTimeOut: 10000
                         }, 'error');
@@ -710,7 +710,7 @@ class App extends Component {
             // worker quiting
             if (worker.to_leave) {
                 if (worker.to_leave_ticker <= 0) {
-                    addAction(worker.name+' resigned from your company', {timeOut: 20000, extendedTimeOut: 10000}, 'error');
+                    addNotification(worker.name+' resigned from your company', {timeOut: 20000, extendedTimeOut: 10000}, 'error');
                     this.dismissEmployer(worker.id);
                 }
                 else {
@@ -722,7 +722,7 @@ class App extends Component {
             if (!worker.to_vacation && !worker.in_vacation && worker.stamina <= 0) {
                 worker.to_vacation = true;
                 worker.to_vacation_ticker = 24 * 7 * 2; // 2 weeks
-                addAction(worker.name+' leaves on vacation in two weeks', {timeOut: 10000, extendedTimeOut: 5000}, 'error');
+                addNotification(worker.name+' leaves on vacation in two weeks', {timeOut: 10000, extendedTimeOut: 5000}, 'error');
             }
             if (worker.to_vacation) {
                 worker.to_vacation_ticker--;
@@ -731,7 +731,7 @@ class App extends Component {
                     worker.in_vacation = true;
                     let long =  _.random(2, 3);
                     worker.in_vacation_ticker = 24 * 7 * long; // 1-3 weeks
-                    addAction(worker.name+' leaves on a '+long+' week vacation now', {timeOut: 15000, extendedTimeOut: 8000}, 'error');
+                    addNotification(worker.name+' leaves on a '+long+' week vacation now', {timeOut: 15000, extendedTimeOut: 8000}, 'error');
                 }
             }
             if (worker.in_vacation) {
@@ -740,7 +740,7 @@ class App extends Component {
                 if (worker.in_vacation_ticker === 0) {
                     worker.in_vacation = false;
                     worker.stamina = 1000;
-                    addAction(worker.name+' comes back from vacation', {timeOut: 5000, extendedTimeOut: 3000}, 'success');
+                    addNotification(worker.name+' comes back from vacation', {timeOut: 5000, extendedTimeOut: 3000}, 'success');
                 }
                 return false;
             }
