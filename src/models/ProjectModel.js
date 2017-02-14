@@ -49,7 +49,7 @@ class ProjectModel {
             tasks_done: 0, bugs_passed: 0,
             refactored: 0, tests_wrote: 0, cuted_cost: 0, retrospected: 0};
     }
-    
+
     generateReport(is_player = true) {
         return {
             id: this.id, name: this.getName(), is_player: is_player, type: this.type,
@@ -95,17 +95,17 @@ class ProjectModel {
                     this.stored_wisdom[stat] += bugs;
                     let prevented = this.runTests(bugs);
                     if (prevented) {
-                        chatMessage(formName(), ' do '+tasks+' tasks and '+bugs+' bugs in '+stat+', but test prevent '+prevented+' of them', 'warning');
+                        chatMessage(formName(), ' does '+tasks+' tasks and creates '+bugs+' bugs in '+stat+', but tests prevent '+prevented+' of them', 'warning');
                         bugs -= prevented;
                         tasks += prevented;
                         tasks = Math.min(this.needs[stat], tasks);
                     }
                     else {
-                        chatMessage(formName(), ' do '+tasks+' tasks and '+bugs+' bugs in '+stat, 'warning');
+                        chatMessage(formName(), ' does '+tasks+' tasks and creates '+bugs+' bugs in '+stat, 'warning');
                     }
                 }
                 else {
-                    chatMessage(formName(), ' do '+tasks+' '+stat+' tasks', 'info');
+                    chatMessage(formName(), ' does '+tasks+' '+stat+' tasks', 'info');
                 }
 
                 if (support) this.supporter = null;

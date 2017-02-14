@@ -76,10 +76,10 @@ class Project extends Component {
                 </h4>
                 <p className="small">
                     With team {team_label}{tech.length ? <span className="small"> and tech {tech_label}</span> : ''}. Spent {project.facts.money_spent}$ for salary.
-                    Done {project.facts.tasks_done} tasks. Passed {project.facts.bugs_passed} bugs.
-                    Do {project.facts.refactored} refactoring, wrote {project.facts.tests_wrote} tests and retrospected {project.facts.retrospected} tasks which cost {project.facts.cuted_cost}$ totally.
+                    Did {project.facts.tasks_done} tasks. Passed {project.facts.bugs_passed} bugs.
+                    Did {project.facts.refactored} refactoring, wrote {project.facts.tests_wrote} tests and retrospected {project.facts.retrospected} tasks which cost {project.facts.cuted_cost}$ totally.
                 </p>
-                    
+
                 <StatsBar stats={stats_data} data={this.props.data} />
 
                 <div className="flex-container-row">
